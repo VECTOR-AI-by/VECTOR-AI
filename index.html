@@ -634,6 +634,11 @@ VECTOR-AI — Первое суверенное MAS-решение (Multi-Agent 
     btn.textContent = 'Отправка...';
     
     var subject = 'VECTOR-AI: заявка от ' + name;
+
+    // Сохраняем для Gmail fallback
+    window._lastSubject = subject;
+    window._lastBody = body;
+    
     var body = 'Новая заявка VECTOR-AI by\n\n' +
       'Имя / Организация: ' + name + '\n' +
       'Email: ' + email + '\n' +
@@ -646,33 +651,33 @@ VECTOR-AI — Первое суверенное MAS-решение (Multi-Agent 
       '?subject=' + encodeURIComponent(subject) +
       '&body=' + encodeURIComponent(body);
 
-    // Способ 1: пробуем открыть системный почтовый клиент через скрытую ссылку
+    // Способ 1: пробуем открыть системный почтовый клиент через СКРЫТЫЙ iframe
+    // (страница не скроллит, не уходит вверх)
     try {
-      var link = document.createElement('a');
-      link.href = mailto;
-      link.rel = 'noopener';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      var iframe = document.createElement('iframe');
+      iframe.style.display = 'none';
+      iframe.style.width = '0';
+      iframe.style.height = '0';
+      iframe.src = mailto;
+      document.body.appendChild(iframe);
+      setTimeout(function(){ 
+        try { document.body.removeChild(iframe); } catch(e) {}
+      }, 500);
     } catch(e) {}
 
-    // Способ 2: через 1.2с открываем Gmail web как fallback
-    // Если у пользователя Outlook/Apple Mail/Yandex — браузер сам поймёт
+    // Способ 2: готовим кнопку Gmail fallback (не открываем сразу, даём выбор)
     setTimeout(function(){
-      var webmail = 'https://mail.google.com/mail/?view=cm&fs=1' +
-        '&to=andrey_prosto@bk.ru' +
-        '&su=' + encodeURIComponent(subject) +
-        '&body=' + encodeURIComponent(body);
-      window.open(webmail, '_blank', 'noopener');
-    }, 1200);
+      var ok = document.getElementById('form-success');
+      var fallback = document.getElementById('form-gmail-fallback');
+      if (ok) ok.classList.add('show');
+      if (fallback) fallback.classList.add('show');
+    }, 300);
 
     setTimeout(function(){
       btn.disabled = false;
       btn.textContent = 'Отправить заявку';
-      var ok = document.getElementById('form-success');
-      if (ok) ok.classList.add('show');
       form.reset();
-    }, 2000);
+    }, 2500);
   });
 })();
 
@@ -767,6 +772,14 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){
 <textarea class="form-input" name="message" placeholder="Опишите задачу или инфраструктуру для аудита" required maxlength="2000"></textarea>
 <div class="form-error" id="form-error"></div>
 <button type="submit" class="btn btn-primary" id="submit-btn">Отправить заявку</button>
+<div class="form-gmail-fallback" id="form-gmail-fallback" style="display:none; margin-top:12px; text-align:center;">
+<button type="button" class="btn btn-secondary" id="gmail-open" style="width:100%;">
+✉ Открыть в Gmail Web
+</button>
+<div style="font-size:11px; color:var(--text-muted); margin-top:8px;">
+Если почтовый клиент не открылся — нажмите кнопку выше
+</div>
+</div>
 <div class="form-success" id="form-success">
 ✓ Заявка успешно отправлена. Мы свяжемся с вами в ближайшее время.
 </div>
@@ -777,5 +790,18 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){
 </section>
 
 </main>
+<script>
+
+// Gmail fallback handler
+document.getElementById('gmail-open')?.addEventListener('click', function(){
+  var subject = window._lastSubject || 'VECTOR-AI заявка';
+  var body = window._lastBody || 'Заявка с сайта VECTOR-AI';
+  var url = 'https://mail.google.com/mail/?view=cm&fs=1' +
+    '&to=andrey_prosto@bk.ru' +
+    '&su=' + encodeURIComponent(subject) +
+    '&body=' + encodeURIComponent(body);
+  window.open(url, '_blank', 'noopener');
+});
+</script>
 </body>
 </html>
