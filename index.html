@@ -35,9 +35,10 @@ nav a:hover{color:var(--text)}
 h1{font-size:clamp(36px,5.5vw,64px);font-weight:800;line-height:1.1;margin-bottom:20px;letter-spacing:-2px}
 h1 span{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .hero-description{font-size:18px;color:var(--text-muted);margin-bottom:32px;max-width:860px}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:15px 30px;border-radius:12px;font-size:15px;font-weight:600;text-decoration:none;transition:all 0.3s;cursor:pointer;border:none}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:15px 30px;border-radius:12px;font-size:15px;font-weight:600;text-decoration:none;transition:all 0.3s;cursor:pointer;border:none;font-family:inherit}
 .btn-primary{background:var(--gradient);color:#fff;box-shadow:0 4px 24px rgba(0,102,255,0.3)}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,102,255,0.4)}
+.btn-primary:disabled{opacity:0.5;cursor:not-allowed;transform:none}
 .btn-secondary{background:var(--bg-card);color:var(--text);border:1px solid rgba(255,255,255,0.1)}
 .btn-secondary:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.2)}
 section{padding:80px 0}
@@ -105,9 +106,14 @@ section{padding:80px 0}
 .form-input{padding:13px 16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:var(--text);font-size:14px;font-family:inherit;transition:border-color 0.3s}
 .form-input:focus{outline:none;border-color:var(--primary)}
 .form-input::placeholder{color:var(--text-muted)}
+.form-input:disabled{opacity:0.5;cursor:not-allowed}
 select.form-input{cursor:pointer;background-image:linear-gradient(45deg,transparent 50%,var(--text-muted) 50%),linear-gradient(135deg,var(--text-muted) 50%,transparent 50%);background-position:calc(100% - 18px) calc(1em + 2px),calc(100% - 13px) calc(1em + 2px);background-size:5px 5px,5px 5px;background-repeat:no-repeat;appearance:none;-webkit-appearance:none}
 select.form-input option{background:#0A0F1A;color:var(--text)}
 textarea.form-input{min-height:100px;resize:vertical}
+.form-error{font-size:12px;color:#FF5577;margin-top:6px;display:none}
+.form-error.show{display:block}
+.form-success{background:rgba(0,212,170,0.1);border:1px solid rgba(0,212,170,0.3);border-radius:10px;padding:14px;margin-top:16px;display:none}
+.form-success.show{display:block}
 .contact-disclaimer{font-size:11px;color:var(--text-muted);margin-top:14px;line-height:1.5;max-width:580px;margin-left:auto;margin-right:auto}
 footer{padding:32px 0;border-top:1px solid rgba(255,255,255,0.05);text-align:center}
 .footer-content{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px}
@@ -559,9 +565,9 @@ VECTOR-AI — Первое суверенное MAS-решение (Multi-Agent 
 <div class="contact-card">
 <h2 class="contact-title">Заявка на закрытое пилотное тестирование</h2>
 <p class="contact-description">Все тесты проводятся через изолированные контейнеры-сателлиты в периметре заказчика. Код ядра ИИ-логики не передаётся. По результатам заявки мы свяжемся с вами для согласования пилотного развёртывания.</p>
-<form class="contact-form" id="lead-form" method="POST" target="_blank" rel="noopener">
-<input type="text" class="form-input" name="name" placeholder="Имя / Организация" required>
-<input type="email" class="form-input" name="email" placeholder="Email" required>
+<form class="contact-form" id="lead-form">
+<input type="text" class="form-input" name="name" placeholder="Имя / Организация" required maxlength="150">
+<input type="email" class="form-input" name="email" placeholder="Email" required maxlength="254">
 <select class="form-input" name="org_type" required>
 <option value="" disabled selected>Тип организации</option>
 <option value="gov">Государственный сектор / Регулятор</option>
@@ -570,9 +576,13 @@ VECTOR-AI — Первое суверенное MAS-решение (Multi-Agent 
 <option value="investor">Инвестор / Технологический партнёр</option>
 <option value="other">Другое</option>
 </select>
-<input type="text" class="form-input" name="scope" placeholder="Масштаб: количество серверов / контрактов / репозиториев">
-<textarea class="form-input" name="message" placeholder="Опишите задачу или инфраструктуру для аудита"></textarea>
-<button type="submit" class="btn btn-primary">Отправить заявку</button>
+<input type="text" class="form-input" name="scope" placeholder="Масштаб: количество серверов / контрактов / репозиториев" maxlength="200">
+<textarea class="form-input" name="message" placeholder="Опишите задачу или инфраструктуру для аудита" required maxlength="2000"></textarea>
+<div class="form-error" id="form-error"></div>
+<button type="submit" class="btn btn-primary" id="submit-btn">Отправить заявку</button>
+<div class="form-success" id="form-success">
+✓ Заявка успешно отправлена. Мы свяжемся с вами в ближайшее время.
+</div>
 </form>
 <p class="contact-disclaimer">Все тесты проводятся в изолированном контуре заказчика через одноразовые контейнеры-сателлиты. Исходный код ядра ИИ-логики не покидает защищённые мощности разработчика. Превентивная проверка законодательной базы РБ и ЕАЭС включена в каждый пилот.</p>
 </div>
@@ -592,27 +602,69 @@ VECTOR-AI — Первое суверенное MAS-решение (Multi-Agent 
 <script>
 (function(){
   var form = document.getElementById('lead-form');
+  var btn = document.getElementById('submit-btn');
+  var err = document.getElementById('form-error');
+  var ok = document.getElementById('form-success');
   if (!form) return;
+  
+  function setLoading(loading){
+    if (loading){
+      btn.disabled = true;
+      btn.textContent = 'Отправка...';
+    } else {
+      btn.disabled = false;
+      btn.textContent = 'Отправить заявку';
+    }
+  }
+  
+  function showError(msg){
+    err.textContent = msg;
+    err.classList.add('show');
+    ok.classList.remove('show');
+  }
+  
+  function showSuccess(){
+    err.classList.remove('show');
+    ok.classList.add('show');
+    form.reset();
+  }
+  
   form.addEventListener('submit', function(e){
     e.preventDefault();
-    var btn = form.querySelector('button[type="submit"]');
-    var data = new FormData(form);
-    var lines = [];
-    lines.push('🔔 Новая заявка VECTOR-AI');
-    lines.push('Имя: ' + (data.get('name')||''));
-    lines.push('Email: ' + (data.get('email')||''));
-    lines.push('Тип: ' + (data.get('org_type')||''));
-    lines.push('Масштаб: ' + (data.get('scope')||''));
-    lines.push('Задача: ' + (data.get('message')||''));
-    var text = encodeURIComponent(lines.join('\n'));
-    var url = 'https://t.me/seawaysers?text=' + text;
-    btn.textContent = 'Заявка отправлена ✓';
-    btn.disabled = true;
-    window.open(url, '_blank', 'noopener');
-    setTimeout(function(){ btn.textContent='Отправить заявку'; btn.disabled=false; form.reset(); }, 4000);
+    setLoading(true);
+    err.classList.remove('show');
+    
+    var data = Object.fromEntries(new FormData(form).entries());
+    
+    fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+    .then(function(r){ return r.json().then(function(j){ return { ok: r.ok, data: j }; }); })
+    .then(function(r){
+      if (r.ok && r.data.ok){
+        showSuccess();
+      } else {
+        showError(r.data.error || 'Не удалось отправить заявку. Попробуйте позже.');
+      }
+    })
+    .catch(function(){
+      showError('Ошибка сети. Проверьте подключение и попробуйте снова.');
+    })
+    .finally(function(){
+      setLoading(false);
+    });
   });
 })();
-document.querySelectorAll('a[href^="#"]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();var t=document.querySelector(this.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth',block:'start'})})});
+
+document.querySelectorAll('a[href^="#"]').forEach(function(a){
+  a.addEventListener('click', function(e){
+    e.preventDefault();
+    var t = document.querySelector(this.getAttribute('href'));
+    if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
 </script>
 </body>
 </html>
