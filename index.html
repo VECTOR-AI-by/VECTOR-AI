@@ -513,6 +513,155 @@ VECTOR-AI — Первое суверенное MAS-решение (Multi-Agent 
 </div>
 </section>
 
+<!-- Интерактивный терминал: Target Ledger в действии -->
+<section class="terminal-section">
+<div class="container">
+<div class="section-header">
+<div class="section-label">Live · Демонстрация</div>
+<h2 class="section-title">Target Ledger в действии</h2>
+<p class="section-description">Реальный лог автономной работы роя: от входного запроса через каскад воркеров до юридического пакета. Каждый тик — реальный шаг архитектуры VECTOR-AI.</p>
+</div>
+<div class="terminal-widget" id="terminal">
+<div class="terminal-header">
+<div class="terminal-dots">
+<span class="dot dot-red"></span>
+<span class="dot dot-yellow"></span>
+<span class="dot dot-green"></span>
+</div>
+<div class="terminal-title">VECTOR-AI // TARGET_LEDGER_RUNTIME</div>
+<div class="terminal-badge">ON-PREMISES SATELLITE</div>
+</div>
+<div class="terminal-body" id="terminal-screen">
+<div class="term-line"><span class="term-time">[17:35:12]</span> <span class="term-info">INFO</span> Initializing Archetype Gate on target...</div>
+<div class="term-line"><span class="term-time">[17:35:13]</span> <span class="term-arch">ARCHETYPE</span> Target classified as <span class="term-tag">E-Commerce / API-Gateway</span>. Thresholds: <span class="term-dim">τ_chain = 85, τ_sev = CRITICAL</span>.</div>
+<div class="term-line"><span class="term-time">[17:35:14]</span> <span class="term-mech">MECHANICAL_SCAN</span> Launching infra-arsenal (Nmap fingerprinting + web crawlers)...</div>
+<div class="term-block">
+<div class="term-ledger"><span class="term-em">TARGET LEDGER UPDATED</span> <span class="term-dim">(Spawn on Discovery)</span></div>
+<div class="term-ledger-row"><span class="term-key">UUID:</span> <span class="term-val">56c9b445-6b3f</span> &nbsp; <span class="term-key">Domain:</span> <span class="term-val">INFRA</span> &nbsp; <span class="term-key">Type:</span> <span class="term-val">service</span> &nbsp; <span class="term-key">Status:</span> <span class="term-warn">PENDING</span></div>
+<div class="term-ledger-row"><span class="term-key">Payload:</span> <span class="term-val">{"host": "api.target.by", "port": 443, "service": "Laravel/v10.x", "debug": "true"}</span></div>
+</div>
+<div class="term-line"><span class="term-time">[17:35:16]</span> <span class="term-int">INTERPRETER_WORKER_01</span> Claiming task <span class="term-dim">56c9b445</span>. Parsing static context...</div>
+<div class="term-line"><span class="term-time">[17:35:18]</span> <span class="term-amb">VERDICT</span> <span class="term-amb-box">AMBIGUOUS</span> <span class="term-dim">(Static leaks confirmed, APP_DEBUG active. Escalating to Verifier...)</span></div>
+<div class="term-line"><span class="term-time">[17:35:20]</span> <span class="term-ver">VERIFIER_WORKER_04</span> Launching non-destructive active fingerprinting...</div>
+<div class="term-line"><span class="term-time">[17:35:22]</span> <span class="term-ok">VERIFICATION SUCCESS</span> Target endpoint exposed PII data <span class="term-dim">(1,774 records found)</span>. Status: <span class="term-verified">VERIFIED</span></div>
+<div class="term-legal">
+<div class="term-legal-head">📄 AUTOMATED COMPLIANCE &amp; LEGAL ENFORCEMENT <span class="term-legal-badge">ЗАКОН РБ №99-З</span></div>
+<div class="term-legal-body">
+ГЕНЕРАЦИЯ ДОКУМЕНТА: Уведомление об инциденте ИБ в рамках протокола Responsible Disclosure для ООО «Бизнес».<br>
+СТАТУС: Сформирован пакет юридической документации. Шаблон заявления в правоохранительные органы РБ готов к выгрузке. Лог-дамп зашифрован.
+</div>
+</div>
+</div>
+<div class="terminal-footer">
+<div class="terminal-status"><span class="status-dot"></span> <span id="term-status-text">STREAMING</span></div>
+<div class="terminal-controls">
+<button type="button" class="term-btn" id="term-pause">⏸ Пауза</button>
+<button type="button" class="term-btn" id="term-restart">↻ Заново</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<style>
+.terminal-section{padding:60px 0;background:linear-gradient(180deg,transparent 0%,rgba(0,212,170,0.03) 50%,transparent 100%)}
+.terminal-widget{max-width:1000px;margin:0 auto;background:#000;border:1px solid rgba(255,255,255,0.08);border-radius:14px;overflow:hidden;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#cbd5e1;box-shadow:0 20px 60px rgba(0,0,0,0.5)}
+.terminal-header{background:#0a0e15;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;gap:14px}
+.terminal-dots{display:flex;gap:6px}
+.terminal-dots .dot{width:10px;height:10px;border-radius:50%;opacity:0.7}
+.dot-red{background:#ff5f56}.dot-yellow{background:#ffbd2e}.dot-green{background:#27c93f}
+.terminal-title{color:#8B949E;font-size:11px;letter-spacing:1px;flex:1}
+.terminal-badge{font-size:10px;color:#00D4AA;background:rgba(0,212,170,0.1);border:1px solid rgba(0,212,170,0.3);padding:3px 10px;border-radius:6px;letter-spacing:1px}
+.terminal-body{padding:20px 24px;min-height:420px;max-height:540px;overflow-y:auto;line-height:1.65}
+.terminal-body::-webkit-scrollbar{width:6px}
+.terminal-body::-webkit-scrollbar-track{background:rgba(255,255,255,0.02)}
+.terminal-body::-webkit-scrollbar-thumb{background:rgba(0,212,170,0.3);border-radius:3px}
+.term-line{padding:4px 0;opacity:0;animation:termFadeIn 0.4s forwards}
+.term-time{color:#6B7280;margin-right:8px}
+.term-info{color:#3b82f6;font-weight:600;margin-right:6px}
+.term-arch{color:#a855f7;font-weight:600;margin-right:6px}
+.term-mech{color:#f59e0b;font-weight:600;margin-right:6px}
+.term-int{color:#06b6d4;font-weight:600;margin-right:6px}
+.term-ver{color:#ef4444;font-weight:600;margin-right:6px}
+.term-ok{color:#10b981;font-weight:600;margin-right:6px}
+.term-amb{color:#f97316;font-weight:600;margin-right:6px}
+.term-tag{background:rgba(255,255,255,0.08);padding:1px 8px;border-radius:4px;color:#fff;font-weight:500}
+.term-dim{color:#6B7280}
+.term-warn{color:#fbbf24;font-weight:600;animation:termPulse 1.5s ease-in-out infinite}
+.term-verified{background:rgba(16,185,129,0.15);color:#10b981;padding:1px 8px;border-radius:4px;font-weight:600}
+.term-amb-box{background:rgba(249,115,22,0.15);color:#fb923c;padding:1px 8px;border-radius:4px;font-weight:600;border:1px solid rgba(249,115,22,0.3)}
+.term-block{margin:8px 0;padding:12px 16px;background:rgba(0,212,170,0.04);border-left:2px solid rgba(0,212,170,0.4);border-radius:6px}
+.term-ledger{font-size:12px;margin-bottom:4px}
+.term-em{color:#10b981;font-weight:600}
+.term-ledger-row{font-size:12px;padding:2px 0}
+.term-key{color:#6B7280;margin-right:4px}
+.term-val{color:#E8EAED}
+.term-legal{margin-top:14px;padding:14px 16px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:8px}
+.term-legal-head{color:#cbd5e1;font-weight:600;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.term-legal-badge{font-size:9px;background:rgba(16,185,129,0.15);color:#10b981;border:1px solid rgba(16,185,129,0.3);padding:2px 8px;border-radius:4px;letter-spacing:1px;font-weight:500}
+.term-legal-body{color:#8B949E;font-size:11.5px;line-height:1.6}
+.terminal-footer{background:#0a0e15;padding:10px 16px;border-top:1px solid rgba(255,255,255,0.05);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.terminal-status{font-size:11px;color:#10b981;display:flex;align-items:center;gap:8px}
+.status-dot{width:8px;height:8px;background:#10b981;border-radius:50%;animation:termPulse 1.5s ease-in-out infinite;display:inline-block}
+.terminal-controls{display:flex;gap:8px}
+.term-btn{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#cbd5e1;padding:5px 12px;border-radius:6px;font-family:inherit;font-size:11px;cursor:pointer;transition:all 0.2s}
+.term-btn:hover{background:rgba(0,212,170,0.1);border-color:rgba(0,212,170,0.3);color:#00D4AA}
+@keyframes termFadeIn{from{opacity:0;transform:translateX(-4px)}to{opacity:1;transform:translateX(0)}}
+@keyframes termPulse{0%,100%{opacity:1}50%{opacity:0.4}}
+@media(max-width:768px){.terminal-widget{font-size:11px}.terminal-body{padding:14px 16px;min-height:340px}}
+</style>
+
+<script>
+(function(){
+  var screen = document.getElementById('terminal-screen');
+  var status = document.getElementById('term-status-text');
+  if (!screen) return;
+  var lines = screen.querySelectorAll('.term-line, .term-block, .term-legal');
+  var pauseBtn = document.getElementById('term-pause');
+  var restartBtn = document.getElementById('term-restart');
+  var paused = false;
+  var i = 0;
+  
+  function reset(){
+    i = 0;
+    lines.forEach(function(l){ l.style.animation = 'none'; l.style.opacity = '0'; });
+    status.textContent = 'STREAMING';
+    if (pauseBtn) pauseBtn.textContent = '⏸ Пауза';
+  }
+  
+  function showNext(){
+    if (paused) return;
+    if (i >= lines.length){
+      status.textContent = 'COMPLETE';
+      return;
+    }
+    var line = lines[i];
+    line.style.animation = 'termFadeIn 0.4s forwards';
+    i++;
+    setTimeout(showNext, 700);
+  }
+  
+  if (pauseBtn){
+    pauseBtn.addEventListener('click', function(){
+      paused = !paused;
+      pauseBtn.textContent = paused ? '▶ Продолжить' : '⏸ Пауза';
+      status.textContent = paused ? 'PAUSED' : 'STREAMING';
+      if (!paused) showNext();
+    });
+  }
+  
+  if (restartBtn){
+    restartBtn.addEventListener('click', function(){
+      paused = false;
+      reset();
+      setTimeout(showNext, 300);
+    });
+  }
+  
+  setTimeout(showNext, 800);
+})();
+</script>
+
 <section id="sovereignty">
 <div class="container">
 <div class="section-header">

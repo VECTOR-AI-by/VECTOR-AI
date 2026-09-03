@@ -1,9 +1,0 @@
-{
-  "buildCommand": "",
-  "framework": null,
-  "functions": {
-    "api/*.js": {
-      "maxDuration": 10
-    }
-  }
-}
