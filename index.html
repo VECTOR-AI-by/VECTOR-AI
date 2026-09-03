@@ -522,102 +522,7 @@ VECTOR-AI — Первое суверенное MAS-решение (Multi-Agent 
 
 
 <script>
-(function(){
-  var form = document.getElementById('lead-form');
-  if (!form) return;
-  
-  function showSuccess(name, subject, body){
-    var successBox = document.getElementById('form-success');
-    var successMailto = document.getElementById('success-mailto');
-    var successGmail = document.getElementById('success-gmail');
-    
-    var mailto = 'mailto:andrey_prosto@bk.ru?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-    var gmail = 'https://mail.google.com/mail/?view=cm&fs=1&to=andrey_prosto@bk.ru&su=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-    
-    if (successMailto) successMailto.href = mailto;
-    if (successGmail) successGmail.href = gmail;
-    
-    // Скрываем все поля формы
-    var fields = form.querySelectorAll('input, select, textarea, .form-error');
-    fields.forEach(function(f){ f.style.display = 'none'; });
-    var btn = document.getElementById('submit-btn');
-    if (btn) btn.style.display = 'none';
-    
-    // Показываем success БЛОК
-    if (successBox) {
-      successBox.classList.add('show');
-      successBox.style.display = 'block';
-      successBox.style.opacity = '1';
-      successBox.style.visibility = 'visible';
-      setTimeout(function(){
-        successBox.scrollIntoView({behavior:'smooth', block:'center'});
-      }, 200);
-    }
-    
-    // Открываем mailto через скрытый iframe
-    setTimeout(function(){
-      try {
-        var iframe = document.createElement('iframe');
-        iframe.style.cssText = 'display:none;width:0;height:0;border:0;position:absolute;left:-9999px;';
-        iframe.src = mailto;
-        document.body.appendChild(iframe);
-        setTimeout(function(){
-          try { document.body.removeChild(iframe); } catch(e) {}
-        }, 1500);
-      } catch(e) {}
-    }, 500);
-  }
-  
-  form.addEventListener('submit', function(e){
-    e.preventDefault();
-    
-    // Читаем поля напрямую (минуя FormData для надёжности)
-    var name = '';
-    var email = '';
-    var org = '';
-    var scope = '';
-    var msg = '';
-    
-    var nameInput = form.querySelector('input[name="name"]');
-    var emailInput = form.querySelector('input[name="email"]');
-    var orgInput = form.querySelector('select[name="org_type"]');
-    var scopeInput = form.querySelector('input[name="scope"]');
-    var msgInput = form.querySelector('textarea[name="message"]');
-    
-    if (nameInput) name = nameInput.value.trim();
-    if (emailInput) email = emailInput.value.trim();
-    if (orgInput) org = orgInput.value;
-    if (scopeInput) scope = scopeInput.value.trim();
-    if (msgInput) msg = msgInput.value.trim();
-    
-    var errBox = document.getElementById('form-error');
-    var valid = true;
-    var errMsg = '';
-    if (name.length < 2) { valid = false; errMsg = 'Укажите имя или организацию'; }
-    else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { valid = false; errMsg = 'Некорректный email'; }
-    else if (msg.length < 5) { valid = false; errMsg = 'Опишите задачу подробнее (минимум 5 символов)'; }
-    
-    if (!valid) {
-      if (errBox) { errBox.textContent = errMsg; errBox.classList.add('show'); }
-      return;
-    }
-    if (errBox) errBox.classList.remove('show');
-    
-    var btn = document.getElementById('submit-btn');
-    if (btn) { btn.disabled = true; btn.textContent = 'Отправка...'; }
-    
-    var subject = 'VECTOR-AI: заявка от ' + name;
-    var body = 'Новая заявка VECTOR-AI by\n\n' +
-      'Имя / Организация: ' + name + '\n' +
-      'Email: ' + email + '\n' +
-      'Тип: ' + (org || '—') + '\n' +
-      'Масштаб: ' + (scope || '—') + '\n\n' +
-      'Задача:\n' + msg + '\n\n' +
-      '—\nПолучено: ' + new Date().toISOString();
-    
-    showSuccess(name, subject, body);
-  });
-})();
+
 
 document.querySelectorAll('a[href^="#"]').forEach(function(a){
   a.addEventListener('click', function(e){
@@ -630,86 +535,127 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){
 
 
 </script>
-<!-- Advanced Swarm Visualizer -->
+
+
+<!-- Distributed Swarm Runtime -->
 <section class="swarm-section" id="swarm">
 <div class="container">
 <div class="section-header">
-<div class="section-label">Live · Демонстрация архитектуры</div>
-<h2 class="section-title">Advanced Swarm Visualizer</h2>
-<p class="section-description">Интерактивная симуляция работы суверенного AI-роя. Переключайте между режимами инфраструктурного пентеста и аудита смарт-контрактов. Запустите LAUNCH_SWARM чтобы наблюдать каскадное исполнение воркеров и пополнение Target Ledger в реальном времени.</p>
+<div class="section-label">Live · Динамическая симуляция архитектуры</div>
+<h2 class="section-title">DISTRIBUTED SWARM RUNTIME</h2>
+<p class="section-description">Интерактивная симуляция каскадного исполнения суверенного AI-роя. Переключайте между режимами и наблюдайте, как Командующий, Альфа/Гамма, Воркеры и Spawner/Watchdog реагируют на очередь в реальном времени.</p>
 </div>
 
 <div class="swarm-widget">
 <div class="swarm-header">
 <div class="swarm-dots">
 <span class="dot dot-red"></span>
-<span class="swarm-dot"></span>
+<span class="swarm-dot-line"></span>
 <span class="dot dot-yellow"></span>
-<span class="swarm-dot"></span>
+<span class="swarm-dot-line"></span>
 <span class="dot dot-green"></span>
 </div>
-<span class="swarm-title">VECTOR-AI // ADVANCED SWARM VISUALIZER</span>
+<span class="swarm-title">ВЕКТОР-ИИ // DISTRIBUTED SWARM RUNTIME</span>
 <div class="swarm-domain-switch">
-<button type="button" id="btn-infra" class="domain-btn active">🌐 INFRA_PENTEST</button>
-<button type="button" id="btn-web3" class="domain-btn">⛓️ WEB3_DEFI</button>
+<button type="button" id="btn-infra" class="domain-btn active">🌐 АУДИТ_ИНФРАСТРУКТУРЫ</button>
+<button type="button" id="btn-web3" class="domain-btn">⛓️ АУДИТ_WEB3_DEFI</button>
 </div>
 </div>
 
 <div class="swarm-input-bar">
-<span class="swarm-prompt">vector-ai@swarm:~$</span>
+<span class="swarm-prompt">vector-ai@рой:~$</span>
 <div class="swarm-input-display">
-<span id="input-target">scan --target https://your-domain.com</span>
-<span id="scan-status" class="status-badge status-ready">READY</span>
+<span id="input-target" class="input-target-text">проверить --цель https://target.local</span>
+<span id="scan-status" class="status-badge status-ready">ГОТОВ</span>
 </div>
-<button type="button" id="btn-launch" class="launch-btn">LAUNCH_SWARM</button>
+<button type="button" id="btn-launch" class="launch-btn">ЗАПУСТИТЬ_РОЙ</button>
+</div>
+
+<div style="padding:0 18px 12px;">
+<div class="event-log-wrap">
+<div class="event-log-header">
+<span class="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">Последовательность событий</span>
+<span id="pipeline-stage" class="text-[10px] text-zinc-600">ОЖИДАНИЕ</span>
+</div>
+<div id="event-log" class="event-log-body">
+<div class="text-zinc-700 italic">Здесь будет видна передача задач между Командующим, Альфой/Гаммой и роем.</div>
+</div>
+</div>
 </div>
 
 <div class="swarm-grid">
-<div class="swarm-col swarm-col-left">
-<div class="swarm-col-label">Core Orchestration Node</div>
-<div id="node-orchestrator" class="swarm-node-card orchestrator">
-<div class="node-content">
-<div class="node-title">🤖 FLAGMAN_ORCHESTRATOR</div>
-<div class="node-sub">Decomposing target payload...</div>
-</div>
-<div id="badge-orchestrator" class="node-badge"></div>
+<div class="swarm-col-left">
+<div class="swarm-col-label">Runtime topology</div>
+
+<div id="node-commanding" class="swarm-node-card orchestrator">
+<div><div class="node-title">👑 КОМАНДУЮЩИЙ</div><div class="node-sub">Декомпозиция / агрегация / отчётный контроль</div></div>
+<div class="flex items-center gap-2"><span id="orch-state" class="text-[9px] text-zinc-600">IDLE</span><div id="badge-commanding" class="node-badge"></div></div>
 </div>
 
-<div class="swarm-col-label sub">Domain Gates</div>
 <div class="swarm-gate-grid">
 <div id="node-alpha" class="swarm-gate">
-<div class="node-title">🛡️ ALPHA GATE</div>
-<div class="node-sub">Domain: Web3/Code</div>
-<div id="cov-alpha" class="node-cov">COV: 0.0%</div>
+<div class="node-title">🛡️ АЛЬФА</div>
+<div class="node-sub">Domain: Web3 / Code</div>
+<div id="cov-alpha" class="node-cov">COVERAGE: 0%</div>
 </div>
 <div id="node-gamma" class="swarm-gate">
-<div class="node-title">📡 GAMMA GATE</div>
-<div class="node-sub">Domain: Infra/OSINT</div>
-<div id="cov-gamma" class="node-cov">COV: 0.0%</div>
+<div class="node-title">📡 ГАММА</div>
+<div class="node-sub">Domain: Infra / OSINT</div>
+<div id="cov-gamma" class="node-cov">COVERAGE: 0%</div>
 </div>
 </div>
 
-<div class="swarm-col-label sub">Dynamic Worker Pool (On-Premises Runtime) — Auto-Scaling</div>
-<div id="worker-pool" class="swarm-workers"></div>
+<div class="swarm-graph-wrap">
+<div class="scanline"></div>
+<div class="flex items-center justify-between mb-3">
+<div class="swarm-col-label">Swarm Graph</div>
+<div id="рой-count" class="text-[9px] text-zinc-400 bg-zinc-900 px-1.5 py-0.5 rounded border border-zinc-800">WORKERS: 0</div>
+</div>
+<div id="рой-graph" class="swarm-graph">
+<div id="graph-links" class="graph-layer"></div>
+<div id="graph-nodes" class="graph-layer"></div>
+<div class="absolute left-2 top-2 text-[8px] text-zinc-700">LIVE EVENT STREAM</div>
+</div>
 </div>
 
-<div class="swarm-col swarm-col-right">
-<div class="swarm-col-label">Asynchronous Target Ledger (State Controller)</div>
+<div class="flex items-center justify-between mt-1">
+<div class="swarm-col-label">Динамический пул</div>
+<div id="queue-depth" class="text-[9px] text-zinc-500">PENDING: 0</div>
+</div>
+<div class="swarm-workers" id="worker-pool-container">
+<div class="text-zinc-600 italic text-center py-8">Пул неактивен. Ожидание цели...</div>
+</div>
+</div>
+
+<div class="swarm-col-right">
+<div class="swarm-col-label">Target Ledger // внешний источник состояния</div>
+
 <div class="ledger-table">
 <div class="ledger-header">
 <div class="lcol-id">ID</div>
-<div class="lcol-type">Type</div>
+<div class="lcol-type">Type / Target</div>
 <div class="lcol-status">Status</div>
 <div class="lcol-verdict">Verdict</div>
 </div>
 <div id="ledger-rows" class="ledger-body">
-<div class="ledger-empty">Target Ledger empty. Click LAUNCH_SWARM to test the architecture.</div>
+<div class="text-zinc-600 text-center py-16 italic">Реестр пуст. Запустите симуляцию.</div>
+</div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+<div class="metric-card">
+<div class="swarm-col-label mb-3">Invariant Monitor</div>
+<div id="invariants" class="space-y-1.5 text-[9px]"></div>
+</div>
+<div class="metric-card">
+<div class="swarm-col-label mb-3">Spawner / Watchdog</div>
+<div id="runtime-metrics" class="space-y-1.5 text-[9px]"></div>
 </div>
 </div>
 
 <div id="final-verdict-box" class="final-verdict">
-<div class="final-label">Automated Enforcement &amp; Compliance Output</div>
-<div id="final-text" class="final-text">Awaiting execution data...</div>
+<div class="final-label">Выходной контур</div>
+<div id="final-text" class="final-text">Ожидание данных исполнения...</div>
 </div>
 </div>
 </div>
@@ -718,13 +664,13 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){
 </section>
 
 <style>
-.swarm-section{padding:60px 0;background:linear-gradient(180deg,transparent 0%,rgba(0,212,170,0.03) 50%,transparent 100%)}
-.swarm-widget{max-width:1100px;margin:0 auto;background:#000;border:1px solid rgba(255,255,255,0.08);border-radius:14px;overflow:hidden;font-family:'JetBrains Mono',monospace;font-size:12px;color:#cbd5e1;box-shadow:0 20px 60px rgba(0,0,0,0.5)}
+.swarm-section{padding:60px 0;background:linear-gradient(180deg,transparent 0%,rgba(0,212,170,0.03) 50%,transparent 100%);font-family:'JetBrains Mono',monospace}
+.swarm-widget{max-width:1100px;margin:0 auto;background:#0A0F14;border:1px solid rgba(255,255,255,0.08);border-radius:14px;overflow:hidden;font-size:12px;color:#cbd5e1;box-shadow:0 20px 60px rgba(0,0,0,0.5)}
 .swarm-header{background:#0a0e15;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .swarm-dots{display:flex;gap:6px;align-items:center}
 .swarm-dots .dot{width:10px;height:10px;border-radius:50%;opacity:0.7}
 .dot-red{background:#ff5f56}.dot-yellow{background:#ffbd2e}.dot-green{background:#27c93f}
-.swarm-dot{width:6px;height:1px;background:rgba(255,255,255,0.1)}
+.swarm-dot-line{width:6px;height:1px;background:rgba(255,255,255,0.1)}
 .swarm-title{color:#8B949E;font-size:11px;letter-spacing:1.5px;flex:1;font-weight:600}
 .swarm-domain-switch{display:flex;background:#0a0e15;padding:3px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);gap:2px}
 .domain-btn{background:transparent;border:none;color:#8B949E;padding:6px 12px;border-radius:6px;font-family:inherit;font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:all 0.2s;text-transform:uppercase}
@@ -733,67 +679,66 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){
 .swarm-input-bar{padding:14px 18px;background:rgba(0,212,170,0.02);border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .swarm-prompt{color:#00D4AA;font-weight:700;font-size:12px;white-space:nowrap}
 .swarm-input-display{flex:1;background:#000;padding:8px 12px;border:1px solid rgba(255,255,255,0.08);border-radius:6px;color:#cbd5e1;font-size:12px;display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:200px}
-#input-target{font-weight:600;color:#E8EAED}
-.status-badge{font-size:9px;padding:3px 10px;border-radius:4px;letter-spacing:1px;font-weight:600;text-transform:uppercase}
+.input-target-text{font-weight:600;color:#E8EAED;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.status-badge{font-size:9px;padding:3px 10px;border-radius:4px;letter-spacing:1px;font-weight:600;text-transform:uppercase;flex-shrink:0}
 .status-ready{color:#8B949E;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1)}
 .status-running{color:#fbbf24;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);animation:swarmPulse 1s ease-in-out infinite}
 .status-completed{color:#10b981;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3)}
 .launch-btn{background:linear-gradient(135deg,#10b981,#059669);color:#000;font-weight:800;padding:9px 20px;border-radius:8px;font-family:inherit;font-size:11px;letter-spacing:1.5px;cursor:pointer;border:none;text-transform:uppercase;transition:all 0.2s;box-shadow:0 4px 16px rgba(16,185,129,0.25)}
 .launch-btn:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(16,185,129,0.35)}
 .launch-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
-.swarm-grid{display:grid;grid-template-columns:5fr 7fr;gap:18px;padding:18px;min-height:480px}
+.event-log-wrap{background:#0a0e15;border:1px solid rgba(255,255,255,0.05);border-radius:10px;overflow:hidden}
+.event-log-header{padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;justify-content:space-between;align-items:center}
+.event-log-body{padding:8px 12px;max-height:150px;overflow-y:auto;font-size:10px;line-height:1.6}
+.event-log-body .log-line{padding:2px 0;color:#8B949E;animation:swarmFadeIn 0.3s forwards}
+.event-log-body .log-time{color:#6B7280;margin-right:6px}
+.event-log-body .log-actor{color:#00D4AA;font-weight:700;margin-right:6px}
+.event-log-body .log-actor.alpha{color:#a855f7}
+.event-log-body .log-actor.gamma{color:#10b981}
+.event-log-body .log-actor.orch{color:#3b82f6}
+.event-log-body .log-action{color:#cbd5e1}
+.swarm-grid{display:grid;grid-template-columns:5fr 7fr;gap:18px;padding:18px;min-height:520px}
 @media(max-width:900px){.swarm-grid{grid-template-columns:1fr}}
-.swarm-col{display:flex;flex-direction:column;gap:10px}
-.swarm-col-label{font-size:10px;color:#8B949E;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-top:6px}
-.swarm-col-label.sub{margin-top:14px}
+.swarm-col-left,.swarm-col-right{display:flex;flex-direction:column;gap:10px}
+.swarm-col-label{font-size:10px;color:#8B949E;font-weight:700;letter-spacing:2px;text-transform:uppercase}
 .swarm-node-card{background:#0a0e15;border:1px solid rgba(255,255,255,0.08);padding:14px 16px;border-radius:10px;display:flex;align-items:center;justify-content:space-between;transition:all 0.3s}
+.swarm-node-card.orchestrator{border-left:3px solid #3b82f6}
 .swarm-node-card.orchestrator.active{border-color:rgba(59,130,246,0.6);box-shadow:0 0 24px rgba(59,130,246,0.2)}
-.node-content{flex:1}
 .node-title{font-weight:700;color:#E8EAED;font-size:12px}
 .node-sub{font-size:10px;color:#8B949E;margin-top:3px}
-.node-badge{width:10px;height:10px;border-radius:50%;background:#374151;transition:all 0.3s}
+.node-badge{width:10px;height:10px;border-radius:50%;background:#374151;transition:all 0.3s;flex-shrink:0}
 .node-badge.active{background:#3b82f6;animation:swarmPulse 0.8s ease-in-out infinite;box-shadow:0 0 12px rgba(59,130,246,0.6)}
 .swarm-gate-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .swarm-gate{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);padding:12px;border-radius:10px;opacity:0.4;transition:all 0.3s}
 .swarm-gate.active{opacity:1;border-color:rgba(0,212,170,0.4);box-shadow:0 0 20px rgba(0,212,170,0.15)}
 .node-cov{font-size:10px;color:#fbbf24;margin-top:6px;font-weight:700;letter-spacing:1px}
-.swarm-workers{display:flex;flex-direction:column;gap:6px;background:rgba(255,255,255,0.02);padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.05)}
-.swarm-worker{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);padding:8px 12px;border-radius:6px;display:flex;align-items:center;justify-content:space-between;opacity:0.4;transition:all 0.3s;font-size:11px}
-.swarm-worker.active{opacity:1;border-color:rgba(59,130,246,0.4);background:rgba(59,130,246,0.05)}
-.worker-label{color:#cbd5e1}
-.worker-status{font-size:9px;padding:2px 8px;border-radius:4px;font-weight:600;letter-spacing:1px}
-.status-idle{color:#8B949E;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06)}
-.status-computing{color:#3b82f6;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.3);animation:swarmPulse 0.8s ease-in-out infinite}
-.status-verifying{color:#ef4444;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);animation:swarmPulse 0.8s ease-in-out infinite}
-.status-exploiting{color:#a855f7;background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.3);animation:swarmPulse 0.8s ease-in-out infinite}
-.ledger-table{background:#000;border:1px solid rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;flex:1;display:flex;flex-direction:column}
-.ledger-header{display:grid;grid-template-columns:1fr 1.4fr 1.4fr 2fr;background:#0a0e15;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.05);font-weight:700;color:#8B949E;font-size:9px;letter-spacing:1.5px;text-transform:uppercase}
+.swarm-graph-wrap{margin-top:12px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px;position:relative;overflow:hidden}
+.scanline{position:absolute;left:0;right:0;height:40px;background:linear-gradient(to bottom,transparent,rgba(59,130,246,0.05),transparent);pointer-events:none;animation:swarmScan 3.2s linear infinite}
+@keyframes swarmScan{0%{transform:translateY(-100%);opacity:0}15%{opacity:.25}80%{opacity:.12}100%{transform:translateY(100%);opacity:0}}
+.swarm-graph{position:relative;height:160px;background:rgba(0,0,0,0.4);border-radius:6px;border:1px solid rgba(255,255,255,0.05);overflow:hidden}
+.graph-layer{position:absolute;inset:0;pointer-events:none}
+.swarm-workers{display:flex;flex-direction:column;gap:6px;background:rgba(255,255,255,0.02);padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.05);max-height:180px;overflow-y:auto}
+.ledger-table{background:#000;border:1px solid rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;display:flex;flex-direction:column}
+.ledger-header{display:grid;grid-template-columns:0.8fr 2fr 1.2fr 1.2fr;background:#0a0e15;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.05);font-weight:700;color:#8B949E;font-size:9px;letter-spacing:1.5px;text-transform:uppercase}
 .lcol-id,.lcol-type,.lcol-status,.lcol-verdict{padding:0 6px}
-.ledger-body{flex:1;padding:8px;max-height:280px;overflow-y:auto;display:flex;flex-direction:column;gap:6px}
+.ledger-body{padding:8px;max-height:270px;overflow-y:auto;display:flex;flex-direction:column;gap:6px}
 .ledger-body::-webkit-scrollbar{width:5px}
 .ledger-body::-webkit-scrollbar-thumb{background:rgba(0,212,170,0.3);border-radius:3px}
-.ledger-empty{text-align:center;padding:40px 12px;color:#6B7280;font-style:italic;font-size:11px}
-.ledger-row{display:grid;grid-template-columns:1fr 1.4fr 1.4fr 2fr;padding:8px 12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:6px;align-items:center;font-size:11px;animation:rowFadeIn 0.4s forwards}
-@keyframes rowFadeIn{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:translateX(0)}}
-.lr-id{color:#8B949E}
-.lr-type{color:#00D4AA;font-weight:700}
-.lr-type.web3{color:#10b981}
-.lr-type.infra{color:#a855f7}
-.lr-type.flash{color:#ef4444}
-.lr-status{padding:2px 0}
-.lr-status span{font-size:9px;padding:2px 8px;border-radius:3px;font-weight:600;letter-spacing:0.5px}
+.ledger-row{display:grid;grid-template-columns:0.8fr 2fr 1.2fr 1.2fr;padding:8px 10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:6px;align-items:center;font-size:11px;animation:swarmFadeIn 0.4s forwards}
+.ledger-row .lr-id{color:#8B949E}
+.ledger-row .lr-type{color:#cbd5e1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ledger-row .lr-type .lr-parent{font-size:8px;color:#6B7280;display:block}
+.ledger-row .lr-status span{font-size:9px;padding:2px 8px;border-radius:3px;font-weight:600;letter-spacing:0.5px}
 .lr-pending{color:#fbbf24;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3)}
 .lr-progress{color:#3b82f6;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.3);animation:swarmPulse 0.8s ease-in-out infinite}
 .lr-done{color:#8B949E;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08)}
 .lr-escalated{color:#fb923c;background:rgba(251,146,60,0.1);border:1px solid rgba(251,146,60,0.3)}
-.lr-verdict{text-align:right;font-weight:700;font-size:10px}
-.lr-verdict.fp{color:#8B949E}
-.lr-verdict.amb{color:#fb923c}
-.lr-verdict.verified{color:#10b981}
-.lr-verdict.verified-fail{color:#ef4444}
-.lr-log{font-size:9px;color:#8B949E;background:#000;padding:6px 8px;border:1px solid rgba(255,255,255,0.04);border-radius:4px;font-family:monospace;line-height:1.4}
-.lr-log .lcmd{color:#6B7280}
-.lr-log .lexec{color:#fbbf24}
+.lr-verified{color:#10b981;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3)}
+.lr-verified-fail{color:#ef4444;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3)}
+.lr-fp{color:#8B949E;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08)}
+.ledger-row .lr-verdict{text-align:right;font-weight:700;font-size:10px}
+.ledger-empty{text-align:center;padding:50px 12px;color:#6B7280;font-style:italic;font-size:11px}
+.metric-card{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:14px}
 .final-verdict{margin-top:14px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);padding:14px 16px;border-radius:10px;opacity:0.3;transition:all 0.5s}
 .final-verdict.active-red{opacity:1;border-color:rgba(239,68,68,0.5);background:rgba(239,68,68,0.05);box-shadow:0 0 30px rgba(239,68,68,0.15)}
 .final-verdict.active-green{opacity:1;border-color:rgba(16,185,129,0.5);background:rgba(16,185,129,0.05);box-shadow:0 0 30px rgba(16,185,129,0.15)}
@@ -802,11 +747,314 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){
 .final-text strong{color:#E8EAED}
 .final-text .law{font-size:9px;background:rgba(16,185,129,0.15);color:#10b981;border:1px solid rgba(16,185,129,0.3);padding:1px 6px;border-radius:3px;letter-spacing:1px;font-weight:600}
 .final-text .law-red{font-size:9px;background:rgba(239,68,68,0.15);color:#ef4444;border:1px solid rgba(239,68,68,0.3);padding:1px 6px;border-radius:3px;letter-spacing:1px;font-weight:600}
+@keyframes swarmFadeIn{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:translateX(0)}}
 @keyframes swarmPulse{0%,100%{opacity:1}50%{opacity:0.4}}
 </style>
 
 <script>
+const VS = (function(){
+  const targets = {
+    infra: "проверить --цель https://target.local",
+    web3: "проверить --цель 0x71C23310... (forked EVM)"
+  };
+  const state = {
+    domain:"infra", running:false, timers:[], workers:new Map(), ledger:new Map(),
+    coverage:{}, pending:0, claimed:0, timeouts:0, duplicates:0, lost:0, escalations:0
+  };
+  const $ = function(id){ return document.getElementById(id); };
+  const later = function(ms, fn){ state.timers.push(setTimeout(fn, ms)); };
+  const esc = function(s){ return String(s).replace(/[&<>\\"\047]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","\047":"&#039;"}[c]; }); };
+  const activeBtn = function(){ return "px-3 py-1.5 rounded-md font-bold text-[10px] uppercase bg-zinc-800 text-white border border-zinc-700"; };
+  const idleBtn = function(){ return "px-3 py-1.5 rounded-md font-bold text-[10px] uppercase text-zinc-500 hover:text-zinc-300"; };
+  const status = function(cls){ return "text-[10px] uppercase tracking-widest bg-zinc-900 px-2 py-0.5 rounded border border-zinc-800 " + cls; };
+  
+  function log(actor, action, time){
+    var box = $("event-log");
+    if (box && box.querySelector(".italic")) box.innerHTML = "";
+    var t = time || new Date().toTimeString().substring(0,8);
+    var actorClass = actor === "ОРКЕСТРАТОР" ? "orch" : (actor === "АЛЬФА" ? "alpha" : (actor === "ГАММА" ? "gamma" : ""));
+    var line = document.createElement("div");
+    line.className = "log-line";
+    line.innerHTML = '<span class="log-time">[' + t + ']</span><span class="log-actor ' + actorClass + '">' + actor + ':</span><span class="log-action">' + action + '</span>';
+    if (box) { box.appendChild(line); box.scrollTop = box.scrollHeight; }
+  }
+  
+  function switchDomain(domain){
+    if (state.running) return;
+    state.domain = domain;
+    $("input-target").innerText = targets[domain];
+    $("btn-infra").className = domain === "infra" ? activeBtn() : idleBtn();
+    $("btn-web3").className = domain === "web3" ? activeBtn() : idleBtn();
+    reset();
+  }
+  
+  function reset(){
+    state.timers.forEach(clearTimeout); state.timers = []; state.running = false;
+    state.workers.clear(); state.ledger.clear(); state.pending = 0; state.claimed = 0;
+    state.timeouts = 0; state.escalations = 0;
+    $("scan-status").innerText = "ГОТОВ";
+    $("scan-status").className = status("text-zinc-500");
+    $("btn-launch").disabled = false; $("btn-launch").style.opacity = "1";
+    $("orch-state").innerText = "IDLE";
+    $("badge-commanding").className = "node-badge";
+    $("pipeline-stage").innerText = "ОЖИДАНИЕ";
+    ["alpha","gamma"].forEach(function(x){
+      $("node-" + x).style.opacity = ".4";
+      $("node-" + x).className = "swarm-gate";
+      $("cov-" + x).innerText = "COVERAGE: 0%";
+    });
+    $("worker-pool-container").innerHTML = '<div class="text-zinc-600 italic text-center py-8">Пул неактивен. Ожидание цели...</div>';
+    $("ledger-rows").innerHTML = '<div class="text-zinc-600 text-center py-16 italic">Реестр пуст. Запустите симуляцию.</div>';
+    $("graph-nodes").innerHTML = ""; $("graph-links").innerHTML = "";
+    $("final-verdict-box").className = "final-verdict";
+    $("final-text").innerHTML = "Ожидание данных исполнения...";
+    var logBox = $("event-log");
+    if (logBox) logBox.innerHTML = '<div class="text-zinc-700 italic">Здесь будет видна передача задач между Командующим, Альфой/Гаммой и роем.</div>';
+    renderMetrics();
+  }
+  
+  function addRow(id, type, st, stCls, ver, verCls, parent){
+    var row = { id:id, type:type, status:st, verdict:ver, parent:parent };
+    state.ledger.set(id, row); state.pending++;
+    if ($("ledger-rows").querySelector(".italic")) $("ledger-rows").innerHTML = "";
+    var el = document.createElement("div");
+    el.id = "ledger-" + id;
+    el.className = "ledger-row";
+    var parentHtml = parent ? '<span class="lr-parent">parent: ' + esc(parent) + '</span>' : '';
+    el.innerHTML = '<div class="lr-id">#' + esc(id) + '</div>' +
+      '<div class="lr-type">' + esc(type) + parentHtml + '</div>' +
+      '<div class="lr-status"><span id="status-' + id + '" class="' + (stCls || "lr-pending") + '">' + esc(st) + '</span></div>' +
+      '<div id="verdict-' + id + '" class="lr-verdict"><span class="' + (verCls || "lr-pending") + '">' + esc(ver) + '</span></div>';
+    $("ledger-rows").appendChild(el);
+    $("ledger-rows").scrollTop = $("ledger-rows").scrollHeight;
+    renderMetrics();
+  }
+  
+  function updateRow(id, st, stCls, ver, verCls){
+    var r = state.ledger.get(id); if (!r) return;
+    if (r.status === "PENDING" && st !== "PENDING") state.pending = Math.max(0, state.pending - 1);
+    r.status = st; r.verdict = ver;
+    var s = $("status-" + id), v = $("verdict-" + id);
+    if (s) { s.innerText = st; s.className = stCls; }
+    if (v) { v.innerHTML = '<span class="' + (verCls || "lr-pending") + '">' + esc(ver) + '</span>'; }
+    renderMetrics();
+  }
+  
+  function addWorker(id, role, task){
+    state.workers.set(id, { id:id, role:role, task:task });
+    var c = $("worker-pool-container");
+    if (c.querySelector(".italic")) c.innerHTML = "";
+    var el = document.createElement("div");
+    el.id = "worker-" + id;
+    el.className = "swarm-worker";
+    el.style.cssText = "background:rgba(255,255,255,0.03);border:1px solid rgba(59,130,246,0.4);padding:8px 12px;border-radius:6px;display:flex;align-items:center;justify-content:space-between;font-size:11px;animation:swarmFadeIn 0.3s forwards";
+    el.innerHTML = '<div><span style="color:#cbd5e1;font-weight:600">' + esc(role) + '</span><span style="display:block;font-size:8px;color:#6B7280">' + esc(task) + '</span></div>' +
+      '<span id="wstat-' + id + '" class="text-[9px] bg-zinc-950 px-1.5 py-0.5 rounded text-blue-400 border border-blue-900/40" style="animation:swarmPulse 0.8s ease-in-out infinite">RUNNING</span>';
+    c.appendChild(el);
+    $("рой-count").innerText = "WORKERS: " + state.workers.size;
+    graphNode(id, role);
+    renderMetrics();
+  }
+  
+  function removeWorker(id){
+    state.workers.delete(id);
+    var el = $("worker-" + id);
+    if (el) el.remove();
+    $("рой-count").innerText = "WORKERS: " + state.workers.size;
+    if (!state.workers.size) $("worker-pool-container").innerHTML = '<div class="text-zinc-600 italic text-center py-8">Пул ожидает pending items...</div>';
+    renderMetrics();
+  }
+  
+  function graphNode(id, label){
+    var wrap = $("graph-nodes");
+    if (!wrap) return;
+    var n = state.workers.size, col = n % 2, row = Math.floor(n / 2);
+    var el = document.createElement("div");
+    el.id = "g-" + id;
+    el.className = "absolute";
+    el.style.cssText = "position:absolute;padding:2px 6px;border-radius:4px;border:1px solid rgba(59,130,246,0.6);background:rgba(59,130,246,0.15);color:#93c5fd;animation:swarmFadeIn 0.4s forwards;white-space:nowrap;font-size:8px";
+    el.style.left = (42 + col * 35) + "%";
+    el.style.top = (20 + (row % 4) * 22) + "%";
+    el.innerText = label.replace("⚡ ", "").replace("🔥 ", "");
+    wrap.appendChild(el);
+  }
+  
+  function setCoverage(x, val){ $("cov-" + x).innerText = "COVERAGE: " + val + "%"; }
+  
+  function renderMetrics(){
+    $("queue-depth").innerText = "PENDING: " + state.pending;
+    $("runtime-metrics").innerHTML = 
+      '<div class="flex justify-between"><span class="text-zinc-600">SPAWNER target_workers</span><span class="text-blue-400">' + Math.max(1, Math.ceil(state.pending/5)) + '</span></div>' +
+      '<div class="flex justify-between"><span class="text-zinc-600">active_workers</span><span>' + state.workers.size + '</span></div>' +
+      '<div class="flex justify-between"><span class="text-zinc-600">queue pressure</span><span class="' + (state.pending>5?"text-yellow-400":"text-zinc-400") + '">' + (state.pending>5?"HIGH":"NORMAL") + '</span></div>' +
+      '<div class="flex justify-between"><span class="text-zinc-600">watchdog timeouts</span><span class="' + (state.timeouts?"text-orange-400":"text-emerald-400") + '">' + state.timeouts + '</span></div>' +
+      '<div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.05);color:#6B7280">event-driven runtime / external state</div>';
+    var total = 0, done = 0;
+    state.ledger.forEach(function(v){ total++; if (v.status === "DONE") done++; });
+    $("invariants").innerHTML = 
+      inv("NO LOST ITEMS", state.lost === 0, total + "/" + total) +
+      inv("NO DUPLICATE CLAIMS", state.duplicates === 0, String(state.duplicates)) +
+      inv("PENDING TRACKED", state.pending >= 0, String(state.pending)) +
+      inv("ESCALATION RULE", true, String(state.escalations)) +
+      inv("REPORT GATE", reportAllowed(), reportAllowed() ? "UNLOCKED" : "BLOCKED");
+  }
+  function inv(name, ok, val){
+    return '<div class="flex items-center justify-between"><span>' + (ok?"✓":"✕") + " " + name + '</span><span class="' + (ok?"text-emerald-400":"text-red-400") + '">' + esc(val) + '</span></div>';
+  }
+  function reportAllowed(){
+    var vals = Object.values(state.coverage);
+    return vals.length > 0 && vals.every(function(v){ return v === 100; }) && state.pending === 0 && state.workers.size === 0;
+  }
+  
+  function activate(domain){
+    var node = $("node-" + domain);
+    node.style.opacity = "1";
+    var color = domain === "infra" ? "168,85,247" : "16,185,129";
+    node.className = "swarm-gate active";
+    node.style.cssText = "background:rgba(255,255,255,0.02);border:1px solid rgba(" + color + ",0.4);padding:12px;border-radius:10px;opacity:1;box-shadow:0 0 20px rgba(" + color + ",0.15)";
+  }
+  
+  function finish(title, html, critical){
+    $("final-verdict-box").className = "final-verdict " + (critical ? "active-red" : "active-green");
+    $("final-text").innerHTML = '<div style="display:flex;align-items:center;justify-content:space-between;font-weight:700;border-bottom:1px solid ' + (critical?"rgba(239,68,68,0.3)":"rgba(16,185,129,0.3)") + ';padding-bottom:6px;margin-bottom:8px;color:' + (critical?"#ef4444":"#10b981") + '"><span>' + esc(title) + '</span><span class="' + (critical?"law-red":"law") + '">' + (reportAllowed() ? "REPORT UNLOCKED" : "REPORT BLOCKED") + '</span></div>' + html;
+    $("scan-status").innerText = "ЗАВЕРШЕНО";
+    $("scan-status").className = status("text-emerald-400");
+    $("orch-state").innerText = "REPORT_READY";
+    $("badge-commanding").className = "node-badge active";
+    state.running = false; $("btn-launch").disabled = false; $("btn-launch").style.opacity = "1";
+    renderMetrics();
+  }
+  
+  function start(){
+    if (state.running) return;
+    reset(); state.running = true;
+    $("btn-launch").disabled = true; $("btn-launch").style.opacity = ".55";
+    $("scan-status").innerText = "СКАНИРОВАНИЕ";
+    $("scan-status").className = status("text-yellow-400");
+    $("orch-state").innerText = "DECOMPOSING";
+    $("badge-commanding").className = "node-badge active";
+    $("pipeline-stage").innerText = "PHASE 1/3";
+    log("ОРКЕСТРАТОР", "декомпозиция задачи, классификация архетипа");
+    later(800, function(){
+      $("pipeline-stage").innerText = "PHASE 2/3";
+      if (state.domain === "infra") runInfra();
+      else runWeb3();
+    });
+  }
+  
+  function runInfra(){
+    activate("gamma");
+    state.coverage = { port:0, service:0, secret:0 };
+    log("ОРКЕСТРАТОР", "маршрутизация → ГАММА (infra/osint)");
+    addRow("inf-01", "port / scan", "PENDING", "lr-pending");
+    later(900, function(){
+      log("ГАММА", "spawn 1 worker (port scan)");
+      addWorker("w-01", "⚡ ИСПОЛНИТЕЛЬ · 01", "passive port analysis");
+      updateRow("inf-01", "IN_PROGRESS", "lr-progress", "—", "lr-pending");
+    });
+    later(2400, function(){
+      log("ИСПОЛНИТЕЛЬ · 01", "inf-01 → TP (ports exposed), spawn child tasks");
+      updateRow("inf-01", "DONE", "lr-done", "TP", "lr-verified");
+      removeWorker("w-01"); state.coverage.port = 100; setCoverage("gamma", 33);
+      addRow("inf-02", "service / fingerprint", "PENDING", "lr-pending");
+      addRow("inf-03", "secret / leak_check", "PENDING", "lr-pending");
+    });
+    later(3500, function(){
+      log("SPAWNER", "queue=2 → target_workers=⌈2/5⌉=1, escalate to 3");
+      addWorker("w-02", "⚡ ИСПОЛНИТЕЛЬ · 02", "service fingerprint");
+      addWorker("w-03", "⚡ ИСПОЛНИТЕЛЬ · 03", "repository metadata");
+    });
+    later(5600, function(){
+      log("ИСПОЛНИТЕЛЬ · 02", "inf-02 → FP (standard config)");
+      log("ИСПОЛНИТЕЛЬ · 03", "inf-03 → AMBIGUOUS, escalate to ВЕРИФИКАТОР");
+      updateRow("inf-02", "DONE", "lr-done", "FP", "lr-fp");
+      state.coverage.service = 100;
+      updateRow("inf-03", "ESCALATED", "lr-escalated", "AMBIGUOUS", "lr-escalated");
+      state.escalations++;
+      removeWorker("w-02"); removeWorker("w-03");
+      state.coverage.secret = 0; setCoverage("gamma", 67);
+    });
+    later(6800, function(){
+      log("ВЕРИФИКАТОР · 01", "spawn: active config validation (safe)");
+      addWorker("w-ver", "🔥 ВЕРИФИКАТОР · 01", "safe configuration validation");
+      updateRow("inf-03", "IN_PROGRESS", "lr-progress", "VERIFYING", "lr-escalated");
+    });
+    later(9000, function(){
+      log("ВЕРИФИКАТОР · 01", "inf-03 → VERIFIED (PII leak)");
+      updateRow("inf-03", "DONE", "lr-done", "VERIFIED", "lr-verified-fail");
+      state.coverage.secret = 100; setCoverage("gamma", 100);
+      removeWorker("w-ver");
+      log("ВЫХОДНОЙ КОНТУР", "генерация пакета Responsible Disclosure");
+      finish("⚡ ПОДТВЕРЖДЁН КРИТИЧЕСКИЙ ИНЦИДЕНТ", 
+        'Цель: <b>https://target.local</b><br/>Найденная конфигурация подтверждена безопасной проверкой. Все domain/type закрыты, очередь пуста. Автоматически сформирован технический пакет Responsible Disclosure.', false);
+    });
+  }
+  
+  function runWeb3(){
+    activate("alpha");
+    state.coverage = { finding:0, contract:0, wallet:0 };
+    log("ОРКЕСТРАТОР", "маршрутизация → АЛЬФА (web3/code)");
+    addRow("w3-01", "finding / proxy_check", "PENDING", "lr-pending");
+    later(900, function(){
+      log("АЛЬФА", "spawn 1 worker (proxy analysis)");
+      addWorker("w-w3-01", "⚡ ИСПОЛНИТЕЛЬ · 01", "proxy storage analysis");
+      updateRow("w3-01", "IN_PROGRESS", "lr-progress", "—", "lr-pending");
+    });
+    later(2400, function(){
+      log("ИСПОЛНИТЕЛЬ · 01", "w3-01 → TP, 3 child contracts found");
+      updateRow("w3-01", "DONE", "lr-done", "TP", "lr-verified");
+      removeWorker("w-w3-01"); state.coverage.finding = 100; setCoverage("alpha", 25);
+      addRow("w3-02", "contract / logic", "PENDING", "lr-pending");
+      addRow("w3-03", "contract / vault", "PENDING", "lr-pending");
+      addRow("w3-04", "wallet / graph_node", "PENDING", "lr-pending");
+    });
+    later(3500, function(){
+      log("SPAWNER", "queue=3 → escalate to 3 workers");
+      addWorker("w-w3-02", "⚡ ИСПОЛНИТЕЛЬ · 02", "logic analysis");
+      addWorker("w-w3-03", "⚡ ИСПОЛНИТЕЛЬ · 03", "storage analysis");
+      addWorker("w-w3-04", "⚡ ИСПОЛНИТЕЛЬ · 04", "dependency graph");
+    });
+    later(5600, function(){
+      log("ИСПОЛНИТЕЛЬ · 02", "w3-02 → FP (safe calculation)");
+      log("ИСПОЛНИТЕЛЬ · 04", "w3-04 → TP (graph nodes found)");
+      log("ИСПОЛНИТЕЛЬ · 03", "w3-03 → AMBIGUOUS, escalate");
+      updateRow("w3-02", "DONE", "lr-done", "FP", "lr-fp");
+      updateRow("w3-04", "DONE", "lr-done", "TP", "lr-verified");
+      state.coverage.contract = 100; state.coverage.wallet = 100;
+      updateRow("w3-03", "ESCALATED", "lr-escalated", "AMBIGUOUS", "lr-escalated");
+      state.escalations++;
+      removeWorker("w-w3-02"); removeWorker("w-w3-03"); removeWorker("w-w3-04");
+      setCoverage("alpha", 75);
+    });
+    later(6800, function(){
+      log("ВЕРИФИКАТОР · 02", "spawn: isolated EVM fork validation");
+      addWorker("w-vweb3", "🔥 ВЕРИФИКАТОР · 02", "isolated EVM fork validation");
+      updateRow("w3-03", "IN_PROGRESS", "lr-progress", "FORK TEST", "lr-escalated");
+    });
+    later(7600, function(){
+      log("ВЕРИФИКАТОР · 02", "forge test → spawned 2 graph child tasks");
+      addRow("w3-05", "graph_node / discovered wallet", "PENDING", "lr-pending", "—", "lr-pending", "w3-03");
+      addRow("w3-06", "graph_node / discovered wallet", "PENDING", "lr-pending", "—", "lr-pending", "w3-03");
+      state.coverage.wallet = 100;
+    });
+    later(8800, function(){
+      log("ВЕРИФИКАТОР · 02", "w3-05,06,03 → VERIFIED, exploit valid in fork");
+      updateRow("w3-05", "DONE", "lr-done", "VERIFIED", "lr-verified");
+      updateRow("w3-06", "DONE", "lr-done", "VERIFIED", "lr-verified");
+      updateRow("w3-03", "DONE", "lr-done", "VERIFIED", "lr-verified-fail");
+      removeWorker("w-vweb3");
+      state.coverage.contract = 100; setCoverage("alpha", 100);
+      log("ВЫХОДНОЙ КОНТУР", "remediation patch сгенерирован, реальная сеть не задета");
+      finish("⚠️ ПОДТВЕРЖДЁН ВЕКТОР В ИЗОЛИРОВАННОМ FORK", 
+        'Целевой контракт: <b>0x71C23310...</b><br/>Вектор воспроизведён в изолированном EVM-форке. <b>Реальная сеть не затрагивалась.</b><br/><span class="law-red">VERIFIED</span> — все дочерние items созданы через <span style="color:#cbd5e1">parent_id</span>, закрыты независимо, coverage=100%.', true);
+    });
+  }
+  
+  $("input-target").innerText = targets.infra; reset();
+  return { start: start, switchDomain: switchDomain };
+})();
 </script>
+
 
 <section class="contact" id="contact">
 <div class="container">
@@ -830,14 +1078,9 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){
 <button type="submit" class="btn btn-primary" id="submit-btn">Отправить заявку</button>
 <div class="form-success" id="form-success">
   <div class="success-icon">✓</div>
-  <div class="success-title">Заявка успешно сформирована!</div>
-  <div class="success-text">Мы свяжемся с вами в ближайшее время. Если почтовый клиент не открылся автоматически, нажмите кнопку ниже.</div>
-  <a id="success-mailto" href="#" class="btn btn-primary" style="width:100%;margin-top:12px;">
-    📧 Открыть почтовый клиент
-  </a>
-  <a id="success-gmail" href="#" target="_blank" rel="noopener" class="btn btn-secondary" style="width:100%;margin-top:8px;">
-    🌐 Открыть в Gmail Web
-  </a>
+  <div class="success-title">Заявка успешно отправлена!</div>
+  <div class="success-text">Спасибо! Заявка отправлена. Мы свяжемся с вами в ближайшее время.</div>
+  
 </div>
 </form>
 <p class="contact-disclaimer">Все тесты проводятся в изолированном контуре заказчика через одноразовые контейнеры-сателлиты. Исходный код ядра ИИ-логики не покидает защищённые мощности разработчика. Превентивная проверка законодательной базы РБ и ЕАЭС включена в каждый пилот.</p>
@@ -1231,43 +1474,63 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){
 })();
 </script>
 
-<!-- Lead Modal -->
-<div class="lead-modal" id="lead-modal">
-<div class="lead-modal-content">
-<button type="button" class="lead-modal-close" id="modal-close">×</button>
-<div class="lead-modal-icon">✉</div>
-<h3 class="lead-modal-title">Заявка сформирована</h3>
-<p class="lead-modal-text">Ваша заявка готова к отправке. Нажмите кнопку — откроется почтовый клиент с заполненными полями.</p>
-<a id="modal-mailto" href="mailto:andrey_prosto@bk.ru" class="btn btn-primary" style="width:100%;margin-bottom:12px;">
-📧 Открыть почтовый клиент
-</a>
-<a id="modal-gmail" href="https://mail.google.com/" target="_blank" rel="noopener" class="btn btn-secondary" style="width:100%;">
-🌐 Открыть в Gmail Web
-</a>
-<p class="lead-modal-note">Если почтовый клиент не установлен — нажмите вторую кнопку, заявка откроется в Gmail.</p>
-</div>
-</div>
-
-<style>
-.lead-modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px}
-.lead-modal.show{display:flex}
-.lead-modal-content{background:#0A0F1A;border:1px solid rgba(0,102,255,0.3);border-radius:20px;padding:36px 32px;max-width:440px;width:100%;position:relative;animation:modalSlide 0.3s ease}
-@keyframes modalSlide{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
-.lead-modal-close{position:absolute;top:12px;right:16px;background:none;border:none;color:#8B949E;font-size:28px;cursor:pointer;line-height:1;padding:0;width:32px;height:32px}
-.lead-modal-close:hover{color:#E8EAED}
-.lead-modal-icon{font-size:48px;text-align:center;margin-bottom:16px}
-.lead-modal-title{font-size:22px;font-weight:700;text-align:center;margin-bottom:12px;color:#E8EAED}
-.lead-modal-text{color:#8B949E;text-align:center;margin-bottom:24px;font-size:14px;line-height:1.5}
-.lead-modal-note{font-size:11px;color:#6B7280;margin-top:14px;line-height:1.5;text-align:center}
-</style>
 
 <script>
-document.getElementById('modal-close')?.addEventListener('click', function(){
-  document.getElementById('lead-modal').classList.remove('show');
-});
-document.getElementById('lead-modal')?.addEventListener('click', function(e){
-  if (e.target === this) this.classList.remove('show');
-});
+(function(){
+  var form = document.getElementById('lead-form');
+  if (!form) return;
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var nameInput = form.querySelector('input[name="name"]');
+    var emailInput = form.querySelector('input[name="email"]');
+    var orgInput = form.querySelector('select[name="org_type"]');
+    var scopeInput = form.querySelector('input[name="scope"]');
+    var msgInput = form.querySelector('textarea[name="message"]');
+    var name = nameInput ? nameInput.value.trim() : '';
+    var email = emailInput ? emailInput.value.trim() : '';
+    var org = orgInput ? orgInput.value : '';
+    var scope = scopeInput ? scopeInput.value.trim() : '';
+    var msg = msgInput ? msgInput.value.trim() : '';
+    var errBox = document.getElementById('form-error');
+    if (name.length<2){errBox.textContent='Укажите имя или организацию';errBox.classList.add('show');return;}
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){errBox.textContent='Некорректный email';errBox.classList.add('show');return;}
+    if (msg.length<5){errBox.textContent='Опишите задачу (минимум 5 символов)';errBox.classList.add('show');return;}
+    errBox.classList.remove('show');
+    var btn = document.getElementById('submit-btn');
+    btn.disabled=true; btn.textContent='Отправка...';
+    fetch('https://formsubmit.co/ajax/andrey_prosto@bk.ru', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body: JSON.stringify({
+        _subject:'VECTOR-AI: заявка от '+name,
+        _captcha:'false', _template:'table',
+        'Имя/Организация':name, 'Email':email,
+        'Тип организации':org||'—', 'Масштаб':scope||'—', 'Задача':msg
+      })
+    })
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if (d.success==='true'||d.success===true){
+        form.querySelectorAll('input, select, textarea, .form-error').forEach(function(el){el.style.display='none';});
+        btn.style.display='none';
+        var sb = document.getElementById('form-success');
+        sb.classList.add('show');
+        sb.style.display='block';
+        sb.style.opacity='1';
+        sb.style.visibility='visible';
+      } else {
+        errBox.textContent='Ошибка отправки. Попробуйте позже.';
+        errBox.classList.add('show');
+        btn.disabled=false; btn.textContent='Отправить заявку';
+      }
+    })
+    .catch(function(){
+      errBox.textContent='Ошибка сети. Проверьте подключение.';
+      errBox.classList.add('show');
+      btn.disabled=false; btn.textContent='Отправить заявку';
+    });
+  });
+})();
 </script>
 </body>
 </html>
