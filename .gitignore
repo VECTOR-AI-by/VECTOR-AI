@@ -198,12 +198,6 @@ cache/
 typechain/
 typechain-types/
 
-# Git
-.git/
-.gitignore
-.gitattributes
-.gitmodules
-
 # Docker
 docker-compose.override.yml
 Dockerfile.dev
