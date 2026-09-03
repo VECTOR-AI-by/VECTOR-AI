@@ -645,16 +645,34 @@ VECTOR-AI — Первое суверенное MAS-решение (Multi-Agent 
     var mailto = 'mailto:andrey_prosto@bk.ru' +
       '?subject=' + encodeURIComponent(subject) +
       '&body=' + encodeURIComponent(body);
-    
-    window.location.href = mailto;
-    
+
+    // Способ 1: пробуем открыть системный почтовый клиент через скрытую ссылку
+    try {
+      var link = document.createElement('a');
+      link.href = mailto;
+      link.rel = 'noopener';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch(e) {}
+
+    // Способ 2: через 1.2с открываем Gmail web как fallback
+    // Если у пользователя Outlook/Apple Mail/Yandex — браузер сам поймёт
+    setTimeout(function(){
+      var webmail = 'https://mail.google.com/mail/?view=cm&fs=1' +
+        '&to=andrey_prosto@bk.ru' +
+        '&su=' + encodeURIComponent(subject) +
+        '&body=' + encodeURIComponent(body);
+      window.open(webmail, '_blank', 'noopener');
+    }, 1200);
+
     setTimeout(function(){
       btn.disabled = false;
       btn.textContent = 'Отправить заявку';
       var ok = document.getElementById('form-success');
       if (ok) ok.classList.add('show');
       form.reset();
-    }, 1500);
+    }, 2000);
   });
 })();
 
@@ -665,6 +683,69 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){
     if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 });
+
+// === Интерактивный терминал Target Ledger ===
+(function(){
+  var screen = document.getElementById('terminal-screen');
+  if (!screen) return;
+  var blocks = screen.querySelectorAll('.term-line, .term-block, .term-legal');
+  var status = document.getElementById('term-status-text');
+  var pauseBtn = document.getElementById('term-pause');
+  var restartBtn = document.getElementById('term-restart');
+  var i = 0;
+  var paused = false;
+  var timer = null;
+  
+  function reset(){
+    i = 0;
+    paused = false;
+    blocks.forEach(function(b){
+      b.style.animation = 'none';
+      b.style.opacity = '0';
+    });
+    if (status) status.textContent = 'STREAMING';
+    if (pauseBtn) pauseBtn.textContent = '⏸ Пауза';
+  }
+  
+  function showNext(){
+    if (paused) return;
+    if (i >= blocks.length){
+      if (status) status.textContent = 'COMPLETE';
+      return;
+    }
+    var b = blocks[i];
+    b.style.animation = 'termFadeIn 0.4s forwards';
+    i++;
+    timer = setTimeout(showNext, 650);
+  }
+  
+  if (pauseBtn){
+    pauseBtn.addEventListener('click', function(){
+      paused = !paused;
+      if (paused){
+        if (timer) clearTimeout(timer);
+        if (status) status.textContent = 'PAUSED';
+        pauseBtn.textContent = '▶ Продолжить';
+      } else {
+        if (status) status.textContent = 'STREAMING';
+        pauseBtn.textContent = '⏸ Пауза';
+        showNext();
+      }
+    });
+  }
+  
+  if (restartBtn){
+    restartBtn.addEventListener('click', function(){
+      if (timer) clearTimeout(timer);
+      reset();
+      setTimeout(showNext, 400);
+    });
+  }
+  
+  // Запуск анимации
+  setTimeout(showNext, 600);
+})();
+
 </script>
 </body>
 </html>
