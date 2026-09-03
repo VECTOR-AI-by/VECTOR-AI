@@ -526,38 +526,87 @@ VECTOR-AI — Первое суверенное MAS-решение (Multi-Agent 
   var form = document.getElementById('lead-form');
   if (!form) return;
   
-  form.addEventListener('submit', function(e){
-    e.preventDefault();
-    console.log('VECTOR-AI form submitted', {name: form.name, value: form.value});
-    var data = Object.fromEntries(new FormData(form).entries());
-    var name = (data.name || '').trim();
-    var email = (data.email || '').trim();
-    var org = (data.org_type || '').trim();
-    var scope = (data.scope || '').trim();
-    var msg = (data.message || '').trim();
-    
-    if (name.length < 2) { alert('Укажите имя или организацию'); return; }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { alert('Некорректный email'); return; }
-    if (msg.length < 5) { alert('Опишите задачу подробнее'); return; }
-    
-    var btn = document.getElementById('submit-btn');
+  function showSuccess(name, subject, body){
     var successBox = document.getElementById('form-success');
     var successMailto = document.getElementById('success-mailto');
     var successGmail = document.getElementById('success-gmail');
     
-    btn.disabled = true;
-    btn.textContent = 'Отправка...';
+    var mailto = 'mailto:andrey_prosto@bk.ru?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    var gmail = 'https://mail.google.com/mail/?view=cm&fs=1&to=andrey_prosto@bk.ru&su=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
     
-    // Скрываем ошибки
+    if (successMailto) successMailto.href = mailto;
+    if (successGmail) successGmail.href = gmail;
+    
+    // Скрываем все поля формы
+    var fields = form.querySelectorAll('input, select, textarea, .form-error');
+    fields.forEach(function(f){ f.style.display = 'none'; });
+    var btn = document.getElementById('submit-btn');
+    if (btn) btn.style.display = 'none';
+    
+    // Показываем success БЛОК
+    if (successBox) {
+      successBox.classList.add('show');
+      successBox.style.display = 'block';
+      successBox.style.opacity = '1';
+      successBox.style.visibility = 'visible';
+      setTimeout(function(){
+        successBox.scrollIntoView({behavior:'smooth', block:'center'});
+      }, 200);
+    }
+    
+    // Открываем mailto через скрытый iframe
+    setTimeout(function(){
+      try {
+        var iframe = document.createElement('iframe');
+        iframe.style.cssText = 'display:none;width:0;height:0;border:0;position:absolute;left:-9999px;';
+        iframe.src = mailto;
+        document.body.appendChild(iframe);
+        setTimeout(function(){
+          try { document.body.removeChild(iframe); } catch(e) {}
+        }, 1500);
+      } catch(e) {}
+    }, 500);
+  }
+  
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    
+    // Читаем поля напрямую (минуя FormData для надёжности)
+    var name = '';
+    var email = '';
+    var org = '';
+    var scope = '';
+    var msg = '';
+    
+    var nameInput = form.querySelector('input[name="name"]');
+    var emailInput = form.querySelector('input[name="email"]');
+    var orgInput = form.querySelector('select[name="org_type"]');
+    var scopeInput = form.querySelector('input[name="scope"]');
+    var msgInput = form.querySelector('textarea[name="message"]');
+    
+    if (nameInput) name = nameInput.value.trim();
+    if (emailInput) email = emailInput.value.trim();
+    if (orgInput) org = orgInput.value;
+    if (scopeInput) scope = scopeInput.value.trim();
+    if (msgInput) msg = msgInput.value.trim();
+    
     var errBox = document.getElementById('form-error');
+    var valid = true;
+    var errMsg = '';
+    if (name.length < 2) { valid = false; errMsg = 'Укажите имя или организацию'; }
+    else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { valid = false; errMsg = 'Некорректный email'; }
+    else if (msg.length < 5) { valid = false; errMsg = 'Опишите задачу подробнее (минимум 5 символов)'; }
+    
+    if (!valid) {
+      if (errBox) { errBox.textContent = errMsg; errBox.classList.add('show'); }
+      return;
+    }
     if (errBox) errBox.classList.remove('show');
     
-    var subject = 'VECTOR-AI: заявка от ' + name;
-
-    // Сохраняем для Gmail fallback
-    window._lastSubject = subject;
-    window._lastBody = body;
+    var btn = document.getElementById('submit-btn');
+    if (btn) { btn.disabled = true; btn.textContent = 'Отправка...'; }
     
+    var subject = 'VECTOR-AI: заявка от ' + name;
     var body = 'Новая заявка VECTOR-AI by\n\n' +
       'Имя / Организация: ' + name + '\n' +
       'Email: ' + email + '\n' +
@@ -566,44 +615,7 @@ VECTOR-AI — Первое суверенное MAS-решение (Multi-Agent 
       'Задача:\n' + msg + '\n\n' +
       '—\nПолучено: ' + new Date().toISOString();
     
-    var mailto = 'mailto:andrey_prosto@bk.ru' +
-      '?subject=' + encodeURIComponent(subject) +
-      '&body=' + encodeURIComponent(body);
-
-    // Заполняем success-блок с реальными ссылками
-    if (successMailto) successMailto.href = mailto;
-    if (successGmail) successGmail.href = 'https://mail.google.com/mail/?view=cm&fs=1&to=andrey_prosto@bk.ru&su=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-    
-    // Скрываем форму
-    var inputs = form.querySelectorAll('input, select, textarea');
-    inputs.forEach(function(inp){ inp.style.display = 'none'; });
-    btn.style.display = 'none';
-    
-    // Показываем success
-    if (successBox) {
-      successBox.classList.add('show');
-      successBox.style.display = 'block';
-    }
-    
-    // Пробуем открыть почтовый клиент через скрытый iframe
-    setTimeout(function(){
-      try {
-        var iframe = document.createElement('iframe');
-        iframe.style.display = 'none';
-        iframe.style.width = '0';
-        iframe.style.height = '0';
-        iframe.src = mailto;
-        document.body.appendChild(iframe);
-        setTimeout(function(){ 
-          try { document.body.removeChild(iframe); } catch(e) {}
-        }, 1000);
-      } catch(e) {}
-    }, 500);
-    
-    // Скроллим к success-блоку
-    setTimeout(function(){
-      if (successBox) successBox.scrollIntoView({behavior:'smooth', block:'center'});
-    }, 200);
+    showSuccess(name, subject, body);
   });
 })();
 
