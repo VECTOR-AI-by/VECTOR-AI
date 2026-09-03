@@ -3,23 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VECTOR-AI — Суверенная система автономного аудита</title>
-    <meta name="description" content="AI-рой система для автономного аудита смарт-контрактов, пентеста инфраструктуры и безопасности Web3. Оркестратор агентов с суверенными моделями.">
-    <meta name="keywords" content="AI security, smart contract audit, penetration testing, Web3 security, autonomous audit, Belarus">
+    <title>VECTOR-AI — Sovereign AI Security Intelligence</title>
+    <meta name="description" content="VECTOR-AI — автономная система аудита смарт-контрактов, пентеста инфраструктуры и обеспечения безопасности цифровых активов. AI-оркестратор и специализированные агенты.">
+    <meta name="keywords" content="AI security, smart contract audit, penetration testing, Web3 security, autonomous audit, sovereign AI">
     <meta name="author" content="VECTOR-AI">
     <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#0066FF">
+    
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230A0F1A'/%3E%3Ctext x='50' y='65' font-family='Inter,sans-serif' font-size='60' font-weight='800' fill='%230066FF' text-anchor='middle'%3EV%3C/text%3E%3C/svg%3E">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
             --primary: #0066FF;
             --primary-dark: #0052CC;
@@ -30,461 +28,73 @@
             --text-muted: #8B949E;
             --gradient: linear-gradient(135deg, #0066FF 0%, #00D4AA 100%);
         }
-        
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg-dark);
-            color: var(--text);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-        
-        .bg-gradient {
-            position: fixed;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(ellipse at 30% 20%, rgba(0, 102, 255, 0.15) 0%, transparent 50%),
-                        radial-gradient(ellipse at 70% 80%, rgba(0, 212, 170, 0.1) 0%, transparent 50%);
-            z-index: -1;
-            animation: float 20s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            33% { transform: translate(2%, 2%) rotate(1deg); }
-            66% { transform: translate(-1%, 1%) rotate(-1deg); }
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-        
-        header {
-            padding: 24px 0;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            backdrop-filter: blur(20px);
-            background: rgba(10, 15, 26, 0.8);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 24px;
-            font-weight: 800;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: -0.5px;
-        }
-        
-        .logo-sub {
-            font-size: 10px;
-            font-weight: 500;
-            color: var(--text-muted);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            display: block;
-            margin-top: -4px;
-        }
-        
-        nav {
-            display: flex;
-            gap: 32px;
-        }
-        
-        nav a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-        
-        nav a:hover {
-            color: var(--text);
-        }
-        
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            padding: 120px 0 80px;
-        }
-        
-        .hero-content {
-            max-width: 800px;
-        }
-        
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            background: var(--bg-card);
-            border: 1px solid rgba(0, 102, 255, 0.3);
-            border-radius: 100px;
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--secondary);
-            margin-bottom: 24px;
-        }
-        
-        .hero-badge::before {
-            content: '';
-            width: 8px;
-            height: 8px;
-            background: var(--secondary);
-            border-radius: 50%;
-            animation: pulse 2s ease-in-out infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.2); }
-        }
-        
-        h1 {
-            font-size: clamp(40px, 6vw, 72px);
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 24px;
-            letter-spacing: -2px;
-        }
-        
-        h1 span {
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .hero-description {
-            font-size: 20px;
-            color: var(--text-muted);
-            margin-bottom: 40px;
-            max-width: 600px;
-        }
-        
-        .hero-actions {
-            display: flex;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-        
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 16px 32px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: none;
-        }
-        
-        .btn-primary {
-            background: var(--gradient);
-            color: white;
-            box-shadow: 0 4px 24px rgba(0, 102, 255, 0.3);
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 32px rgba(0, 102, 255, 0.4);
-        }
-        
-        .btn-secondary {
-            background: var(--bg-card);
-            color: var(--text);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-        
-        .features {
-            padding: 100px 0;
-        }
-        
-        .section-header {
-            text-align: center;
-            margin-bottom: 64px;
-        }
-        
-        .section-label {
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--primary);
-            margin-bottom: 16px;
-        }
-        
-        .section-title {
-            font-size: clamp(32px, 4vw, 48px);
-            font-weight: 700;
-            letter-spacing: -1px;
-            margin-bottom: 16px;
-        }
-        
-        .section-description {
-            font-size: 18px;
-            color: var(--text-muted);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 24px;
-        }
-        
-        .feature-card {
-            background: var(--bg-card);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            padding: 32px;
-            transition: all 0.3s ease;
-        }
-        
-        .feature-card:hover {
-            border-color: rgba(0, 102, 255, 0.3);
-            transform: translateY(-4px);
-        }
-        
-        .feature-icon {
-            width: 56px;
-            height: 56px;
-            background: var(--gradient);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-        
-        .feature-title {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
-        
-        .feature-description {
-            color: var(--text-muted);
-            font-size: 15px;
-        }
-        
-        .architecture {
-            padding: 100px 0;
-            background: linear-gradient(180deg, transparent 0%, rgba(0, 102, 255, 0.03) 50%, transparent 100%);
-        }
-        
-        .architecture-visual {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 40px;
-            flex-wrap: wrap;
-            margin-top: 60px;
-        }
-        
-        .arch-node {
-            background: var(--bg-card);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 24px 32px;
-            text-align: center;
-            min-width: 180px;
-        }
-        
-        .arch-node.primary {
-            background: var(--gradient);
-            border: none;
-            transform: scale(1.1);
-        }
-        
-        .arch-node.primary .arch-label {
-            color: white;
-        }
-        
-        .arch-node.primary .arch-sublabel {
-            color: rgba(255, 255, 255, 0.8);
-        }
-        
-        .arch-label {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-        
-        .arch-sublabel {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-        
-        .arch-arrow {
-            font-size: 32px;
-            color: var(--primary);
-        }
-        
-        .capabilities {
-            padding: 100px 0;
-        }
-        
-        .capabilities-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 16px;
-        }
-        
-        .capability-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 16px;
-            padding: 20px;
-            background: var(--bg-card);
-            border-radius: 12px;
-            border: 1px solid transparent;
-            transition: border-color 0.3s ease;
-        }
-        
-        .capability-item:hover {
-            border-color: rgba(0, 212, 170, 0.3);
-        }
-        
-        .capability-check {
-            width: 24px;
-            height: 24px;
-            background: rgba(0, 212, 170, 0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--secondary);
-            font-size: 14px;
-            flex-shrink: 0;
-        }
-        
-        .capability-text {
-            font-size: 15px;
-        }
-        
-        .capability-text strong {
-            color: var(--text);
-        }
-        
-        .contact {
-            padding: 100px 0;
-            text-align: center;
-        }
-        
-        .contact-card {
-            background: var(--bg-card);
-            border: 1px solid rgba(0, 102, 255, 0.2);
-            border-radius: 24px;
-            padding: 60px 40px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        .contact-title {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 16px;
-        }
-        
-        .contact-description {
-            color: var(--text-muted);
-            margin-bottom: 32px;
-        }
-        
-        .contact-form {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-        
-        .form-input {
-            padding: 16px 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            color: var(--text);
-            font-size: 16px;
-            font-family: inherit;
-            transition: border-color 0.3s ease;
-        }
-        
-        .form-input:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-        
-        .form-input::placeholder {
-            color: var(--text-muted);
-        }
-        
-        textarea.form-input {
-            min-height: 120px;
-            resize: vertical;
-        }
-        
-        footer {
-            padding: 40px 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            text-align: center;
-        }
-        
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-        
-        .footer-links {
-            display: flex;
-            gap: 24px;
-        }
-        
-        .footer-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 14px;
-            transition: color 0.3s ease;
-        }
-        
-        .footer-links a:hover {
-            color: var(--text);
-        }
-        
-        .footer-copyright {
-            color: var(--text-muted);
-            font-size: 14px;
-        }
-        
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg-dark); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+        .bg-gradient { position: fixed; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(ellipse at 30% 20%, rgba(0, 102, 255, 0.15) 0%, transparent 50%), radial-gradient(ellipse at 70% 80%, rgba(0, 212, 170, 0.1) 0%, transparent 50%); z-index: -1; animation: float 20s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 33% { transform: translate(2%, 2%) rotate(1deg); } 66% { transform: translate(-1%, 1%) rotate(-1deg); } }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        header { padding: 24px 0; position: fixed; top: 0; left: 0; right: 0; z-index: 100; backdrop-filter: blur(20px); background: rgba(10, 15, 26, 0.8); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        .header-content { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 24px; font-weight: 800; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: -0.5px; }
+        .logo-sub { font-size: 10px; font-weight: 500; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; display: block; margin-top: -4px; }
+        nav { display: flex; gap: 32px; }
+        nav a { color: var(--text-muted); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.3s ease; }
+        nav a:hover { color: var(--text); }
+        .hero { min-height: 100vh; display: flex; align-items: center; padding: 120px 0 80px; }
+        .hero-content { max-width: 800px; }
+        .hero-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: var(--bg-card); border: 1px solid rgba(0, 102, 255, 0.3); border-radius: 100px; font-size: 12px; font-weight: 500; color: var(--secondary); margin-bottom: 24px; }
+        .hero-badge::before { content: ''; width: 8px; height: 8px; background: var(--secondary); border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.2); } }
+        h1 { font-size: clamp(40px, 6vw, 72px); font-weight: 800; line-height: 1.1; margin-bottom: 24px; letter-spacing: -2px; }
+        h1 span { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .hero-description { font-size: 20px; color: var(--text-muted); margin-bottom: 40px; max-width: 600px; }
+        .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+        .btn { display: inline-flex; align-items: center; gap: 8px; padding: 16px 32px; border-radius: 12px; font-size: 16px; font-weight: 600; text-decoration: none; transition: all 0.3s ease; cursor: pointer; border: none; }
+        .btn-primary { background: var(--gradient); color: white; box-shadow: 0 4px 24px rgba(0, 102, 255, 0.3); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0, 102, 255, 0.4); }
+        .btn-secondary { background: var(--bg-card); color: var(--text); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.2); }
+        .features { padding: 100px 0; }
+        .section-header { text-align: center; margin-bottom: 64px; }
+        .section-label { font-size: 12px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--primary); margin-bottom: 16px; }
+        .section-title { font-size: clamp(32px, 4vw, 48px); font-weight: 700; letter-spacing: -1px; margin-bottom: 16px; }
+        .section-description { font-size: 18px; color: var(--text-muted); max-width: 600px; margin: 0 auto; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
+        .feature-card { background: var(--bg-card); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 32px; transition: all 0.3s ease; }
+        .feature-card:hover { border-color: rgba(0, 102, 255, 0.3); transform: translateY(-4px); }
+        .feature-icon { width: 56px; height: 56px; background: var(--gradient); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 20px; }
+        .feature-title { font-size: 20px; font-weight: 700; margin-bottom: 12px; }
+        .feature-description { color: var(--text-muted); font-size: 15px; }
+        .architecture { padding: 100px 0; background: linear-gradient(180deg, transparent 0%, rgba(0, 102, 255, 0.03) 50%, transparent 100%); }
+        .architecture-visual { display: flex; justify-content: center; align-items: center; gap: 40px; flex-wrap: wrap; margin-top: 60px; }
+        .arch-node { background: var(--bg-card); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 24px 32px; text-align: center; min-width: 180px; }
+        .arch-node.primary { background: var(--gradient); border: none; transform: scale(1.1); }
+        .arch-node.primary .arch-label { color: white; }
+        .arch-node.primary .arch-sublabel { color: rgba(255, 255, 255, 0.8); }
+        .arch-label { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+        .arch-sublabel { font-size: 12px; color: var(--text-muted); }
+        .arch-arrow { font-size: 32px; color: var(--primary); }
+        .capabilities { padding: 100px 0; }
+        .capabilities-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+        .capability-item { display: flex; align-items: flex-start; gap: 16px; padding: 20px; background: var(--bg-card); border-radius: 12px; border: 1px solid transparent; transition: border-color 0.3s ease; }
+        .capability-item:hover { border-color: rgba(0, 212, 170, 0.3); }
+        .capability-check { width: 24px; height: 24px; background: rgba(0, 212, 170, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--secondary); font-size: 14px; flex-shrink: 0; }
+        .capability-text { font-size: 15px; }
+        .capability-text strong { color: var(--text); }
+        .contact { padding: 100px 0; text-align: center; }
+        .contact-card { background: var(--bg-card); border: 1px solid rgba(0, 102, 255, 0.2); border-radius: 24px; padding: 60px 40px; max-width: 600px; margin: 0 auto; }
+        .contact-title { font-size: 32px; font-weight: 700; margin-bottom: 16px; }
+        .contact-description { color: var(--text-muted); margin-bottom: 32px; }
+        .contact-form { display: flex; flex-direction: column; gap: 16px; }
+        .form-input { padding: 16px 20px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; color: var(--text); font-size: 16px; font-family: inherit; transition: border-color 0.3s ease; }
+        .form-input:focus { outline: none; border-color: var(--primary); }
+        .form-input::placeholder { color: var(--text-muted); }
+        textarea.form-input { min-height: 120px; resize: vertical; }
+        footer { padding: 40px 0; border-top: 1px solid rgba(255, 255, 255, 0.05); text-align: center; }
+        .footer-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+        .footer-links { display: flex; gap: 24px; }
+        .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 14px; transition: color 0.3s ease; }
+        .footer-links a:hover { color: var(--text); }
+        .footer-copyright { color: var(--text-muted); font-size: 14px; }
         @media (max-width: 768px) {
             nav { display: none; }
             .hero { padding: 100px 0 60px; }
@@ -495,17 +105,8 @@
             .arch-arrow { transform: rotate(90deg); }
             .footer-content { flex-direction: column; text-align: center; }
         }
-        
-        .fade-in {
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeIn 0.8s ease forwards;
-        }
-        
-        @keyframes fadeIn {
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
+        .fade-in { opacity: 0; transform: translateY(20px); animation: fadeIn 0.8s ease forwards; }
+        @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
         .delay-1 { animation-delay: 0.1s; }
         .delay-2 { animation-delay: 0.2s; }
         .delay-3 { animation-delay: 0.3s; }
@@ -514,7 +115,6 @@
 </head>
 <body>
     <div class="bg-gradient"></div>
-    
     <header>
         <div class="container">
             <div class="header-content">
@@ -530,137 +130,90 @@
             </div>
         </div>
     </header>
-    
     <main>
         <section class="hero">
             <div class="container">
                 <div class="hero-content">
-                    <div class="hero-badge fade-in">
-                        Суверенная AI-система
-                    </div>
+                    <div class="hero-badge fade-in">Суверенная AI-система</div>
                     <h1 class="fade-in delay-1">
                         Оркестратор <span>AI-агентов</span><br>
                         для автономного аудита
                     </h1>
                     <p class="hero-description fade-in delay-2">
-                        Суверенная система безопасности нового поколения. 
+                        Автономная система безопасности нового поколения. 
                         AI-рой из специализированных агентов под управлением 
                         единого оркестратора — для аудита смарт-контрактов, 
                         пентеста инфраструктуры и защиты цифровых активов.
                     </p>
                     <div class="hero-actions fade-in delay-3">
-                        <a href="#contact" class="btn btn-primary">
-                            Подать заявку
-                        </a>
-                        <a href="#features" class="btn btn-secondary">
-                            Узнать больше
-                        </a>
+                        <a href="#contact" class="btn btn-primary">Подать заявку</a>
+                        <a href="#features" class="btn btn-secondary">Узнать больше</a>
                     </div>
                 </div>
             </div>
         </section>
-        
         <section class="features" id="features">
             <div class="container">
                 <div class="section-header">
                     <div class="section-label">Возможности</div>
                     <h2 class="section-title">Комплексная защита на всех уровнях</h2>
-                    <p class="section-description">
-                        От статического анализа кода до мониторинга 
-                        real-time угроз — единая платформа для всей цепочки безопасности
-                    </p>
+                    <p class="section-description">От статического анализа кода до мониторинга real-time угроз — единая платформа для всей цепочки безопасности</p>
                 </div>
-                
                 <div class="features-grid">
                     <div class="feature-card">
                         <div class="feature-icon">🔍</div>
                         <h3 class="feature-title">Аудит смарт-контрактов</h3>
-                        <p class="feature-description">
-                            Автоматический анализ кода на 11 языках: Solidity, Vyper, Rust, 
-                            Move, Go, Python, Java, C++, TypeScript, TON, Elixir. 
-                            4 движка статического анализа.
-                        </p>
+                        <p class="feature-description">Автоматический анализ кода на 11 языках: Solidity, Vyper, Rust, Move, Go, Python, Java, C++, TypeScript, TON, Elixir. 4 движка статического анализа.</p>
                     </div>
-                    
                     <div class="feature-card">
                         <div class="feature-icon">🛡️</div>
                         <h3 class="feature-title">Пентест инфраструктуры</h3>
-                        <p class="feature-description">
-                            Автономное тестирование на проникновение: серверы, сети, 
-                            веб-приложения, API. Оркестратор координирует агентов 
-                            для комплексной оценки защищённости.
-                        </p>
+                        <p class="feature-description">Автономное тестирование на проникновение: серверы, сети, веб-приложения, API. Оркестратор координирует агентов для комплексной оценки защищённости.</p>
                     </div>
-                    
                     <div class="feature-card">
                         <div class="feature-icon">⛓️</div>
                         <h3 class="feature-title">On-chain анализ</h3>
-                        <p class="feature-description">
-                            Анализ блокчейн-активности: кошельки, транзакции, 
-                            взаимодействия контрактов. EVM, Solana, Tron, Stellar/Soroban.
-                        </p>
+                        <p class="feature-description">Анализ блокчейн-активности: кошельки, транзакции, взаимодействия контрактов. EVM, Solana, Tron, Stellar/Soroban.</p>
                     </div>
-                    
                     <div class="feature-card">
                         <div class="feature-icon">🤖</div>
                         <h3 class="feature-title">AI-оркестратор</h3>
-                        <p class="feature-description">
-                            Единый центр управления AI-роем. Координация специализированных 
-                            агентов, маршрутизация задач, контекстное планирование 
-                            и адаптивное обучение.
-                        </p>
+                        <p class="feature-description">Единый центр управления AI-роем. Координация специализированных агентов, маршрутизация задач, контекстное планирование и адаптивное обучение.</p>
                     </div>
-                    
                     <div class="feature-card">
                         <div class="feature-icon">🔐</div>
                         <h3 class="feature-title">ZK-верификация</h3>
-                        <p class="feature-description">
-                            Анализ zero-knowledge верификаторов. Groth16, PLONK, StarkNet. 
-                            Обнаружение уязвимостей в схемах и доказательствах.
-                        </p>
+                        <p class="feature-description">Анализ zero-knowledge верификаторов. Groth16, PLONK, StarkNet. Обнаружение уязвимостей в схемах и доказательствах.</p>
                     </div>
-                    
                     <div class="feature-card">
                         <div class="feature-icon">📊</div>
                         <h3 class="feature-title">Анализ рыночных рисков</h3>
-                        <p class="feature-description">
-                            Мониторинг деривативов, ликвидности, позиционирования. 
-                            Выявление манипуляций и аномалий поведения.
-                        </p>
+                        <p class="feature-description">Мониторинг деривативов, ликвидности, позиционирования. Выявление манипуляций и аномалий поведения.</p>
                     </div>
                 </div>
             </div>
         </section>
-        
         <section class="architecture" id="architecture">
             <div class="container">
                 <div class="section-header">
                     <div class="section-label">Архитектура</div>
                     <h2 class="section-title">Рой AI-агентов под единым управлением</h2>
-                    <p class="section-description">
-                        Каждый агент специализируется на своей области, 
-                        оркестратор обеспечивает координацию и синергию
-                    </p>
+                    <p class="section-description">Каждый агент специализируется на своей области, оркестратор обеспечивает координацию и синергию</p>
                 </div>
-                
                 <div class="architecture-visual">
                     <div class="arch-node primary">
                         <div class="arch-label">Оркестратор</div>
                         <div class="arch-sublabel">Единый центр управления</div>
                     </div>
-                    
                     <div class="arch-arrow">→</div>
-                    
                     <div class="arch-node">
                         <div class="arch-label">Αльфа</div>
                         <div class="arch-sublabel">Стратегический анализ</div>
                     </div>
-                    
                     <div class="arch-node">
                         <div class="arch-label">Βета</div>
                         <div class="arch-sublabel">Оперативная разведка</div>
                     </div>
-                    
                     <div class="arch-node">
                         <div class="arch-label">Γамма</div>
                         <div class="arch-sublabel">Мониторинг и оповещение</div>
@@ -668,125 +221,88 @@
                 </div>
             </div>
         </section>
-        
         <section class="capabilities" id="capabilities">
             <div class="container">
                 <div class="section-header">
                     <div class="section-label">Технические возможности</div>
                     <h2 class="section-title">Что умеет система</h2>
                 </div>
-                
                 <div class="capabilities-list">
                     <div class="capability-item">
                         <div class="capability-check">✓</div>
-                        <div class="capability-text">
-                            <strong>Статический анализ кода</strong> — 11 языков, 4 движка (Slither, Mythril, Aderyn, Semgrep)
-                        </div>
+                        <div class="capability-text"><strong>Статический анализ кода</strong> — 11 языков, 4 движка (Slither, Mythril, Aderyn, Semgrep)</div>
                     </div>
                     <div class="capability-item">
                         <div class="capability-check">✓</div>
-                        <div class="capability-text">
-                            <strong>Анализ upgradable-контрактов</strong> — ERC1967, UUPS, Transparent Proxy, storage collision
-                        </div>
+                        <div class="capability-text"><strong>Анализ upgradable-контрактов</strong> — ERC1967, UUPS, Transparent Proxy, storage collision</div>
                     </div>
                     <div class="capability-item">
                         <div class="capability-check">✓</div>
-                        <div class="capability-text">
-                            <strong>Моделирование атак</strong> — Flash loan, reentrancy, oracle manipulation, governance capture
-                        </div>
+                        <div class="capability-text"><strong>Моделирование атак</strong> — Flash loan, reentrancy, oracle manipulation, governance capture</div>
                     </div>
                     <div class="capability-item">
                         <div class="capability-check">✓</div>
-                        <div class="capability-text">
-                            <strong>Социальная разведка</strong> — Telegram, Twitter/X, Discord, поиск импостеров
-                        </div>
+                        <div class="capability-text"><strong>Социальная разведка</strong> — Telegram, Twitter/X, Discord, поиск импостеров</div>
                     </div>
                     <div class="capability-item">
                         <div class="capability-check">✓</div>
-                        <div class="capability-text">
-                            <strong>Анализ держателей</strong> — Whale tracking, CEX/LP correction, governance concentration
-                        </div>
+                        <div class="capability-text"><strong>Анализ держателей</strong> — Whale tracking, CEX/LP correction, governance concentration</div>
                     </div>
                     <div class="capability-item">
                         <div class="capability-check">✓</div>
-                        <div class="capability-text">
-                            <strong>Анализ ликвидности</strong> — DexScreener, wash trading detection, pool fragmentation
-                        </div>
+                        <div class="capability-text"><strong>Анализ ликвидности</strong> — DexScreener, wash trading detection, pool fragmentation</div>
                     </div>
                     <div class="capability-item">
                         <div class="capability-check">✓</div>
-                        <div class="capability-text">
-                            <strong>Детекция drift</strong> — Audit age tracking, code vs bytecode mismatch, new surfaces
-                        </div>
+                        <div class="capability-text"><strong>Детекция drift</strong> — Audit age tracking, code vs bytecode mismatch, new surfaces</div>
                     </div>
                     <div class="capability-item">
                         <div class="capability-check">✓</div>
-                        <div class="capability-text">
-                            <strong>Flow-анализ</strong> — Trace analysis, fund flow reconstruction, drain detection
-                        </div>
+                        <div class="capability-text"><strong>Flow-анализ</strong> — Trace analysis, fund flow reconstruction, drain detection</div>
                     </div>
                 </div>
             </div>
         </section>
-        
         <section class="contact" id="contact">
             <div class="container">
                 <div class="contact-card">
                     <h2 class="contact-title">Подать заявку</h2>
-                    <p class="contact-description">
-                        Оставьте контакты, и мы свяжемся с вами для обсуждения 
-                        сотрудничества и демонстрации возможностей системы.
-                    </p>
-                    
+                    <p class="contact-description">Оставьте контакты, и мы свяжемся с вами для обсуждения сотрудничества и демонстрации возможностей системы.</p>
                     <form class="contact-form" action="https://formspree.io/f/placeholder" method="POST">
                         <input type="text" class="form-input" name="name" placeholder="Имя / Компания" required>
                         <input type="email" class="form-input" name="email" placeholder="Email" required>
                         <input type="text" class="form-input" name="interest" placeholder="Интересующая область">
                         <textarea class="form-input" name="message" placeholder="Расскажите о вашем проекте или задаче"></textarea>
-                        <button type="submit" class="btn btn-primary">
-                            Отправить заявку
-                        </button>
+                        <button type="submit" class="btn btn-primary">Отправить заявку</button>
                     </form>
                 </div>
             </div>
         </section>
     </main>
-    
     <footer>
         <div class="container">
             <div class="footer-content">
                 <div class="footer-links">
                     <a href="https://github.com/VECTOR-AI-by/VECTOR-AI" target="_blank">GitHub</a>
-                    <a href="https://t.me/vector_ai_bot" target="_blank">Telegram Bot</a>
                 </div>
-                <div class="footer-copyright">
-                    © 2026 VECTOR-AI. Суверенная система автономного аудита.
-                </div>
+                <div class="footer-copyright">© 2026 VECTOR-AI. Суверенная система автономного аудита.</div>
             </div>
         </div>
     </footer>
-    
     <script>
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
         });
-        
         document.querySelector('.contact-form').addEventListener('submit', function(e) {
             e.preventDefault();
             const btn = this.querySelector('button[type="submit"]');
             btn.textContent = 'Отправлено ✓';
             btn.disabled = true;
-            setTimeout(() => {
-                btn.textContent = 'Отправить заявку';
-                btn.disabled = false;
-                this.reset();
-            }, 3000);
+            setTimeout(() => { btn.textContent = 'Отправить заявку'; btn.disabled = false; this.reset(); }, 3000);
         });
     </script>
 </body>
