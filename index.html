@@ -1051,6 +1051,12 @@ const VS = (function(){
   }
   
   $("input-target").innerText = targets.infra; reset();
+  
+  // Обработчики кнопок (были потеряны — визуализатор стоял колом)
+  $("btn-launch").addEventListener("click", start);
+  $("btn-infra").addEventListener("click", function(){ switchDomain("infra"); });
+  $("btn-web3").addEventListener("click", function(){ switchDomain("web3"); });
+  
   return { start: start, switchDomain: switchDomain };
 })();
 </script>
@@ -1518,8 +1524,12 @@ const VS = (function(){
         sb.style.display='block';
         sb.style.opacity='1';
         sb.style.visibility='visible';
+      } else if (d.message && d.message.indexOf('Activation') !== -1) {
+        errBox.innerHTML = 'Форма ожидает активации email. Мы отправили письмо с подтверждением — откройте его и нажмите Activate (один раз). После этого заявки приходят автоматически.';
+        errBox.classList.add('show');
+        btn.disabled=false; btn.textContent='Отправить заявку';
       } else {
-        errBox.textContent='Ошибка отправки. Попробуйте позже.';
+        errBox.textContent = (d.message ? 'Ошибка: ' + d.message : 'Ошибка отправки. Попробуйте позже.');
         errBox.classList.add('show');
         btn.disabled=false; btn.textContent='Отправить заявку';
       }
