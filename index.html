@@ -613,197 +613,48 @@ VECTOR-AI — Первое суверенное MAS-решение (Multi-Agent 
 
 <script>
 (function(){
-  var screen = document.getElementById('terminal-screen');
-  var status = document.getElementById('term-status-text');
-  if (!screen) return;
-  var lines = screen.querySelectorAll('.term-line, .term-block, .term-legal');
-  var pauseBtn = document.getElementById('term-pause');
-  var restartBtn = document.getElementById('term-restart');
-  var paused = false;
-  var i = 0;
-  
-  function reset(){
-    i = 0;
-    lines.forEach(function(l){ l.style.animation = 'none'; l.style.opacity = '0'; });
-    status.textContent = 'STREAMING';
-    if (pauseBtn) pauseBtn.textContent = '⏸ Пауза';
-  }
-  
-  function showNext(){
-    if (paused) return;
-    if (i >= lines.length){
-      status.textContent = 'COMPLETE';
-      return;
-    }
-    var line = lines[i];
-    line.style.animation = 'termFadeIn 0.4s forwards';
-    i++;
-    setTimeout(showNext, 700);
-  }
-  
-  if (pauseBtn){
-    pauseBtn.addEventListener('click', function(){
-      paused = !paused;
-      pauseBtn.textContent = paused ? '▶ Продолжить' : '⏸ Пауза';
-      status.textContent = paused ? 'PAUSED' : 'STREAMING';
-      if (!paused) showNext();
-    });
-  }
-  
-  if (restartBtn){
-    restartBtn.addEventListener('click', function(){
-      paused = false;
-      reset();
-      setTimeout(showNext, 300);
-    });
-  }
-  
-  setTimeout(showNext, 800);
-})();
-</script>
-
-<section id="sovereignty">
-<div class="container">
-<div class="section-header">
-<div class="section-label">Суверенитет и принципы</div>
-<h2 class="section-title">100% защита данных. Никаких внешних API</h2>
-<p class="section-description">Платформа функционирует на защищённых изолированных мощностях разработчика. В инфраструктуре заказчика работают только одноразовые контейнеры-сателлиты. Никакие логи, исходный код или транзакционные данные не уходят во внешние SaaS-облака.</p>
-</div>
-<div class="principles">
-<div class="principle">
-<div class="principle-title">Суверенитет данных</div>
-<div class="principle-text affirm">Ядро ИИ-логики остаётся на мощностях разработчика. В периметре заказчика — только временные контейнеры-сателлиты. Код, логи и PoC не покидают контур.</div>
-</div>
-<div class="principle">
-<div class="principle-title">Zero Focus Loss</div>
-<div class="principle-text affirm">Target Ledger отделён от контекста моделей. Каждая находка — независимая сущность в PostgreSQL. 100% покрытие аудита независимо от объёма.</div>
-</div>
-<div class="principle">
-<div class="principle-title">Активные проверки изолированы</div>
-<div class="principle-text affirm">Любая активная верификация — только в контролируемых песочницах (Anvil/Foundry Fork, неразрушающие сетевые проверки). Никакого воздействия на продакшен заказчика.</div>
-</div>
-<div class="principle">
-<div class="principle-title">Превентивная юридическая проверка</div>
-<div class="principle-text affirm">Автоматическая проверка соответствия законодательной базе РБ и ЕАЭС. Генерация пакета превентивных уведомлений и шаблонов для урегулирования инцидентов.</div>
-</div>
-<div class="principle">
-<div class="principle-title">VECTOR-AI НЕ является</div>
-<div class="principle-text">детектором «скам / не скам», инструментом предсказания цен, инвестиционным советником, системой учитывающей бренд или репутацию, передатчиком исходного кода заказчика.</div>
-</div>
-<div class="principle">
-<div class="principle-title">VECTOR-AI является</div>
-<div class="principle-text affirm">AI-системой автономного аудита, картографом контроля и мобильности капитала, измерителем экспозиции, инструментом структурного due diligence.</div>
-</div>
-</div>
-
-<div class="partnership">
-<h3 class="partnership-title">Инфраструктурное партнёрство и миграция</h3>
-<p class="partnership-text">Текущий технологический стек VECTOR-AI полностью готов к развёртыванию. Для суверенизации системы и полного отказа от коммерческих зарубежных API мы ищем стратегических партнёров для:</p>
-<ul class="partnership-list">
-<li>Предоставления изолированных вычислительных мощностей (GPU-кластеров)</li>
-<li>Совместного R&D-центра кибербезопасности</li>
-<li>Интеграции в государственные системы защиты информации</li>
-<li>Пилотного тестирования в контуре критической инфраструктуры заказчика</li>
-</ul>
-</div>
-</div>
-</section>
-
-<section class="contact" id="contact">
-<div class="container">
-<div class="contact-card">
-<h2 class="contact-title">Заявка на закрытое пилотное тестирование</h2>
-<p class="contact-description">Все тесты проводятся через изолированные контейнеры-сателлиты в периметре заказчика. Код ядра ИИ-логики не передаётся. По результатам заявки мы свяжемся с вами для согласования пилотного развёртывания.</p>
-<form class="contact-form" id="lead-form">
-<input type="text" class="form-input" name="name" placeholder="Имя / Организация" required maxlength="150">
-<input type="email" class="form-input" name="email" placeholder="Email" required maxlength="254">
-<select class="form-input" name="org_type" required>
-<option value="" disabled selected>Тип организации</option>
-<option value="gov">Государственный сектор / Регулятор</option>
-<option value="bank">Банковская сфера / Финансовые институты</option>
-<option value="web3">Web3 / DeFi проект</option>
-<option value="investor">Инвестор / Технологический партнёр</option>
-<option value="other">Другое</option>
-</select>
-<input type="text" class="form-input" name="scope" placeholder="Масштаб: количество серверов / контрактов / репозиториев" maxlength="200">
-<textarea class="form-input" name="message" placeholder="Опишите задачу или инфраструктуру для аудита" required maxlength="2000"></textarea>
-<div class="form-error" id="form-error"></div>
-<button type="submit" class="btn btn-primary" id="submit-btn">Отправить заявку</button>
-<div class="form-success" id="form-success">
-✓ Заявка успешно отправлена. Мы свяжемся с вами в ближайшее время.
-</div>
-</form>
-<p class="contact-disclaimer">Все тесты проводятся в изолированном контуре заказчика через одноразовые контейнеры-сателлиты. Исходный код ядра ИИ-логики не покидает защищённые мощности разработчика. Превентивная проверка законодательной базы РБ и ЕАЭС включена в каждый пилот.</p>
-</div>
-</div>
-</section>
-</main>
-<footer>
-<div class="container">
-<div class="footer-content">
-<div class="footer-links">
-<a href="https://github.com/VECTOR-AI-by/VECTOR-AI" target="_blank" rel="noopener">GitHub</a>
-</div>
-<div class="footer-copyright">© 2026 VECTOR-AI · Sovereign AI Security Intelligence · СНГ</div>
-</div>
-</div>
-</footer>
-<script>
-(function(){
   var form = document.getElementById('lead-form');
-  var btn = document.getElementById('submit-btn');
-  var err = document.getElementById('form-error');
-  var ok = document.getElementById('form-success');
   if (!form) return;
-  
-  function setLoading(loading){
-    if (loading){
-      btn.disabled = true;
-      btn.textContent = 'Отправка...';
-    } else {
-      btn.disabled = false;
-      btn.textContent = 'Отправить заявку';
-    }
-  }
-  
-  function showError(msg){
-    err.textContent = msg;
-    err.classList.add('show');
-    ok.classList.remove('show');
-  }
-  
-  function showSuccess(){
-    err.classList.remove('show');
-    ok.classList.add('show');
-    form.reset();
-  }
   
   form.addEventListener('submit', function(e){
     e.preventDefault();
-    setLoading(true);
-    err.classList.remove('show');
-    
     var data = Object.fromEntries(new FormData(form).entries());
+    var name = (data.name || '').trim();
+    var email = (data.email || '').trim();
+    var org = (data.org_type || '').trim();
+    var scope = (data.scope || '').trim();
+    var msg = (data.message || '').trim();
     
-    fetch('/api/contact', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    })
-    .then(function(r){ return r.json().then(function(j){ return { ok: r.ok, data: j }; }); })
-    .then(function(r){
-      if (r.ok && r.data.ok){
-        showSuccess();
-      } else {
-        showError(r.data.error || 'Не удалось отправить заявку. Попробуйте позже.');
-      }
-    })
-    .catch(function(){
-      showError('Ошибка сети. Проверьте подключение и попробуйте снова.');
-    })
-    .finally(function(){
-      setLoading(false);
-    });
+    if (name.length < 2) { alert('Укажите имя или организацию'); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { alert('Некорректный email'); return; }
+    if (msg.length < 5) { alert('Опишите задачу подробнее'); return; }
+    
+    var btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'Отправка...';
+    
+    var subject = 'VECTOR-AI: заявка от ' + name;
+    var body = 'Новая заявка VECTOR-AI by\n\n' +
+      'Имя / Организация: ' + name + '\n' +
+      'Email: ' + email + '\n' +
+      'Тип: ' + (org || '—') + '\n' +
+      'Масштаб: ' + (scope || '—') + '\n\n' +
+      'Задача:\n' + msg + '\n\n' +
+      '—\nПолучено: ' + new Date().toISOString();
+    
+    var mailto = 'mailto:andrey_prosto@bk.ru' +
+      '?subject=' + encodeURIComponent(subject) +
+      '&body=' + encodeURIComponent(body);
+    
+    window.location.href = mailto;
+    
+    setTimeout(function(){
+      btn.disabled = false;
+      btn.textContent = 'Отправить заявку';
+      var ok = document.getElementById('form-success');
+      if (ok) ok.classList.add('show');
+      form.reset();
+    }, 1500);
   });
 })();
 
