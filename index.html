@@ -557,8 +557,8 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){
 </div>
 <span class="swarm-title">ВЕКТОР-ИИ // DISTRIBUTED SWARM RUNTIME</span>
 <div class="swarm-domain-switch">
-<button type="button" id="btn-infra" class="domain-btn active">🌐 АУДИТ_ИНФРАСТРУКТУРЫ</button>
-<button type="button" id="btn-web3" class="domain-btn">⛓️ АУДИТ_WEB3_DEFI</button>
+<button type="button" id="btn-infra" class="domain-btn active">🌐 INFRA</button>
+<button type="button" id="btn-web3" class="domain-btn">⛓️ WEB3</button>
 </div>
 </div>
 
@@ -642,11 +642,16 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){
 </div>
 </div>
 
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-<div class="metric-card">
-<div class="swarm-col-label mb-3">Invariant Monitor</div>
-<div id="invariants" class="space-y-1.5 text-[9px]"></div>
-</div>
+<div class="metric-card mt-4">
+          <div class="flex items-center justify-between mb-3">
+            <div class="swarm-col-label">Runtime Metrics</div>
+            <div class="text-[9px] text-zinc-600">Invariant Monitor · Spawner · Watchdog</div>
+          </div>
+          <div class="grid grid-cols-2 gap-x-4 gap-y-1.5 text-[9px]">
+            <div id="invariants" class="space-y-1.5"></div>
+            <div id="runtime-metrics" class="space-y-1.5"></div>
+          </div>
+        </div>
 <div class="metric-card">
 <div class="swarm-col-label mb-3">Spawner / Watchdog</div>
 <div id="runtime-metrics" class="space-y-1.5 text-[9px]"></div>
