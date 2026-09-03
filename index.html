@@ -747,5 +747,35 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){
 })();
 
 </script>
+<section class="contact" id="contact">
+<div class="container">
+<div class="contact-card">
+<h2 class="contact-title">Заявка на закрытое пилотное тестирование</h2>
+<p class="contact-description">Все тесты проводятся через изолированные контейнеры-сателлиты в периметре заказчика. Код ядра ИИ-логики не передаётся. По результатам заявки мы свяжемся с вами для согласования пилотного развёртывания.</p>
+<form class="contact-form" id="lead-form">
+<input type="text" class="form-input" name="name" placeholder="Имя / Организация" required maxlength="150">
+<input type="email" class="form-input" name="email" placeholder="Email" required maxlength="254">
+<select class="form-input" name="org_type" required>
+<option value="" disabled selected>Тип организации</option>
+<option value="gov">Государственный сектор / Регулятор</option>
+<option value="bank">Банковская сфера / Финансовые институты</option>
+<option value="web3">Web3 / DeFi проект</option>
+<option value="investor">Инвестор / Технологический партнёр</option>
+<option value="other">Другое</option>
+</select>
+<input type="text" class="form-input" name="scope" placeholder="Масштаб: количество серверов / контрактов / репозиториев" maxlength="200">
+<textarea class="form-input" name="message" placeholder="Опишите задачу или инфраструктуру для аудита" required maxlength="2000"></textarea>
+<div class="form-error" id="form-error"></div>
+<button type="submit" class="btn btn-primary" id="submit-btn">Отправить заявку</button>
+<div class="form-success" id="form-success">
+✓ Заявка успешно отправлена. Мы свяжемся с вами в ближайшее время.
+</div>
+</form>
+<p class="contact-disclaimer">Все тесты проводятся в изолированном контуре заказчика через одноразовые контейнеры-сателлиты. Исходный код ядра ИИ-логики не покидает защищённые мощности разработчика. Превентивная проверка законодательной базы РБ и ЕАЭС включена в каждый пилот.</p>
+</div>
+</div>
+</section>
+
+</main>
 </body>
 </html>
