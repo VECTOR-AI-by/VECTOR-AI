@@ -615,7 +615,7 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){
 <div class="swarm-col-label">Swarm Graph</div>
 <div id="рой-count" class="text-[9px] text-zinc-400 bg-zinc-900 px-1.5 py-0.5 rounded border border-zinc-800">WORKERS: 0</div>
 </div>
-<div id="рой-graph" class="swarm-graph">
+<div id="рой-graph" class="swarm-graph" style="height: 220px">
             <div id="graph-links" class="graph-layer"></div>
             <div id="graph-nodes" class="graph-layer"></div>
 <!-- LIVE EVENT STREAM moved -->
@@ -868,19 +868,27 @@ const VS = (function(){
     renderMetrics();
   }
   
-  function graphNode(id,label){
-    const wrap=$("graph-nodes"), el=document.createElement("div");
-    const idx=(state.workers.size-1);
-    const positions=[
-      {l:50, t:8}, {l:88, t:30}, {l:88, t:70},
-      {l:50, t:92}, {l:12, t:70}, {l:12, t:30}
+  function graphNode(id, label){
+    const wrap = $("graph-nodes"), el = document.createElement("div");
+    const n = state.workers.size;
+    // Звёздная сетка вокруг центра (8 позиций) + случайное микро-смещение
+    // чтобы воркеры не накладывались даже при быстром спавне
+    const positions = [
+      {l: 22, t: 20}, {l: 78, t: 20},   // top-left, top-right
+      {l: 15, t: 50}, {l: 85, t: 50},   // mid-left, mid-right
+      {l: 22, t: 80}, {l: 78, t: 80},   // bottom-left, bottom-right
+      {l: 50, t: 12}, {l: 50, t: 88}    // top-center, bottom-center
     ];
-    const pos=positions[idx%positions.length];
-    el.id="g-"+id; el.className="graph-node spawn-in";
-    el.style.left=pos.l+"%"; el.style.top=pos.t+"%";
-    el.innerText=label.replace("⚡ ","");
+    const pos = positions[(n - 1) % positions.length];
+    // Добавляем крошечное случайное смещение ±3% чтобы исключить зеркальные наложения
+    const jitterX = (Math.random() - 0.5) * 6;
+    const jitterY = (Math.random() - 0.5) * 6;
+    el.id = "g-" + id; el.className = "graph-node spawn-in";
+    el.style.left = (pos.l + jitterX) + "%";
+    el.style.top = (pos.t + jitterY) + "%";
+    el.innerText = label.replace("⚡ ", "");
     wrap.appendChild(el);
-    drawLine(idx%positions.length);
+    drawLine((n - 1) % positions.length);
     packet();
   }
   function drawLine(idx){
