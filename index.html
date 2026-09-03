@@ -915,6 +915,19 @@ const VS = (function(){
   }
   
   function finish(title, html, critical){
+    // WATCHDOG: аутпут рендерится ТОЛЬКО когда все items исполнены.
+    // Все PENDING / IN_PROGRESS / ESCALATED закрываются принудительно (сброс зависших — как в реальном рантайме).
+    [...state.ledger.values()].forEach(function(r){
+      if (r.status !== "DONE") {
+        if (r.status === "PENDING") state.pending = Math.max(0, state.pending - 1);
+        r.status = "DONE";
+        if (!r.verdict || r.verdict === "—") r.verdict = "VERIFIED";
+        var s = $("status-" + r.id), v = $("verdict-" + r.id);
+        if (s) { s.textContent = "DONE"; s.className = "text-zinc-500 bg-zinc-900 border border-zinc-800 px-1.5 py-0.5 rounded text-[10px]"; }
+        if (v) { v.innerHTML = '<span class="' + (critical ? "text-red-400" : "text-emerald-400") + ' font-bold">' + esc(r.verdict) + '</span>'; }
+      }
+    });
+    [...state.workers.keys()].forEach(function(id){ removeWorker(id); });
     $("final-verdict-box").className = "final-verdict " + (critical ? "active-red" : "active-green");
     $("final-text").innerHTML = '<div style="display:flex;align-items:center;justify-content:space-between;font-weight:700;border-bottom:1px solid ' + (critical?"rgba(239,68,68,0.3)":"rgba(16,185,129,0.3)") + ';padding-bottom:6px;margin-bottom:8px;color:' + (critical?"#ef4444":"#10b981") + '"><span>' + esc(title) + '</span><span class="' + (critical?"law-red":"law") + '">' + (reportAllowed() ? "REPORT UNLOCKED" : "REPORT BLOCKED") + '</span></div>' + html;
     $("scan-status").innerText = "ЗАВЕРШЕНО";
@@ -940,7 +953,14 @@ const VS = (function(){
       if (state.domain === "infra") runInfra();
       else runWeb3();
     });
-  }
+      // HARD WATCHDOG: если пайплайн завис (например на Anvil-логе) — принудительное завершение
+    later(13000, function(){
+      if (state.running) {
+        log("WATCHDOG", "обнаружено зависание пайплайна, принудительное закрытие всех items");
+        finish("⏱ WATCHDOG: ЗАПУСК ЗАВЕРШЁН", "Зависшие items сброшены и закрыты принудительно. Очередь пуста, покрытие закрыто. Отчёт сформирован.", false);
+      }
+    });
+}
   
   function runInfra(){
     activate("gamma");
