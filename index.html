@@ -870,42 +870,51 @@ const VS = (function(){
   
   function graphNode(id, label){
     const wrap = $("graph-nodes"), el = document.createElement("div");
-    const n = state.workers.size;
-    // Звёздная сетка вокруг центра (8 позиций) + случайное микро-смещение
-    // чтобы воркеры не накладывались даже при быстром спавне
-    const positions = [
-      {l: 22, t: 20}, {l: 78, t: 20},   // top-left, top-right
-      {l: 15, t: 50}, {l: 85, t: 50},   // mid-left, mid-right
-      {l: 22, t: 80}, {l: 78, t: 80},   // bottom-left, bottom-right
-      {l: 50, t: 12}, {l: 50, t: 88}    // top-center, bottom-center
+    // Стабильная координата на основе id — никакого Math.random(),
+    // иначе при reset() и повторном spawn воркеры занимали бы те же позиции
+    let hash = 0;
+    for (let i = 0; i < id.length; i++) hash = ((hash << 5) - hash) + id.charCodeAt(i);
+    const slot = Math.abs(hash) % 12;
+    // 12-позиционная сетка: 4 колонки × 3 ряда вокруг центра (50%, 50%)
+    // Координаты в %, центр — (50,50), периметр — далеко от центра
+    const grid = [
+      {l: 18, t: 18}, {l: 38, t: 12}, {l: 62, t: 12}, {l: 82, t: 18},   // верх
+      {l: 12, t: 45},                              {l: 88, t: 45},   // середина
+      {l: 18, t: 82}, {l: 38, t: 88}, {l: 62, t: 88}, {l: 82, t: 82},   // низ
+      {l: 35, t: 50},                              {l: 65, t: 50}    // центр-лево, центр-право
     ];
-    const pos = positions[(n - 1) % positions.length];
-    // Добавляем крошечное случайное смещение ±3% чтобы исключить зеркальные наложения
-    const jitterX = (Math.random() - 0.5) * 6;
-    const jitterY = (Math.random() - 0.5) * 6;
-    el.id = "g-" + id; el.className = "graph-node spawn-in";
-    el.style.left = (pos.l + jitterX) + "%";
-    el.style.top = (pos.t + jitterY) + "%";
-    el.innerText = label.replace("⚡ ", "");
+    const pos = grid[slot];
+    el.id = "g-" + id;
+    el.className = "graph-node spawn-in";
+    el.style.left = pos.l + "%";
+    el.style.top = pos.t + "%";
+    el.style.transform = "translate(-50%, -50%)";
+    el.innerText = label.replace("⚡ ", "").replace("🔥 ", "");
     wrap.appendChild(el);
-    drawLine((n - 1) % positions.length);
+    drawLine(slot);
     packet();
   }
   function drawLine(idx){
-    const svg=document.getElementById("graph-lines-svg");
-    if(!svg) return;
-    const positions=[
-      {x1:50,y1:50,x2:50,y2:8}, {x1:50,y1:50,x2:88,y2:30},
-      {x1:50,y1:50,x2:88,y2:70}, {x1:50,y1:50,x2:50,y2:92},
-      {x1:50,y1:50,x2:12,y2:70}, {x1:50,y1:50,x2:12,y2:30}
+    const svg = document.getElementById("graph-lines-svg");
+    if (!svg) return;
+    // Координаты в % (центр = 50,50)
+    const grid = [
+      {x1: 50, y1: 50, x2: 18, y2: 18}, {x1: 50, y1: 50, x2: 38, y2: 12},
+      {x1: 50, y1: 50, x2: 62, y2: 12}, {x1: 50, y1: 50, x2: 82, y2: 18},
+      {x1: 50, y1: 50, x2: 12, y2: 45}, {x1: 50, y1: 50, x2: 88, y2: 45},
+      {x1: 50, y1: 50, x2: 18, y2: 82}, {x1: 50, y1: 50, x2: 38, y2: 88},
+      {x1: 50, y1: 50, x2: 62, y2: 88}, {x1: 50, y1: 50, x2: 82, y2: 82},
+      {x1: 50, y1: 50, x2: 35, y2: 50}, {x1: 50, y1: 50, x2: 65, y2: 50}
     ];
-    const p=positions[idx%positions.length];
-    const line=document.createElementNS("http://www.w3.org/2000/svg","line");
-    line.setAttribute("x1",p.x1+"%"); line.setAttribute("y1",p.y1+"%");
-    line.setAttribute("x2",p.x2+"%"); line.setAttribute("y2",p.y2+"%");
-    line.setAttribute("stroke","rgba(16,185,129,0.4)");
-    line.setAttribute("stroke-width","1.5");
-    line.setAttribute("stroke-dasharray","4 4");
+    const p = grid[idx % grid.length];
+    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    line.setAttribute("x1", p.x1 + "%");
+    line.setAttribute("y1", p.y1 + "%");
+    line.setAttribute("x2", p.x2 + "%");
+    line.setAttribute("y2", p.y2 + "%");
+    line.setAttribute("stroke", "rgba(16,185,129,0.4)");
+    line.setAttribute("stroke-width", "1.5");
+    line.setAttribute("stroke-dasharray", "4 4");
     line.classList.add("graph-line-anim");
     svg.appendChild(line);
   }
