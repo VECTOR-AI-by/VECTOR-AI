@@ -528,6 +528,7 @@ VECTOR-AI — Первое суверенное MAS-решение (Multi-Agent 
   
   form.addEventListener('submit', function(e){
     e.preventDefault();
+    console.log('VECTOR-AI form submitted', {name: form.name, value: form.value});
     var data = Object.fromEntries(new FormData(form).entries());
     var name = (data.name || '').trim();
     var email = (data.email || '').trim();
@@ -579,8 +580,10 @@ VECTOR-AI — Первое суверенное MAS-решение (Multi-Agent 
     btn.style.display = 'none';
     
     // Показываем success
-    if (successBox) successBox.classList.add('show');
-    if (successBox) successBox.style.display = 'block';
+    if (successBox) {
+      successBox.classList.add('show');
+      successBox.style.display = 'block';
+    }
     
     // Пробуем открыть почтовый клиент через скрытый iframe
     setTimeout(function(){
@@ -813,7 +816,7 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){
 <textarea class="form-input" name="message" placeholder="Опишите задачу или инфраструктуру для аудита" required maxlength="2000"></textarea>
 <div class="form-error" id="form-error"></div>
 <button type="submit" class="btn btn-primary" id="submit-btn">Отправить заявку</button>
-<div class="form-success" id="form-success" style="display:none;">
+<div class="form-success" id="form-success">
   <div class="success-icon">✓</div>
   <div class="success-title">Заявка успешно сформирована!</div>
   <div class="success-text">Мы свяжемся с вами в ближайшее время. Если почтовый клиент не открылся автоматически, нажмите кнопку ниже.</div>
