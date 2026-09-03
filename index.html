@@ -133,6 +133,11 @@ footer{padding:32px 0;border-top:1px solid rgba(255,255,255,0.05);text-align:cen
 .graph-line-anim{animation:graphFlow 1.5s linear infinite}
 @keyframes graphFlow{to{stroke-dashoffset:-16}}
 .graph-packet{position:absolute;width:6px;height:6px;border-radius:50%;background:#10b981;box-shadow:0 0 12px #10b981;transform:translate(-50%,-50%);z-index:3}
+.graph-node.center-node{background:rgba(59,130,246,0.25);border-color:rgba(59,130,246,0.6);color:#93c5fd;font-weight:700;padding:6px 12px;font-size:10px;box-shadow:0 0 20px rgba(59,130,246,0.4);z-index:4}
+.graph-node.node-alpha-c{border-color:rgba(168,85,247,0.5);background:rgba(168,85,247,0.15);color:#d8b4fe}
+.graph-node.node-gamma-c{border-color:rgba(16,212,170,0.5);background:rgba(16,212,170,0.15);color:#5eead4}
+.graph-node.spawn-in{animation:nodeSpawn .3s ease}
+@keyframes nodeSpawn{from{opacity:0;transform:translate(-50%,-50%) scale(.5)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
 </style>
 </head>
 <body>
@@ -765,6 +770,13 @@ const VS = (function(){
     domain:"infra", running:false, timers:[], workers:new Map(), ledger:new Map(),
     coverage:{}, pending:0, claimed:0, timeouts:0, duplicates:0, lost:0, escalations:0
   };
+  const graphState = { usedSlots: new Set(), slotOf: new Map() };
+  const GRID = [
+    {l: 18, t: 18}, {l: 38, t: 12}, {l: 62, t: 12}, {l: 82, t: 18},
+    {l: 12, t: 45},                              {l: 88, t: 45},
+    {l: 18, t: 82}, {l: 38, t: 88}, {l: 62, t: 88}, {l: 82, t: 82},
+    {l: 35, t: 50},                              {l: 65, t: 50}
+  ];
   const $ = function(id){ return document.getElementById(id); };
   const SPEED = 1.3;
   const later = function(ms, fn){ state.timers.push(setTimeout(fn, ms * SPEED)); };
@@ -790,6 +802,25 @@ const VS = (function(){
     $("btn-web3").className=domain==="web3" ? "domain-btn active" : "domain-btn";
     reset();
   }
+
+  // Пересобирает слой Swarm Graph: SVG для линий + центральный узел Оркестратора.
+  // Вызывается вместо innerHTML="" на graph-nodes/graph-links, чтобы у нас всегда
+  // был реальный <svg id="graph-lines-svg"> для рисования связей (раньше его не было
+  // вообще, поэтому drawLine() тихо ничего не делал и узлы просто "плавали" сами по себе).
+  function initGraph(){
+    var links = $("graph-links");
+    links.innerHTML = '<svg id="graph-lines-svg" width="100%" height="100%" style="position:absolute;inset:0;overflow:visible"></svg>';
+    var nodes = $("graph-nodes");
+    nodes.innerHTML = '';
+    var center = document.createElement("div");
+    center.id = "g-center";
+    center.className = "graph-node center-node";
+    center.style.left = "50%"; center.style.top = "50%";
+    center.innerText = "ОРКЕСТРАТОР";
+    nodes.appendChild(center);
+    graphState.usedSlots.clear();
+    graphState.slotOf.clear();
+  }
   
   function reset(){
     state.timers.forEach(clearTimeout); state.timers = []; state.running = false;
@@ -808,7 +839,8 @@ const VS = (function(){
     });
     $("worker-pool-container").innerHTML = '<div class="text-zinc-600 italic text-center py-8">Пул неактивен. Ожидание цели...</div>';
     $("ledger-rows").innerHTML = '<div class="text-zinc-600 text-center py-16 italic">Реестр пуст. Запустите симуляцию.</div>';
-    $("graph-nodes").innerHTML = ""; $("graph-links").innerHTML = "";
+    initGraph();
+    $("рой-count").innerText = "WORKERS: 0";
     $("final-verdict-box").className = "final-verdict";
     $("final-text").innerHTML = "Ожидание данных исполнения...";
     var logBox = $("event-log");
@@ -855,7 +887,11 @@ const VS = (function(){
       '<span id="wstat-' + id + '" class="text-[9px] bg-zinc-950 px-1.5 py-0.5 rounded text-blue-400 border border-blue-900/40" style="animation:swarmPulse 0.8s ease-in-out infinite">RUNNING</span>';
     c.appendChild(el);
     $("рой-count").innerText = "WORKERS: " + state.workers.size;
-    graphNode(id, role);
+    // Каждый воркер, появившийся в "Пуле", получает узел в Swarm Graph того же домена,
+    // который сейчас активен (АЛЬФА для web3, ГАММА для infra) — так граф всегда
+    // отражает ровно то, что происходит в логе событий и в списке воркеров.
+    var domain = state.domain === "web3" ? "alpha" : "gamma";
+    graphNode(id, role, domain);
     renderMetrics();
   }
   
@@ -863,60 +899,79 @@ const VS = (function(){
     state.workers.delete(id);
     var el = $("worker-" + id);
     if (el) el.remove();
+    // Убираем и узел, и связывающую линию из Swarm Graph, освобождая слот в сетке —
+    // раньше узлы копились там бесконечно и график превращался в кашу, никак не
+    // отражая, что воркер уже закончил работу.
+    var gEl = $("g-" + id);
+    if (gEl) gEl.remove();
+    var lEl = document.getElementById("gl-" + id);
+    if (lEl) lEl.remove();
+    if (graphState.slotOf.has(id)) {
+      graphState.usedSlots.delete(graphState.slotOf.get(id));
+      graphState.slotOf.delete(id);
+    }
     $("рой-count").innerText = "WORKERS: " + state.workers.size;
     if (!state.workers.size) $("worker-pool-container").innerHTML = '<div class="text-zinc-600 italic text-center py-8">Пул ожидает pending items...</div>';
     renderMetrics();
   }
   
-  function graphNode(id, label){
-    const wrap = $("graph-nodes"), el = document.createElement("div");
-    // Стабильная координата на основе id — никакого Math.random(),
-    // иначе при reset() и повторном spawn воркеры занимали бы те же позиции
-    let hash = 0;
-    for (let i = 0; i < id.length; i++) hash = ((hash << 5) - hash) + id.charCodeAt(i);
-    const slot = Math.abs(hash) % 12;
-    // 12-позиционная сетка: 4 колонки × 3 ряда вокруг центра (50%, 50%)
-    // Координаты в %, центр — (50,50), периметр — далеко от центра
-    const grid = [
-      {l: 18, t: 18}, {l: 38, t: 12}, {l: 62, t: 12}, {l: 82, t: 18},   // верх
-      {l: 12, t: 45},                              {l: 88, t: 45},   // середина
-      {l: 18, t: 82}, {l: 38, t: 88}, {l: 62, t: 88}, {l: 82, t: 82},   // низ
-      {l: 35, t: 50},                              {l: 65, t: 50}    // центр-лево, центр-право
-    ];
-    const pos = grid[slot];
+  function graphNode(id, label, domain){
+    const wrap = $("graph-nodes");
+    // Берём первый свободный слот сетки вместо хэша от id — так узлы не наслаиваются
+    // друг на друга и располагаются предсказуемо, по кругу вокруг Оркестратора.
+    let slot = -1;
+    for (let i = 0; i < GRID.length; i++){
+      if (!graphState.usedSlots.has(i)) { slot = i; break; }
+    }
+    if (slot === -1) slot = graphState.usedSlots.size % GRID.length;
+    graphState.usedSlots.add(slot);
+    graphState.slotOf.set(id, slot);
+    const pos = GRID[slot];
+    const el = document.createElement("div");
     el.id = "g-" + id;
-    el.className = "graph-node spawn-in";
+    el.className = "graph-node spawn-in" + (domain === "alpha" ? " node-alpha-c" : domain === "gamma" ? " node-gamma-c" : "");
     el.style.left = pos.l + "%";
     el.style.top = pos.t + "%";
-    el.style.transform = "translate(-50%, -50%)";
     el.innerText = label.replace("⚡ ", "").replace("🔥 ", "");
     wrap.appendChild(el);
-    drawLine(slot);
-    packet();
+    drawLine(id, slot, domain);
+    packet(pos);
   }
-  function drawLine(idx){
+  function drawLine(id, idx, domain){
     const svg = document.getElementById("graph-lines-svg");
     if (!svg) return;
-    // Координаты в % (центр = 50,50)
-    const grid = [
-      {x1: 50, y1: 50, x2: 18, y2: 18}, {x1: 50, y1: 50, x2: 38, y2: 12},
-      {x1: 50, y1: 50, x2: 62, y2: 12}, {x1: 50, y1: 50, x2: 82, y2: 18},
-      {x1: 50, y1: 50, x2: 12, y2: 45}, {x1: 50, y1: 50, x2: 88, y2: 45},
-      {x1: 50, y1: 50, x2: 18, y2: 82}, {x1: 50, y1: 50, x2: 38, y2: 88},
-      {x1: 50, y1: 50, x2: 62, y2: 88}, {x1: 50, y1: 50, x2: 82, y2: 82},
-      {x1: 50, y1: 50, x2: 35, y2: 50}, {x1: 50, y1: 50, x2: 65, y2: 50}
-    ];
-    const p = grid[idx % grid.length];
+    const p = GRID[idx % GRID.length];
     const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line.setAttribute("x1", p.x1 + "%");
-    line.setAttribute("y1", p.y1 + "%");
-    line.setAttribute("x2", p.x2 + "%");
-    line.setAttribute("y2", p.y2 + "%");
-    line.setAttribute("stroke", "rgba(16,185,129,0.4)");
+    line.setAttribute("id", "gl-" + id);
+    line.setAttribute("x1", "50%");
+    line.setAttribute("y1", "50%");
+    line.setAttribute("x2", p.l + "%");
+    line.setAttribute("y2", p.t + "%");
+    const color = domain === "alpha" ? "168,85,247" : domain === "gamma" ? "16,212,170" : "59,130,246";
+    line.setAttribute("stroke", "rgba(" + color + ",0.45)");
     line.setAttribute("stroke-width", "1.5");
     line.setAttribute("stroke-dasharray", "4 4");
     line.classList.add("graph-line-anim");
     svg.appendChild(line);
+  }
+  // Небольшой "пакет данных", который визуально пролетает от нового узла к
+  // Оркестратору в момент спавна — раньше packet() вообще не была объявлена
+  // и просто падала с ReferenceError при каждом новом воркере.
+  function packet(pos){
+    const wrap = $("graph-nodes");
+    if (!wrap) return;
+    const p = document.createElement("div");
+    p.className = "graph-packet";
+    p.style.left = pos.l + "%";
+    p.style.top = pos.t + "%";
+    p.style.transition = "left .6s ease, top .6s ease, opacity .6s ease";
+    wrap.appendChild(p);
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        p.style.left = "50%"; p.style.top = "50%"; p.style.opacity = "0";
+      });
+    });
+    setTimeout(function(){ p.remove(); }, 650);
   }
   
   function setCoverage(x, val){ $("cov-" + x).innerText = "COVERAGE: " + val + "%"; }
@@ -1157,390 +1212,6 @@ const VS = (function(){
 </main>
 <script>
 </script>
-<script>
-(function(){
-  var simTimeouts = [];
-  var currentDomain = 'infra';
-  var workerCounter = 0;
-  var taskCounter = 0;
-  var launchedWorkers = new Set();
-  
-  var launchBtn = document.getElementById('btn-launch');
-  var btnInfra = document.getElementById('btn-infra');
-  var btnWeb3 = document.getElementById('btn-web3');
-  if (!launchBtn) return;
-  
-  function makeRow(opts){
-    var row = document.createElement('div');
-    row.className = 'ledger-row';
-    row.id = opts.id;
-    row.innerHTML = '<div class="lr-id">' + opts.id + '</div>' +
-      '<div class="lr-type ' + (opts.typeClass||'') + '">' + opts.type + '</div>' +
-      '<div class="lr-status"><span class="' + opts.statusClass + '">' + opts.status + '</span></div>' +
-      '<div class="lr-verdict ' + (opts.verdictClass||'') + '">' + (opts.verdict||'—') + '</div>';
-    return row;
-  }
-  
-  function makeLogRow(text1, text2, accent){
-    var row = document.createElement('div');
-    row.className = 'lr-log';
-    row.innerHTML = '<span class="lcmd">' + text1 + '</span>' + (text2 ? '<br/><span class="lexec" style="color:' + (accent||'#fbbf24') + '">' + text2 + '</span>' : '');
-    return row;
-  }
-  
-  function setStatus(text, className){
-    var el = document.getElementById('scan-status');
-    el.textContent = text;
-    el.className = 'status-badge ' + className;
-  }
-  
-  function updateCoverage(percent, gate){
-    var id = gate === 'alpha' ? 'cov-alpha' : 'cov-gamma';
-    document.getElementById(id).textContent = 'COV: ' + percent.toFixed(1) + '%';
-  }
-  
-  function spawnWorker(label, type){
-    var slot = document.createElement('div');
-    slot.className = 'swarm-worker';
-    slot.id = 'w-slot-' + (++workerCounter);
-    
-    var isVerifier = type === 'verifier';
-    var isExploit = type === 'exploit';
-    var icon = isVerifier ? '🔥' : (isExploit ? '💣' : '⚡');
-    var statusId = 'w-stat-' + workerCounter;
-    
-    slot.innerHTML = '<span class="worker-label">' + icon + ' ' + label + '</span>' +
-      '<span id="' + statusId + '" class="worker-status status-idle">IDLE</span>';
-    document.getElementById('worker-pool').appendChild(slot);
-    
-    return { id: slot.id, statusId: statusId, label: label, type: type };
-  }
-  
-  function setWorkerStatus(w, status, text){
-    var el = document.getElementById(w.statusId);
-    if (!el) return;
-    el.textContent = text;
-    var cls = 'status-idle';
-    if (status === 'computing') cls = 'status-computing';
-    else if (status === 'verifying') cls = 'status-verifying';
-    else if (status === 'exploiting') cls = 'status-exploiting';
-    el.className = 'worker-status ' + cls;
-  }
-  
-  function clearAllTimeouts(){
-    simTimeouts.forEach(function(t){ clearTimeout(t); });
-    simTimeouts = [];
-  }
-  
-  function spawnTask(type, typeClass, parentId){
-    taskCounter++;
-    var id = '#' + Math.random().toString(36).substring(2, 6);
-    var row = makeRow({id:id, type:type, typeClass:typeClass, status:'PENDING', statusClass:'lr-pending'});
-    document.getElementById('ledger-rows').appendChild(row);
-    return { id: id, row: row, parentId: parentId, escalated: false };
-  }
-  
-  function updateTask(task, statusText, verdict, verdictClass, statusClassName){
-    var row = document.getElementById(task.id);
-    if (!row) return;
-    var statusSpan = row.querySelector('.lr-status span');
-    statusSpan.textContent = statusText;
-    statusSpan.className = statusClassName;
-    var verdictDiv = row.querySelector('.lr-verdict');
-    if (verdict) {
-      verdictDiv.textContent = verdict;
-      verdictDiv.className = 'lr-verdict ' + (verdictClass||'');
-    }
-  }
-  
-  function resetUI(){
-    clearAllTimeouts();
-    workerCounter = 0;
-    taskCounter = 0;
-    rowId = 0;
-    launchedWorkers.clear();
-    
-    setStatus('READY', 'status-ready');
-    document.getElementById('node-orchestrator').classList.remove('active');
-    document.getElementById('badge-orchestrator').classList.remove('active');
-    document.getElementById('node-alpha').classList.remove('active');
-    document.getElementById('node-gamma').classList.remove('active');
-    updateCoverage(0, 'alpha');
-    updateCoverage(0, 'gamma');
-    document.getElementById('worker-pool').innerHTML = '';
-    document.getElementById('ledger-rows').innerHTML = '<div class="ledger-empty">Target Ledger empty. Click LAUNCH_SWARM to test the architecture.</div>';
-    var fvb = document.getElementById('final-verdict-box');
-    fvb.className = 'final-verdict';
-    document.getElementById('final-text').textContent = 'Awaiting execution data...';
-    launchBtn.disabled = false;
-    
-    // Базовый пул воркеров (подгружается при старте)
-    var w1 = spawnWorker('INTERPRETER_01', 'interpreter');
-    var w2 = spawnWorker('INTERPRETER_02', 'interpreter');
-    var w3 = spawnWorker('VERIFIER_01', 'verifier');
-    window._baseWorkers = [w1, w2, w3];
-  }
-  
-  function switchDomain(domain){
-    if (document.getElementById('scan-status').textContent === 'RUNNING') return;
-    currentDomain = domain;
-    btnInfra.classList.toggle('active', domain === 'infra');
-    btnWeb3.classList.toggle('active', domain === 'web3');
-    document.getElementById('input-target').textContent = (domain === 'infra')
-      ? 'scan --target https://your-domain.com'
-      : 'scan --target 0xTARGET...';
-    resetUI();
-  }
-  
-  btnInfra.addEventListener('click', function(){ switchDomain('infra'); });
-  btnWeb3.addEventListener('click', function(){ switchDomain('web3'); });
-  
-  function runInfraPipeline(){
-    var gamma = document.getElementById('node-gamma');
-    gamma.classList.add('active');
-    document.getElementById('ledger-rows').innerHTML = '';
-    
-    var t1 = spawnTask('port/scan', 'infra');
-    var t2 = spawnTask('subdomain/enum', 'infra');
-    var t3 = spawnTask('header/check', 'infra');
-    
-    // Этап 1: Interpreter workers берут первичные таски
-    simTimeouts.push(setTimeout(function(){
-      setWorkerStatus(window._baseWorkers[0], 'computing', 'PING-SWEEP ' + t1.id);
-      setWorkerStatus(window._baseWorkers[1], 'computing', 'SUBDOMAIN ' + t2.id);
-      updateTask(t1, 'IN_PROGRESS', null, '', 'lr-progress');
-      updateTask(t2, 'IN_PROGRESS', null, '', 'lr-progress');
-    }, 800));
-    
-    // Этап 2: t1 (port scan) → FP
-    simTimeouts.push(setTimeout(function(){
-      setWorkerStatus(window._baseWorkers[0], 'idle', 'IDLE');
-      updateTask(t1, 'DONE', 'FP (standard)', 'fp', 'lr-done');
-    }, 2000));
-    
-    // Этап 3: t2 (subdomain) находит новые → СПАВН подтасков и новых воркеров
-    simTimeouts.push(setTimeout(function(){
-      setWorkerStatus(window._baseWorkers[1], 'idle', 'IDLE');
-      updateTask(t2, 'DONE', 'TP (3 subdomains)', 'verified', 'lr-done');
-      updateCoverage(33, 'gamma');
-      
-      // Динамический спавн: subdomain нашёл → новые таски
-      var t4 = spawnTask('subdomain/staging', 'infra', t2.id);
-      var t5 = spawnTask('subdomain/admin', 'infra', t2.id);
-      var t6 = spawnTask('subdomain/dev', 'infra', t2.id);
-      
-      // Новые воркеры подхватывают
-      var wNew1 = spawnWorker('INTERPRETER_03', 'interpreter');
-      var wNew2 = spawnWorker('INTERPRETER_04', 'interpreter');
-      
-      setTimeout(function(){
-        setWorkerStatus(wNew1, 'computing', 'CRAWL staging');
-        setWorkerStatus(wNew2, 'computing', 'CRAWL dev');
-        updateTask(t4, 'IN_PROGRESS', null, '', 'lr-progress');
-        updateTask(t6, 'IN_PROGRESS', null, '', 'lr-progress');
-      }, 200);
-    }, 2800));
-    
-    // Этап 4: t3 (header check) → AMBIGUOUS → СПАВН верификатора
-    simTimeouts.push(setTimeout(function(){
-      updateTask(t3, 'ESCALATED', 'AMBIGUOUS (debug?)', 'amb', 'lr-escalated');
-      updateCoverage(45, 'gamma');
-      
-      var v1 = spawnWorker('VERIFIER_02', 'verifier');
-      setTimeout(function(){
-        setWorkerStatus(v1, 'verifying', 'DEEP-SCAN headers');
-      }, 200);
-    }, 3400));
-    
-    // Этап 5: subdomain/staging находит утечку → AMBIGUOUS
-    simTimeouts.push(setTimeout(function(){
-      updateTask(t4, 'ESCALATED', 'AMBIGUOUS (.env)', 'amb', 'lr-escalated');
-      
-      // Спавним верификатора для утечки
-      var v2 = spawnWorker('VERIFIER_03', 'verifier');
-      setTimeout(function(){
-        setWorkerStatus(v2, 'verifying', 'EXTRACT secrets');
-      }, 200);
-    }, 4200));
-    
-    // Этап 6: subdomain/dev → FP (мертвый)
-    simTimeouts.push(setTimeout(function(){
-      updateTask(t6, 'DONE', 'FP (dead)', 'fp', 'lr-done');
-      updateCoverage(60, 'gamma');
-    }, 5000));
-    
-    // Этап 7: Финальная верификация - VERIFIED утечки
-    simTimeouts.push(setTimeout(function(){
-      // Закрываем все воркеры
-      document.querySelectorAll('.worker-status').forEach(function(el){
-        el.textContent = 'IDLE';
-        el.className = 'worker-status status-idle';
-      });
-      
-      // Лог форка
-      var logRow = makeLogRow(
-        'verifier_03: payload analyzer',
-        'PII EXPOSED: 1,774 records via debug endpoint',
-        '#ef4444'
-      );
-      document.getElementById('ledger-rows').appendChild(logRow);
-      
-      // Финальный таск
-      var tFinal = spawnTask('pii/exposed', 'infra');
-      updateTask(tFinal, 'DONE', 'VERIFIED (1,774 PII)', 'verified', 'lr-done');
-      updateCoverage(100, 'gamma');
-      
-      var fvb = document.getElementById('final-verdict-box');
-      fvb.className = 'final-verdict active-red';
-      document.getElementById('final-text').innerHTML = 
-        '<div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(239,68,68,0.3);padding-bottom:6px;margin-bottom:8px">' +
-          '<strong style="color:#ef4444">⚡ CRITICAL INFRA INCIDENT VERIFIED</strong>' +
-          '<span class="law-red">ЗАКОН РБ №99-З</span>' +
-        '</div>' +
-        '<strong>Target:</strong> your-domain.com // Surface mapped by ' + workerCounter + ' workers across ' + taskCounter + ' tasks.<br/>' +
-        '<strong style="color:#ef4444">[ENFORCEMENT ACTION]:</strong> Автоматическая генерация пакета Responsible Disclosure + шаблон заявления по законодательству РБ. Лог-дамп зашифрован.';
-      setStatus('COMPLETED', 'status-completed');
-      document.getElementById('badge-orchestrator').classList.remove('active');
-      launchBtn.disabled = false;
-    }, 6500));
-  }
-  
-  function runWeb3Pipeline(){
-    var alpha = document.getElementById('node-alpha');
-    alpha.classList.add('active');
-    document.getElementById('ledger-rows').innerHTML = '';
-    
-    var t1 = spawnTask('contract/proxy', 'web3');
-    
-    // Этап 1: Parser
-    simTimeouts.push(setTimeout(function(){
-      setWorkerStatus(window._baseWorkers[0], 'computing', 'PARSING ' + t1.id);
-      updateTask(t1, 'IN_PROGRESS', null, '', 'lr-progress');
-    }, 800));
-    
-    // Этап 2: Proxy находит имплементации → СПАВН 2 воркеров
-    simTimeouts.push(setTimeout(function(){
-      setWorkerStatus(window._baseWorkers[0], 'idle', 'IDLE');
-      updateTask(t1, 'DONE', 'TP (EIP-1967)', 'verified', 'lr-done');
-      updateCoverage(20, 'alpha');
-      
-      var t2 = spawnTask('impl/v1', 'web3', t1.id);
-      var t3 = spawnTask('impl/v2', 'web3', t1.id);
-      
-      var w2 = spawnWorker('INTERPRETER_03', 'interpreter');
-      var w3 = spawnWorker('INTERPRETER_04', 'interpreter');
-      
-      setTimeout(function(){
-        setWorkerStatus(w2, 'computing', 'DECOMPILE v1');
-        setWorkerStatus(w3, 'computing', 'DECOMPILE v2');
-        updateTask(t2, 'IN_PROGRESS', null, '', 'lr-progress');
-        updateTask(t3, 'IN_PROGRESS', null, '', 'lr-progress');
-      }, 200);
-    }, 2000));
-    
-    // Этап 3: impl v1 → FP
-    simTimeouts.push(setTimeout(function(){
-      updateTask(t2, 'DONE', 'FP (Storage Safe)', 'fp', 'lr-done');
-      updateCoverage(35, 'alpha');
-    }, 3200));
-    
-    // Этап 4: impl v2 → AMBIGUOUS → СПАВН верификаторов
-    simTimeouts.push(setTimeout(function(){
-      updateTask(t3, 'ESCALATED', 'AMBIGUOUS (reentrancy?)', 'amb', 'lr-escalated');
-      updateCoverage(50, 'alpha');
-      
-      var v1 = spawnWorker('VERIFIER_02', 'verifier');
-      var v2 = spawnWorker('VERIFIER_03', 'verifier');
-      var t4 = spawnTask('trace/calls', 'web3', t3.id);
-      var t5 = spawnTask('storage/slots', 'web3', t3.id);
-      
-      setTimeout(function(){
-        setWorkerStatus(v1, 'verifying', 'FORK-TEST reentrancy');
-        setWorkerStatus(v2, 'verifying', 'MAP dependencies');
-        updateTask(t4, 'IN_PROGRESS', null, '', 'lr-progress');
-        updateTask(t5, 'IN_PROGRESS', null, '', 'lr-progress');
-      }, 200);
-    }, 4000));
-    
-    // Этап 5: t4 (trace) → FP, t5 (storage) → AMBIGUOUS
-    simTimeouts.push(setTimeout(function(){
-      updateTask(t4, 'DONE', 'FP (calls safe)', 'fp', 'lr-done');
-      updateCoverage(65, 'alpha');
-    }, 5000));
-    
-    simTimeouts.push(setTimeout(function(){
-      updateTask(t5, 'ESCALATED', 'AMBIGUOUS (slot collision)', 'amb', 'lr-escalated');
-      updateCoverage(75, 'alpha');
-      
-      // Спавним нового эксплойт-агента
-      var x1 = spawnWorker('EXPLOIT_CART_01', 'exploit');
-      setTimeout(function(){
-        setWorkerStatus(x1, 'exploiting', 'ATTACK-POC build');
-      }, 200);
-    }, 5400));
-    
-    // Этап 6: Лог форка
-    simTimeouts.push(setTimeout(function(){
-      var logRow = makeLogRow(
-        '$ anvil --fork-url MAINNET_RPC --fork-block-number LATEST',
-        'Anvil fork ready. Compiling PoC exploit...',
-        '#fbbf24'
-      );
-      document.getElementById('ledger-rows').appendChild(logRow);
-    }, 6200));
-    
-    // Этап 7: Финальная верификация
-    simTimeouts.push(setTimeout(function(){
-      document.querySelectorAll('.worker-status').forEach(function(el){
-        el.textContent = 'IDLE';
-        el.className = 'worker-status status-idle';
-      });
-      
-      var tFinal = spawnTask('exploit/verified', 'flash', t3.id);
-      updateTask(tFinal, 'DONE', 'VERIFIED (Reentrancy)', 'verified-fail', 'lr-done');
-      updateCoverage(100, 'alpha');
-      
-      var logRow = makeLogRow(
-        'forge test --fork-url http://localhost:8545 --match-test reentrancy_vector',
-        'PASS: Attack vector confirmed in isolated fork.',
-        '#ef4444'
-      );
-      document.getElementById('ledger-rows').appendChild(logRow);
-      
-      var fvb = document.getElementById('final-verdict-box');
-      fvb.className = 'final-verdict active-green';
-      document.getElementById('final-text').innerHTML = 
-        '<div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(16,185,129,0.3);padding-bottom:6px;margin-bottom:8px">' +
-          '<strong style="color:#10b981">⚠️ BLOCKCHAIN PROTOCOL EXPLOIT VERIFIED IN FORK</strong>' +
-          '<span class="law">ON-PREMISES RUNTIME</span>' +
-        '</div>' +
-        '<strong>Target Contract:</strong> 0xTARGET... // ' + taskCounter + ' tasks processed by ' + workerCounter + ' workers.<br/>' +
-        '<strong style="color:#10b981">[VERIFIER METRIC]:</strong> Локальное исполнение в форке завершилось с кодом <span style="background:rgba(239,68,68,0.15);color:#ef4444;padding:1px 6px;border:1px solid rgba(239,68,68,0.3);border-radius:3px;font-weight:700">PASS (Attack Vector Valid)</span>. Сгенерирован патч remediation.';
-      setStatus('COMPLETED', 'status-completed');
-      document.getElementById('badge-orchestrator').classList.remove('active');
-      launchBtn.disabled = false;
-    }, 7500));
-  }
-  
-  function startSim(){
-    resetUI();
-    setStatus('RUNNING', 'status-running');
-    launchBtn.disabled = true;
-    document.getElementById('node-orchestrator').classList.add('active');
-    document.getElementById('badge-orchestrator').classList.add('active');
-    
-    simTimeouts.push(setTimeout(function(){
-      if (currentDomain === 'infra') runInfraPipeline();
-      else runWeb3Pipeline();
-    }, 1000));
-  }
-  
-  launchBtn.addEventListener('click', startSim);
-  resetUI();
-})();
-</script>
-
-
 <script>
 (function(){
   var form = document.getElementById('lead-form');
