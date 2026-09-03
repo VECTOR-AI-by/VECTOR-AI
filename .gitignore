@@ -1,0 +1,222 @@
+# ============================================
+# VECTOR-AI .gitignore — ЗАЩИТА СЕКРЕТОВ
+# ============================================
+
+# Секреты и ключи (НИКОГДА не коммитить)
+.env
+.env.*
+!.env.example
+*.env
+secrets/
+keys/
+credentials/
+*.key
+*.pem
+*.p12
+*.pfx
+id_rsa*
+id_dsa*
+id_ecdsa*
+id_ed25519*
+*.keystore
+*.mnemonic
+*.seed
+wallet.dat
+keystore.json
+private_key*
+secret_key*
+api_key*
+access_token*
+
+# API ключи по сервисам
+**/alchemy*
+**/infura*
+**/ankr*
+**/chainstack*
+**/etherscan*
+**/bscscan*
+**/polygonscan*
+**/snowtrace*
+**/arbiscan*
+**/optimistic*
+**/basescan*
+**/helius*
+
+# Telegram / Discord / Twitter / сессии
+**/telegram*
+**/discord*
+**/twitter*
+*.session
+*.session-journal
+GBR_*.session
+tdata/
+*.bot
+bot_token*
+tg_token*
+
+# LLM ключи
+**/openai*
+**/anthropic*
+**/groq*
+**/claude*
+llm_keys/
+ai_keys/
+
+# Логи и отчёты
+logs/
+*.log
+*.log.*
+audit_logs/
+scan_logs/
+report_logs/
+*.out
+*.err
+demo_reports/
+deploy_logs/
+private_reports/
+internal_reports/
+client_data/
+
+# Данные пользователей
+users.db
+users_db*
+users/
+clients/
+customer_data/
+pii/
+gdpr_data/
+
+# Датасеты
+datasets/
+training_data/
+ml_data/
+*.csv
+*.tsv
+*.parquet
+*.arrow
+
+# Векторные базы и модели
+vector_db/
+chroma/
+chroma.sqlite3
+embeddings/
+*.npy
+*.npz
+*.pkl
+*.pickle
+models/
+*.bin
+*.pt
+*.pth
+*.onnx
+*.gguf
+*.safetensors
+*.h5
+*.keras
+*.tflite
+
+# Кэши
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+.cache/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+*.egg-info/
+.eggs/
+build/
+dist/
+node_modules/
+.next/
+.turbo/
+.vercel/
+.netlify/
+out/
+
+# Виртуальные окружения
+venv/
+.venv/
+env/
+.python-version
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+.bash_history
+.zsh_history
+
+# Backup
+*.bak
+*.backup
+*.tmp
+*.temp
+*~
+~$*
+*.orig
+
+# Базы данных
+*.db
+*.sqlite
+*.sqlite3
+
+# Внутренние документы
+**/internal/
+**/private/
+**/drafts/
+**/scratch/
+**/playground/
+**/sandbox/
+**/archive/
+**/_archive/
+**/_old/
+**/_bak/
+**/_cats/
+
+# BORIS-specific
+*.py.bak_*
+*.py.bak
+BORIS_*.json
+ДОСКА_*.txt
+ДОСКА_*.txt.bak*
+
+# Foundry / Hardhat
+foundry/cache/
+foundry/out/
+foundry/broadcast/
+openzeppelin-contracts/
+artifacts/
+cache/
+typechain/
+typechain-types/
+
+# Git
+.git/
+.gitignore
+.gitattributes
+.gitmodules
+
+# Docker
+docker-compose.override.yml
+Dockerfile.dev
+
+# Тесты приватные
+test_data/
+test_keys/
+test_secrets/
+
+# Приватная документация
+docs/private/
+docs/internal/
+docs/notes/
+TODO.md
+NOTES.md
+*.private.md
