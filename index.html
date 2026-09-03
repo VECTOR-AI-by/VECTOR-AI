@@ -785,11 +785,11 @@ const VS = (function(){
   }
   
   function switchDomain(domain){
-    if (state.running) return;
-    state.domain = domain;
-    $("input-target").innerText = targets[domain];
-    $("btn-infra").className = domain === "infra" ? activeBtn() : idleBtn();
-    $("btn-web3").className = domain === "web3" ? activeBtn() : idleBtn();
+    if(state.running) return;
+    state.domain=domain;
+    $("input-target").innerText=targets[domain];
+    $("btn-infra").className=domain==="infra" ? "domain-btn active" : "domain-btn";
+    $("btn-web3").className=domain==="web3" ? "domain-btn active" : "domain-btn";
     reset();
   }
   
@@ -870,18 +870,38 @@ const VS = (function(){
     renderMetrics();
   }
   
-  function graphNode(id, label){
-    var wrap = $("graph-nodes");
-    if (!wrap) return;
-    var n = state.workers.size, col = n % 2, row = Math.floor(n / 2);
-    var el = document.createElement("div");
-    el.id = "g-" + id;
-    el.className = "absolute";
-    el.style.cssText = "position:absolute;padding:2px 6px;border-radius:4px;border:1px solid rgba(59,130,246,0.6);background:rgba(59,130,246,0.15);color:#93c5fd;animation:swarmFadeIn 0.4s forwards;white-space:nowrap;font-size:8px";
-    el.style.left = (42 + col * 35) + "%";
-    el.style.top = (20 + (row % 4) * 22) + "%";
-    el.innerText = label.replace("⚡ ", "").replace("🔥 ", "");
+  function graphNode(id,label){
+    const wrap=$("graph-nodes"), el=document.createElement("div");
+    const idx=(state.workers.size-1);
+    const positions=[
+      {l:50, t:8}, {l:88, t:30}, {l:88, t:70},
+      {l:50, t:92}, {l:12, t:70}, {l:12, t:30}
+    ];
+    const pos=positions[idx%positions.length];
+    el.id="g-"+id; el.className="graph-node spawn-in";
+    el.style.left=pos.l+"%"; el.style.top=pos.t+"%";
+    el.innerText=label.replace("⚡ ","");
     wrap.appendChild(el);
+    drawLine(idx%positions.length);
+    packet();
+  }
+  function drawLine(idx){
+    const svg=document.getElementById("graph-lines-svg");
+    if(!svg) return;
+    const positions=[
+      {x1:50,y1:50,x2:50,y2:8}, {x1:50,y1:50,x2:88,y2:30},
+      {x1:50,y1:50,x2:88,y2:70}, {x1:50,y1:50,x2:50,y2:92},
+      {x1:50,y1:50,x2:12,y2:70}, {x1:50,y1:50,x2:12,y2:30}
+    ];
+    const p=positions[idx%positions.length];
+    const line=document.createElementNS("http://www.w3.org/2000/svg","line");
+    line.setAttribute("x1",p.x1+"%"); line.setAttribute("y1",p.y1+"%");
+    line.setAttribute("x2",p.x2+"%"); line.setAttribute("y2",p.y2+"%");
+    line.setAttribute("stroke","rgba(16,185,129,0.4)");
+    line.setAttribute("stroke-width","1.5");
+    line.setAttribute("stroke-dasharray","4 4");
+    line.classList.add("graph-line-anim");
+    svg.appendChild(line);
   }
   
   function setCoverage(x, val){ $("cov-" + x).innerText = "COVERAGE: " + val + "%"; }
