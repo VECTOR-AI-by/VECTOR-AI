@@ -514,102 +514,8 @@ VECTOR-AI — Первое суверенное MAS-решение (Multi-Agent 
 </section>
 
 <!-- Интерактивный терминал: Target Ledger в действии -->
-<section class="terminal-section">
-<div class="container">
-<div class="section-header">
-<div class="section-label">Live · Демонстрация</div>
-<h2 class="section-title">Target Ledger в действии</h2>
-<p class="section-description">Реальный лог автономной работы роя: от входного запроса через каскад воркеров до юридического пакета. Каждый тик — реальный шаг архитектуры VECTOR-AI.</p>
-</div>
-<div class="terminal-widget" id="terminal">
-<div class="terminal-header">
-<div class="terminal-dots">
-<span class="dot dot-red"></span>
-<span class="dot dot-yellow"></span>
-<span class="dot dot-green"></span>
-</div>
-<div class="terminal-title">VECTOR-AI // TARGET_LEDGER_RUNTIME</div>
-<div class="terminal-badge">ON-PREMISES SATELLITE</div>
-</div>
-<div class="terminal-body" id="terminal-screen">
-<div class="term-line"><span class="term-time">[17:35:12]</span> <span class="term-info">INFO</span> Initializing Archetype Gate on target...</div>
-<div class="term-line"><span class="term-time">[17:35:13]</span> <span class="term-arch">ARCHETYPE</span> Target classified as <span class="term-tag">E-Commerce / API-Gateway</span>. Thresholds: <span class="term-dim">τ_chain = 85, τ_sev = CRITICAL</span>.</div>
-<div class="term-line"><span class="term-time">[17:35:14]</span> <span class="term-mech">MECHANICAL_SCAN</span> Launching infra-arsenal (Nmap fingerprinting + web crawlers)...</div>
-<div class="term-block">
-<div class="term-ledger"><span class="term-em">TARGET LEDGER UPDATED</span> <span class="term-dim">(Spawn on Discovery)</span></div>
-<div class="term-ledger-row"><span class="term-key">UUID:</span> <span class="term-val">56c9b445-6b3f</span> &nbsp; <span class="term-key">Domain:</span> <span class="term-val">INFRA</span> &nbsp; <span class="term-key">Type:</span> <span class="term-val">service</span> &nbsp; <span class="term-key">Status:</span> <span class="term-warn">PENDING</span></div>
-<div class="term-ledger-row"><span class="term-key">Payload:</span> <span class="term-val">{"host": "api.target.by", "port": 443, "service": "Laravel/v10.x", "debug": "true"}</span></div>
-</div>
-<div class="term-line"><span class="term-time">[17:35:16]</span> <span class="term-int">INTERPRETER_WORKER_01</span> Claiming task <span class="term-dim">56c9b445</span>. Parsing static context...</div>
-<div class="term-line"><span class="term-time">[17:35:18]</span> <span class="term-amb">VERDICT</span> <span class="term-amb-box">AMBIGUOUS</span> <span class="term-dim">(Static leaks confirmed, APP_DEBUG active. Escalating to Verifier...)</span></div>
-<div class="term-line"><span class="term-time">[17:35:20]</span> <span class="term-ver">VERIFIER_WORKER_04</span> Launching non-destructive active fingerprinting...</div>
-<div class="term-line"><span class="term-time">[17:35:22]</span> <span class="term-ok">VERIFICATION SUCCESS</span> Target endpoint exposed PII data <span class="term-dim">(1,774 records found)</span>. Status: <span class="term-verified">VERIFIED</span></div>
-<div class="term-legal">
-<div class="term-legal-head">📄 AUTOMATED COMPLIANCE &amp; LEGAL ENFORCEMENT <span class="term-legal-badge">ЗАКОН РБ №99-З</span></div>
-<div class="term-legal-body">
-ГЕНЕРАЦИЯ ДОКУМЕНТА: Уведомление об инциденте ИБ в рамках протокола Responsible Disclosure для ООО «Бизнес».<br>
-СТАТУС: Сформирован пакет юридической документации. Шаблон заявления в правоохранительные органы РБ готов к выгрузке. Лог-дамп зашифрован.
-</div>
-</div>
-</div>
-<div class="terminal-footer">
-<div class="terminal-status"><span class="status-dot"></span> <span id="term-status-text">STREAMING</span></div>
-<div class="terminal-controls">
-<button type="button" class="term-btn" id="term-pause">⏸ Пауза</button>
-<button type="button" class="term-btn" id="term-restart">↻ Заново</button>
-</div>
-</div>
-</div>
-</div>
-</section>
 
-<style>
-.terminal-section{padding:60px 0;background:linear-gradient(180deg,transparent 0%,rgba(0,212,170,0.03) 50%,transparent 100%)}
-.terminal-widget{max-width:1000px;margin:0 auto;background:#000;border:1px solid rgba(255,255,255,0.08);border-radius:14px;overflow:hidden;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#cbd5e1;box-shadow:0 20px 60px rgba(0,0,0,0.5)}
-.terminal-header{background:#0a0e15;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;gap:14px}
-.terminal-dots{display:flex;gap:6px}
-.terminal-dots .dot{width:10px;height:10px;border-radius:50%;opacity:0.7}
-.dot-red{background:#ff5f56}.dot-yellow{background:#ffbd2e}.dot-green{background:#27c93f}
-.terminal-title{color:#8B949E;font-size:11px;letter-spacing:1px;flex:1}
-.terminal-badge{font-size:10px;color:#00D4AA;background:rgba(0,212,170,0.1);border:1px solid rgba(0,212,170,0.3);padding:3px 10px;border-radius:6px;letter-spacing:1px}
-.terminal-body{padding:20px 24px;min-height:420px;max-height:540px;overflow-y:auto;line-height:1.65}
-.terminal-body::-webkit-scrollbar{width:6px}
-.terminal-body::-webkit-scrollbar-track{background:rgba(255,255,255,0.02)}
-.terminal-body::-webkit-scrollbar-thumb{background:rgba(0,212,170,0.3);border-radius:3px}
-.term-line{padding:4px 0;opacity:0;animation:termFadeIn 0.4s forwards}
-.term-time{color:#6B7280;margin-right:8px}
-.term-info{color:#3b82f6;font-weight:600;margin-right:6px}
-.term-arch{color:#a855f7;font-weight:600;margin-right:6px}
-.term-mech{color:#f59e0b;font-weight:600;margin-right:6px}
-.term-int{color:#06b6d4;font-weight:600;margin-right:6px}
-.term-ver{color:#ef4444;font-weight:600;margin-right:6px}
-.term-ok{color:#10b981;font-weight:600;margin-right:6px}
-.term-amb{color:#f97316;font-weight:600;margin-right:6px}
-.term-tag{background:rgba(255,255,255,0.08);padding:1px 8px;border-radius:4px;color:#fff;font-weight:500}
-.term-dim{color:#6B7280}
-.term-warn{color:#fbbf24;font-weight:600;animation:termPulse 1.5s ease-in-out infinite}
-.term-verified{background:rgba(16,185,129,0.15);color:#10b981;padding:1px 8px;border-radius:4px;font-weight:600}
-.term-amb-box{background:rgba(249,115,22,0.15);color:#fb923c;padding:1px 8px;border-radius:4px;font-weight:600;border:1px solid rgba(249,115,22,0.3)}
-.term-block{margin:8px 0;padding:12px 16px;background:rgba(0,212,170,0.04);border-left:2px solid rgba(0,212,170,0.4);border-radius:6px}
-.term-ledger{font-size:12px;margin-bottom:4px}
-.term-em{color:#10b981;font-weight:600}
-.term-ledger-row{font-size:12px;padding:2px 0}
-.term-key{color:#6B7280;margin-right:4px}
-.term-val{color:#E8EAED}
-.term-legal{margin-top:14px;padding:14px 16px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:8px}
-.term-legal-head{color:#cbd5e1;font-weight:600;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
-.term-legal-badge{font-size:9px;background:rgba(16,185,129,0.15);color:#10b981;border:1px solid rgba(16,185,129,0.3);padding:2px 8px;border-radius:4px;letter-spacing:1px;font-weight:500}
-.term-legal-body{color:#8B949E;font-size:11.5px;line-height:1.6}
-.terminal-footer{background:#0a0e15;padding:10px 16px;border-top:1px solid rgba(255,255,255,0.05);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
-.terminal-status{font-size:11px;color:#10b981;display:flex;align-items:center;gap:8px}
-.status-dot{width:8px;height:8px;background:#10b981;border-radius:50%;animation:termPulse 1.5s ease-in-out infinite;display:inline-block}
-.terminal-controls{display:flex;gap:8px}
-.term-btn{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#cbd5e1;padding:5px 12px;border-radius:6px;font-family:inherit;font-size:11px;cursor:pointer;transition:all 0.2s}
-.term-btn:hover{background:rgba(0,212,170,0.1);border-color:rgba(0,212,170,0.3);color:#00D4AA}
-@keyframes termFadeIn{from{opacity:0;transform:translateX(-4px)}to{opacity:1;transform:translateX(0)}}
-@keyframes termPulse{0%,100%{opacity:1}50%{opacity:0.4}}
-@media(max-width:768px){.terminal-widget{font-size:11px}.terminal-body{padding:14px 16px;min-height:340px}}
-</style>
+
 
 <script>
 (function(){
@@ -689,69 +595,444 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){
   });
 });
 
-// === Интерактивный терминал Target Ledger ===
-(function(){
-  var screen = document.getElementById('terminal-screen');
-  if (!screen) return;
-  var blocks = screen.querySelectorAll('.term-line, .term-block, .term-legal');
-  var status = document.getElementById('term-status-text');
-  var pauseBtn = document.getElementById('term-pause');
-  var restartBtn = document.getElementById('term-restart');
-  var i = 0;
-  var paused = false;
-  var timer = null;
-  
-  function reset(){
-    i = 0;
-    paused = false;
-    blocks.forEach(function(b){
-      b.style.animation = 'none';
-      b.style.opacity = '0';
-    });
-    if (status) status.textContent = 'STREAMING';
-    if (pauseBtn) pauseBtn.textContent = '⏸ Пауза';
-  }
-  
-  function showNext(){
-    if (paused) return;
-    if (i >= blocks.length){
-      if (status) status.textContent = 'COMPLETE';
-      return;
-    }
-    var b = blocks[i];
-    b.style.animation = 'termFadeIn 0.4s forwards';
-    i++;
-    timer = setTimeout(showNext, 650);
-  }
-  
-  if (pauseBtn){
-    pauseBtn.addEventListener('click', function(){
-      paused = !paused;
-      if (paused){
-        if (timer) clearTimeout(timer);
-        if (status) status.textContent = 'PAUSED';
-        pauseBtn.textContent = '▶ Продолжить';
-      } else {
-        if (status) status.textContent = 'STREAMING';
-        pauseBtn.textContent = '⏸ Пауза';
-        showNext();
-      }
-    });
-  }
-  
-  if (restartBtn){
-    restartBtn.addEventListener('click', function(){
-      if (timer) clearTimeout(timer);
-      reset();
-      setTimeout(showNext, 400);
-    });
-  }
-  
-  // Запуск анимации
-  setTimeout(showNext, 600);
-})();
+
 
 </script>
+<!-- Advanced Swarm Visualizer -->
+<section class="swarm-section" id="swarm">
+<div class="container">
+<div class="section-header">
+<div class="section-label">Live · Демонстрация архитектуры</div>
+<h2 class="section-title">Advanced Swarm Visualizer</h2>
+<p class="section-description">Интерактивная симуляция работы суверенного AI-роя. Переключайте между режимами инфраструктурного пентеста и аудита смарт-контрактов. Запустите LAUNCH_SWARM чтобы наблюдать каскадное исполнение воркеров и пополнение Target Ledger в реальном времени.</p>
+</div>
+
+<div class="swarm-widget">
+<div class="swarm-header">
+<div class="swarm-dots">
+<span class="dot dot-red"></span>
+<span class="swarm-dot"></span>
+<span class="dot dot-yellow"></span>
+<span class="swarm-dot"></span>
+<span class="dot dot-green"></span>
+</div>
+<span class="swarm-title">VECTOR-AI // ADVANCED SWARM VISUALIZER</span>
+<div class="swarm-domain-switch">
+<button type="button" id="btn-infra" class="domain-btn active">🌐 INFRA_PENTEST</button>
+<button type="button" id="btn-web3" class="domain-btn">⛓️ WEB3_DEFI</button>
+</div>
+</div>
+
+<div class="swarm-input-bar">
+<span class="swarm-prompt">vector-ai@swarm:~$</span>
+<div class="swarm-input-display">
+<span id="input-target">scan --target https://barocco.by</span>
+<span id="scan-status" class="status-badge status-ready">READY</span>
+</div>
+<button type="button" id="btn-launch" class="launch-btn">LAUNCH_SWARM</button>
+</div>
+
+<div class="swarm-grid">
+<div class="swarm-col swarm-col-left">
+<div class="swarm-col-label">Core Orchestration Node</div>
+<div id="node-orchestrator" class="swarm-node-card orchestrator">
+<div class="node-content">
+<div class="node-title">🤖 FLAGMAN_ORCHESTRATOR</div>
+<div class="node-sub">Context: 1M Tokens // Decomposing task...</div>
+</div>
+<div id="badge-orchestrator" class="node-badge"></div>
+</div>
+
+<div class="swarm-col-label sub">Domain Gates</div>
+<div class="swarm-gate-grid">
+<div id="node-alpha" class="swarm-gate">
+<div class="node-title">🛡️ ALPHA GATE</div>
+<div class="node-sub">Domain: Web3/Code</div>
+<div id="cov-alpha" class="node-cov">COV: 0.0%</div>
+</div>
+<div id="node-gamma" class="swarm-gate">
+<div class="node-title">📡 GAMMA GATE</div>
+<div class="node-sub">Domain: Infra/OSINT</div>
+<div id="cov-gamma" class="node-cov">COV: 0.0%</div>
+</div>
+</div>
+
+<div class="swarm-col-label sub">Dynamic Worker Pool (On-Premises Runtime)</div>
+<div class="swarm-workers">
+<div id="worker-int-1" class="swarm-worker">
+<span class="worker-label">⚡ INTERPRETER_WORKER_01 (3B)</span>
+<span id="w1-status" class="worker-status status-idle">IDLE</span>
+</div>
+<div id="worker-int-2" class="swarm-worker">
+<span class="worker-label">⚡ INTERPRETER_WORKER_02 (1.5B)</span>
+<span id="w2-status" class="worker-status status-idle">IDLE</span>
+</div>
+<div id="worker-ver-1" class="swarm-worker">
+<span class="worker-label">🔥 VERIFIER_CORE_01 (7B Coder)</span>
+<span id="w3-status" class="worker-status status-idle">IDLE</span>
+</div>
+</div>
+</div>
+
+<div class="swarm-col swarm-col-right">
+<div class="swarm-col-label">Asynchronous Target Ledger (State Controller)</div>
+<div class="ledger-table">
+<div class="ledger-header">
+<div class="lcol-id">ID</div>
+<div class="lcol-type">Type</div>
+<div class="lcol-status">Status</div>
+<div class="lcol-verdict">Verdict</div>
+</div>
+<div id="ledger-rows" class="ledger-body">
+<div class="ledger-empty">Target Ledger empty. Click LAUNCH_SWARM to test the architecture.</div>
+</div>
+</div>
+
+<div id="final-verdict-box" class="final-verdict">
+<div class="final-label">Automated Enforcement &amp; Compliance Output</div>
+<div id="final-text" class="final-text">Awaiting execution data...</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<style>
+.swarm-section{padding:60px 0;background:linear-gradient(180deg,transparent 0%,rgba(0,212,170,0.03) 50%,transparent 100%)}
+.swarm-widget{max-width:1100px;margin:0 auto;background:#000;border:1px solid rgba(255,255,255,0.08);border-radius:14px;overflow:hidden;font-family:'JetBrains Mono',monospace;font-size:12px;color:#cbd5e1;box-shadow:0 20px 60px rgba(0,0,0,0.5)}
+.swarm-header{background:#0a0e15;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.swarm-dots{display:flex;gap:6px;align-items:center}
+.swarm-dots .dot{width:10px;height:10px;border-radius:50%;opacity:0.7}
+.dot-red{background:#ff5f56}.dot-yellow{background:#ffbd2e}.dot-green{background:#27c93f}
+.swarm-dot{width:6px;height:1px;background:rgba(255,255,255,0.1)}
+.swarm-title{color:#8B949E;font-size:11px;letter-spacing:1.5px;flex:1;font-weight:600}
+.swarm-domain-switch{display:flex;background:#0a0e15;padding:3px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);gap:2px}
+.domain-btn{background:transparent;border:none;color:#8B949E;padding:6px 12px;border-radius:6px;font-family:inherit;font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:all 0.2s;text-transform:uppercase}
+.domain-btn.active{background:rgba(0,212,170,0.15);color:#00D4AA;border:1px solid rgba(0,212,170,0.4)}
+.domain-btn:hover:not(.active){color:#cbd5e1}
+.swarm-input-bar{padding:14px 18px;background:rgba(0,212,170,0.02);border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.swarm-prompt{color:#00D4AA;font-weight:700;font-size:12px;white-space:nowrap}
+.swarm-input-display{flex:1;background:#000;padding:8px 12px;border:1px solid rgba(255,255,255,0.08);border-radius:6px;color:#cbd5e1;font-size:12px;display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:200px}
+#input-target{font-weight:600;color:#E8EAED}
+.status-badge{font-size:9px;padding:3px 10px;border-radius:4px;letter-spacing:1px;font-weight:600;text-transform:uppercase}
+.status-ready{color:#8B949E;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1)}
+.status-running{color:#fbbf24;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);animation:swarmPulse 1s ease-in-out infinite}
+.status-completed{color:#10b981;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3)}
+.launch-btn{background:linear-gradient(135deg,#10b981,#059669);color:#000;font-weight:800;padding:9px 20px;border-radius:8px;font-family:inherit;font-size:11px;letter-spacing:1.5px;cursor:pointer;border:none;text-transform:uppercase;transition:all 0.2s;box-shadow:0 4px 16px rgba(16,185,129,0.25)}
+.launch-btn:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(16,185,129,0.35)}
+.launch-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+.swarm-grid{display:grid;grid-template-columns:5fr 7fr;gap:18px;padding:18px;min-height:480px}
+@media(max-width:900px){.swarm-grid{grid-template-columns:1fr}}
+.swarm-col{display:flex;flex-direction:column;gap:10px}
+.swarm-col-label{font-size:10px;color:#8B949E;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-top:6px}
+.swarm-col-label.sub{margin-top:14px}
+.swarm-node-card{background:#0a0e15;border:1px solid rgba(255,255,255,0.08);padding:14px 16px;border-radius:10px;display:flex;align-items:center;justify-content:space-between;transition:all 0.3s}
+.swarm-node-card.orchestrator.active{border-color:rgba(59,130,246,0.6);box-shadow:0 0 24px rgba(59,130,246,0.2)}
+.node-content{flex:1}
+.node-title{font-weight:700;color:#E8EAED;font-size:12px}
+.node-sub{font-size:10px;color:#8B949E;margin-top:3px}
+.node-badge{width:10px;height:10px;border-radius:50%;background:#374151;transition:all 0.3s}
+.node-badge.active{background:#3b82f6;animation:swarmPulse 0.8s ease-in-out infinite;box-shadow:0 0 12px rgba(59,130,246,0.6)}
+.swarm-gate-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.swarm-gate{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);padding:12px;border-radius:10px;opacity:0.4;transition:all 0.3s}
+.swarm-gate.active{opacity:1;border-color:rgba(0,212,170,0.4);box-shadow:0 0 20px rgba(0,212,170,0.15)}
+.node-cov{font-size:10px;color:#fbbf24;margin-top:6px;font-weight:700;letter-spacing:1px}
+.swarm-workers{display:flex;flex-direction:column;gap:6px;background:rgba(255,255,255,0.02);padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.05)}
+.swarm-worker{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);padding:8px 12px;border-radius:6px;display:flex;align-items:center;justify-content:space-between;opacity:0.4;transition:all 0.3s;font-size:11px}
+.swarm-worker.active{opacity:1;border-color:rgba(59,130,246,0.4);background:rgba(59,130,246,0.05)}
+.worker-label{color:#cbd5e1}
+.worker-status{font-size:9px;padding:2px 8px;border-radius:4px;font-weight:600;letter-spacing:1px}
+.status-idle{color:#8B949E;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06)}
+.status-computing{color:#3b82f6;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.3);animation:swarmPulse 0.8s ease-in-out infinite}
+.status-verifying{color:#ef4444;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);animation:swarmPulse 0.8s ease-in-out infinite}
+.ledger-table{background:#000;border:1px solid rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;flex:1;display:flex;flex-direction:column}
+.ledger-header{display:grid;grid-template-columns:1fr 1.4fr 1.4fr 2fr;background:#0a0e15;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.05);font-weight:700;color:#8B949E;font-size:9px;letter-spacing:1.5px;text-transform:uppercase}
+.lcol-id,.lcol-type,.lcol-status,.lcol-verdict{padding:0 6px}
+.ledger-body{flex:1;padding:8px;max-height:280px;overflow-y:auto;display:flex;flex-direction:column;gap:6px}
+.ledger-body::-webkit-scrollbar{width:5px}
+.ledger-body::-webkit-scrollbar-thumb{background:rgba(0,212,170,0.3);border-radius:3px}
+.ledger-empty{text-align:center;padding:40px 12px;color:#6B7280;font-style:italic;font-size:11px}
+.ledger-row{display:grid;grid-template-columns:1fr 1.4fr 1.4fr 2fr;padding:8px 12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:6px;align-items:center;font-size:11px;animation:rowFadeIn 0.4s forwards}
+@keyframes rowFadeIn{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:translateX(0)}}
+.lr-id{color:#8B949E}
+.lr-type{color:#00D4AA;font-weight:700}
+.lr-type.web3{color:#10b981}
+.lr-type.infra{color:#a855f7}
+.lr-type.flash{color:#ef4444}
+.lr-status{padding:2px 0}
+.lr-status span{font-size:9px;padding:2px 8px;border-radius:3px;font-weight:600;letter-spacing:0.5px}
+.lr-pending{color:#fbbf24;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3)}
+.lr-progress{color:#3b82f6;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.3);animation:swarmPulse 0.8s ease-in-out infinite}
+.lr-done{color:#8B949E;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08)}
+.lr-escalated{color:#fb923c;background:rgba(251,146,60,0.1);border:1px solid rgba(251,146,60,0.3)}
+.lr-verdict{text-align:right;font-weight:700;font-size:10px}
+.lr-verdict.fp{color:#8B949E}
+.lr-verdict.amb{color:#fb923c}
+.lr-verdict.verified{color:#10b981}
+.lr-verdict.verified-fail{color:#ef4444}
+.lr-log{font-size:9px;color:#8B949E;background:#000;padding:6px 8px;border:1px solid rgba(255,255,255,0.04);border-radius:4px;font-family:monospace;line-height:1.4}
+.lr-log .lcmd{color:#6B7280}
+.lr-log .lexec{color:#fbbf24}
+.final-verdict{margin-top:14px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);padding:14px 16px;border-radius:10px;opacity:0.3;transition:all 0.5s}
+.final-verdict.active-red{opacity:1;border-color:rgba(239,68,68,0.5);background:rgba(239,68,68,0.05);box-shadow:0 0 30px rgba(239,68,68,0.15)}
+.final-verdict.active-green{opacity:1;border-color:rgba(16,185,129,0.5);background:rgba(16,185,129,0.05);box-shadow:0 0 30px rgba(16,185,129,0.15)}
+.final-label{font-size:10px;color:#8B949E;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.final-text{font-size:11px;color:#cbd5e1;line-height:1.6}
+.final-text strong{color:#E8EAED}
+.final-text .law{font-size:9px;background:rgba(16,185,129,0.15);color:#10b981;border:1px solid rgba(16,185,129,0.3);padding:1px 6px;border-radius:3px;letter-spacing:1px;font-weight:600}
+.final-text .law-red{font-size:9px;background:rgba(239,68,68,0.15);color:#ef4444;border:1px solid rgba(239,68,68,0.3);padding:1px 6px;border-radius:3px;letter-spacing:1px;font-weight:600}
+@keyframes swarmPulse{0%,100%{opacity:1}50%{opacity:0.4}}
+</style>
+
+<script>
+(function(){
+  var simTimeouts = [];
+  var currentDomain = 'infra';
+  var launchBtn = document.getElementById('btn-launch');
+  var btnInfra = document.getElementById('btn-infra');
+  var btnWeb3 = document.getElementById('btn-web3');
+  if (!launchBtn) return;
+  
+  function clearAll(){
+    simTimeouts.forEach(function(t){ clearTimeout(t); });
+    simTimeouts = [];
+  }
+  
+  function setStatus(cls, text, className){
+    var el = document.getElementById('scan-status');
+    el.textContent = text;
+    el.className = 'status-badge ' + className;
+  }
+  
+  function resetUI(){
+    clearAll();
+    setStatus('ready', 'READY', 'status-ready');
+    document.getElementById('node-orchestrator').classList.remove('active');
+    document.getElementById('badge-orchestrator').classList.remove('active');
+    document.getElementById('node-alpha').classList.remove('active');
+    document.getElementById('node-gamma').classList.remove('active');
+    document.getElementById('cov-alpha').textContent = 'COV: 0.0%';
+    document.getElementById('cov-gamma').textContent = 'COV: 0.0%';
+    ['worker-int-1','worker-int-2','worker-ver-1'].forEach(function(id){
+      document.getElementById(id).classList.remove('active');
+    });
+    ['w1-status','w2-status','w3-status'].forEach(function(id){
+      var el = document.getElementById(id);
+      el.textContent = 'IDLE';
+      el.className = 'worker-status status-idle';
+    });
+    document.getElementById('ledger-rows').innerHTML = '<div class="ledger-empty">Target Ledger empty. Click LAUNCH_SWARM to test the architecture.</div>';
+    var fvb = document.getElementById('final-verdict-box');
+    fvb.className = 'final-verdict';
+    document.getElementById('final-text').textContent = 'Awaiting execution data...';
+    launchBtn.disabled = false;
+  }
+  
+  function switchDomain(domain){
+    if (document.getElementById('scan-status').textContent === 'RUNNING') return;
+    currentDomain = domain;
+    btnInfra.classList.toggle('active', domain === 'infra');
+    btnWeb3.classList.toggle('active', domain === 'web3');
+    document.getElementById('input-target').textContent = (domain === 'infra')
+      ? 'scan --target https://barocco.by'
+      : 'scan --target 0x71C23310...';
+    resetUI();
+  }
+  
+  btnInfra.addEventListener('click', function(){ switchDomain('infra'); });
+  btnWeb3.addEventListener('click', function(){ switchDomain('web3'); });
+  
+  function makeRow(opts){
+    var row = document.createElement('div');
+    row.className = 'ledger-row';
+    row.innerHTML = '<div class="lr-id">' + opts.id + '</div>' +
+      '<div class="lr-type ' + (opts.typeClass||'') + '">' + opts.type + '</div>' +
+      '<div class="lr-status"><span class="' + opts.statusClass + '">' + opts.status + '</span></div>' +
+      '<div class="lr-verdict ' + (opts.verdictClass||'') + '">' + (opts.verdict||'—') + '</div>';
+    return row;
+  }
+  
+  function makeLogRow(text1, text2){
+    var row = document.createElement('div');
+    row.className = 'lr-log';
+    row.innerHTML = '<span class="lcmd">' + text1 + '</span><br/><span class="lexec">' + text2 + '</span>';
+    return row;
+  }
+  
+  function startSim(){
+    resetUI();
+    setStatus('running', 'RUNNING', 'status-running');
+    launchBtn.disabled = true;
+    document.getElementById('node-orchestrator').classList.add('active');
+    document.getElementById('badge-orchestrator').classList.add('active');
+    
+    simTimeouts.push(setTimeout(function(){
+      if (currentDomain === 'infra') runInfra();
+      else runWeb3();
+    }, 1000));
+  }
+  
+  function runInfra(){
+    var gamma = document.getElementById('node-gamma');
+    gamma.classList.add('active');
+    
+    var rows = document.getElementById('ledger-rows');
+    rows.innerHTML = '';
+    var r1 = makeRow({id:'#8f1a', type:'port/service', typeClass:'infra', status:'PENDING', statusClass:'lr-pending'});
+    var r2 = makeRow({id:'#4c9b', type:'secret/leak', typeClass:'infra', status:'PENDING', statusClass:'lr-pending'});
+    rows.appendChild(r1);
+    rows.appendChild(r2);
+    
+    var w1 = document.getElementById('w1-status');
+    var w2 = document.getElementById('w2-status');
+    var st1 = r1.querySelector('.lr-status span');
+    var st2 = r2.querySelector('.lr-status span');
+    
+    simTimeouts.push(setTimeout(function(){
+      document.getElementById('worker-int-1').classList.add('active');
+      document.getElementById('worker-int-2').classList.add('active');
+      w1.textContent = 'COMPUTING #8f1a';
+      w1.className = 'worker-status status-computing';
+      w2.textContent = 'COMPUTING #4c9b';
+      w2.className = 'worker-status status-computing';
+      st1.textContent = 'IN_PROGRESS';
+      st1.className = 'lr-progress';
+      st2.textContent = 'IN_PROGRESS';
+      st2.className = 'lr-progress';
+    }, 1200));
+    
+    simTimeouts.push(setTimeout(function(){
+      w1.textContent = 'IDLE';
+      w1.className = 'worker-status status-idle';
+      st1.textContent = 'DONE';
+      st1.className = 'lr-done';
+      r1.querySelector('.lr-verdict').textContent = 'FP (False Positive)';
+      r1.querySelector('.lr-verdict').className = 'lr-verdict fp';
+      w2.textContent = 'IDLE';
+      w2.className = 'worker-status status-idle';
+      st2.textContent = 'ESCALATED';
+      st2.className = 'lr-escalated';
+      r2.querySelector('.lr-verdict').textContent = 'AMBIGUOUS (Leaks found)';
+      r2.querySelector('.lr-verdict').className = 'lr-verdict amb';
+      document.getElementById('cov-gamma').textContent = 'COV: 50.0%';
+    }, 2800));
+    
+    simTimeouts.push(setTimeout(function(){
+      document.getElementById('worker-ver-1').classList.add('active');
+      var w3 = document.getElementById('w3-status');
+      w3.textContent = 'VERIFYING PII #4c9b';
+      w3.className = 'worker-status status-verifying';
+    }, 3500));
+    
+    simTimeouts.push(setTimeout(function(){
+      var w3 = document.getElementById('w3-status');
+      w3.textContent = 'IDLE';
+      w3.className = 'worker-status status-idle';
+      st2.textContent = 'DONE';
+      st2.className = 'lr-done';
+      r2.querySelector('.lr-verdict').textContent = 'VERIFIED (1,774 PII Leaks)';
+      r2.querySelector('.lr-verdict').className = 'lr-verdict verified';
+      document.getElementById('cov-gamma').textContent = 'COV: 100.0%';
+      
+      var fvb = document.getElementById('final-verdict-box');
+      fvb.className = 'final-verdict active-red';
+      document.getElementById('final-text').innerHTML = 
+        '<div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(239,68,68,0.3);padding-bottom:6px;margin-bottom:8px">' +
+          '<strong style="color:#ef4444">⚡ CRITICAL INFRA INCIDENT VERIFIED</strong>' +
+          '<span class="law-red">ЗАКОН РБ №99-З</span>' +
+        '</div>' +
+        '<strong>Target:</strong> barocco.by // Production debug-mode leak exposed personal database.<br/>' +
+        '<strong style="color:#ef4444">[ENFORCEMENT ACTION]:</strong> Автоматическая генерация пакета Responsible Disclosure для владельцев + шаблон заявления в регуляторные органы. Лог-дамп зашифрован.';
+      setStatus('completed', 'COMPLETED', 'status-completed');
+      document.getElementById('badge-orchestrator').classList.remove('active');
+      launchBtn.disabled = false;
+    }, 5500));
+  }
+  
+  function runWeb3(){
+    var alpha = document.getElementById('node-alpha');
+    alpha.classList.add('active');
+    
+    var rows = document.getElementById('ledger-rows');
+    rows.innerHTML = '';
+    var r1 = makeRow({id:'#tx-01', type:'finding/proxy', typeClass:'web3', status:'PENDING', statusClass:'lr-pending'});
+    var r2 = makeRow({id:'#tx-02', type:'chain/flashloan', typeClass:'flash', status:'PENDING', statusClass:'lr-pending'});
+    rows.appendChild(r1);
+    rows.appendChild(r2);
+    
+    var w1 = document.getElementById('w1-status');
+    var w2 = document.getElementById('w2-status');
+    var st1 = r1.querySelector('.lr-status span');
+    var st2 = r2.querySelector('.lr-status span');
+    
+    simTimeouts.push(setTimeout(function(){
+      document.getElementById('worker-int-1').classList.add('active');
+      document.getElementById('worker-int-2').classList.add('active');
+      w1.textContent = 'PARSING PROXIES #tx-01';
+      w1.className = 'worker-status status-computing';
+      w2.textContent = 'ANALYZING LOGIC #tx-02';
+      w2.className = 'worker-status status-computing';
+      st1.textContent = 'IN_PROGRESS';
+      st1.className = 'lr-progress';
+      st2.textContent = 'IN_PROGRESS';
+      st2.className = 'lr-progress';
+    }, 1200));
+    
+    simTimeouts.push(setTimeout(function(){
+      w1.textContent = 'IDLE';
+      w1.className = 'worker-status status-idle';
+      st1.textContent = 'DONE';
+      st1.className = 'lr-done';
+      r1.querySelector('.lr-verdict').textContent = 'FP (Storage Collision Safe)';
+      r1.querySelector('.lr-verdict').className = 'lr-verdict fp';
+      w2.textContent = 'IDLE';
+      w2.className = 'worker-status status-idle';
+      st2.textContent = 'ESCALATED';
+      st2.className = 'lr-escalated';
+      r2.querySelector('.lr-verdict').textContent = 'AMBIGUOUS (Price manipulation risk)';
+      r2.querySelector('.lr-verdict').className = 'lr-verdict amb';
+      document.getElementById('cov-alpha').textContent = 'COV: 50.0%';
+    }, 2800));
+    
+    simTimeouts.push(setTimeout(function(){
+      document.getElementById('worker-ver-1').classList.add('active');
+      var w3 = document.getElementById('w3-status');
+      w3.textContent = 'FOUNDRY FORK RUNTIME';
+      w3.className = 'worker-status status-verifying';
+      rows.appendChild(makeLogRow('$ anvil --fork-url RPC_NET --fork-block-number 20641029', '[EXECUTION]: Compiling validation PoC. Running forge test...'));
+    }, 3500));
+    
+    simTimeouts.push(setTimeout(function(){
+      var w3 = document.getElementById('w3-status');
+      w3.textContent = 'IDLE';
+      w3.className = 'worker-status status-idle';
+      st2.textContent = 'DONE';
+      st2.className = 'lr-done';
+      r2.querySelector('.lr-verdict').textContent = 'VERIFIED (Reentrancy vector confirmed)';
+      r2.querySelector('.lr-verdict').className = 'lr-verdict verified-fail';
+      document.getElementById('cov-alpha').textContent = 'COV: 100.0%';
+      
+      var fvb = document.getElementById('final-verdict-box');
+      fvb.className = 'final-verdict active-green';
+      document.getElementById('final-text').innerHTML = 
+        '<div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(16,185,129,0.3);padding-bottom:6px;margin-bottom:8px">' +
+          '<strong style="color:#10b981">⚠️ BLOCKCHAIN PROTOCOL EXPLOIT VERIFIED IN FORK</strong>' +
+          '<span class="law">EIP-1559 SAFE</span>' +
+        '</div>' +
+        '<strong>Target Contract:</strong> 0x71C23310... // Arbitrage / Oracle manipulation vector simulation.<br/>' +
+        '<strong style="color:#10b981">[VERIFIER METRIC]:</strong> Локальное исполнение в форке завершилось с кодом <span style="background:rgba(239,68,68,0.15);color:#ef4444;padding:1px 6px;border:1px solid rgba(239,68,68,0.3);border-radius:3px;font-weight:700">PASS (Attack Vector Valid)</span>. Сгенерирован патч remediation для синхронизации state variables.';
+      setStatus('completed', 'COMPLETED', 'status-completed');
+      document.getElementById('badge-orchestrator').classList.remove('active');
+      launchBtn.disabled = false;
+    }, 6000));
+  }
+  
+  launchBtn.addEventListener('click', startSim);
+  resetUI();
+})();
+</script>
+
 <section class="contact" id="contact">
 <div class="container">
 <div class="contact-card">
