@@ -626,7 +626,7 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){
 <div class="swarm-input-bar">
 <span class="swarm-prompt">vector-ai@swarm:~$</span>
 <div class="swarm-input-display">
-<span id="input-target">scan --target https://barocco.by</span>
+<span id="input-target">scan --target https://your-domain.com</span>
 <span id="scan-status" class="status-badge status-ready">READY</span>
 </div>
 <button type="button" id="btn-launch" class="launch-btn">LAUNCH_SWARM</button>
@@ -638,7 +638,7 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){
 <div id="node-orchestrator" class="swarm-node-card orchestrator">
 <div class="node-content">
 <div class="node-title">🤖 FLAGMAN_ORCHESTRATOR</div>
-<div class="node-sub">Context: 1M Tokens // Decomposing task...</div>
+<div class="node-sub">Decomposing target payload...</div>
 </div>
 <div id="badge-orchestrator" class="node-badge"></div>
 </div>
@@ -657,21 +657,8 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){
 </div>
 </div>
 
-<div class="swarm-col-label sub">Dynamic Worker Pool (On-Premises Runtime)</div>
-<div class="swarm-workers">
-<div id="worker-int-1" class="swarm-worker">
-<span class="worker-label">⚡ INTERPRETER_WORKER_01 (3B)</span>
-<span id="w1-status" class="worker-status status-idle">IDLE</span>
-</div>
-<div id="worker-int-2" class="swarm-worker">
-<span class="worker-label">⚡ INTERPRETER_WORKER_02 (1.5B)</span>
-<span id="w2-status" class="worker-status status-idle">IDLE</span>
-</div>
-<div id="worker-ver-1" class="swarm-worker">
-<span class="worker-label">🔥 VERIFIER_CORE_01 (7B Coder)</span>
-<span id="w3-status" class="worker-status status-idle">IDLE</span>
-</div>
-</div>
+<div class="swarm-col-label sub">Dynamic Worker Pool (On-Premises Runtime) — Auto-Scaling</div>
+<div id="worker-pool" class="swarm-workers"></div>
 </div>
 
 <div class="swarm-col swarm-col-right">
@@ -746,6 +733,7 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){
 .status-idle{color:#8B949E;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06)}
 .status-computing{color:#3b82f6;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.3);animation:swarmPulse 0.8s ease-in-out infinite}
 .status-verifying{color:#ef4444;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);animation:swarmPulse 0.8s ease-in-out infinite}
+.status-exploiting{color:#a855f7;background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.3);animation:swarmPulse 0.8s ease-in-out infinite}
 .ledger-table{background:#000;border:1px solid rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;flex:1;display:flex;flex-direction:column}
 .ledger-header{display:grid;grid-template-columns:1fr 1.4fr 1.4fr 2fr;background:#0a0e15;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.05);font-weight:700;color:#8B949E;font-size:9px;letter-spacing:1.5px;text-transform:uppercase}
 .lcol-id,.lcol-type,.lcol-status,.lcol-verdict{padding:0 6px}
@@ -786,251 +774,6 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){
 </style>
 
 <script>
-(function(){
-  var simTimeouts = [];
-  var currentDomain = 'infra';
-  var launchBtn = document.getElementById('btn-launch');
-  var btnInfra = document.getElementById('btn-infra');
-  var btnWeb3 = document.getElementById('btn-web3');
-  if (!launchBtn) return;
-  
-  function clearAll(){
-    simTimeouts.forEach(function(t){ clearTimeout(t); });
-    simTimeouts = [];
-  }
-  
-  function setStatus(cls, text, className){
-    var el = document.getElementById('scan-status');
-    el.textContent = text;
-    el.className = 'status-badge ' + className;
-  }
-  
-  function resetUI(){
-    clearAll();
-    setStatus('ready', 'READY', 'status-ready');
-    document.getElementById('node-orchestrator').classList.remove('active');
-    document.getElementById('badge-orchestrator').classList.remove('active');
-    document.getElementById('node-alpha').classList.remove('active');
-    document.getElementById('node-gamma').classList.remove('active');
-    document.getElementById('cov-alpha').textContent = 'COV: 0.0%';
-    document.getElementById('cov-gamma').textContent = 'COV: 0.0%';
-    ['worker-int-1','worker-int-2','worker-ver-1'].forEach(function(id){
-      document.getElementById(id).classList.remove('active');
-    });
-    ['w1-status','w2-status','w3-status'].forEach(function(id){
-      var el = document.getElementById(id);
-      el.textContent = 'IDLE';
-      el.className = 'worker-status status-idle';
-    });
-    document.getElementById('ledger-rows').innerHTML = '<div class="ledger-empty">Target Ledger empty. Click LAUNCH_SWARM to test the architecture.</div>';
-    var fvb = document.getElementById('final-verdict-box');
-    fvb.className = 'final-verdict';
-    document.getElementById('final-text').textContent = 'Awaiting execution data...';
-    launchBtn.disabled = false;
-  }
-  
-  function switchDomain(domain){
-    if (document.getElementById('scan-status').textContent === 'RUNNING') return;
-    currentDomain = domain;
-    btnInfra.classList.toggle('active', domain === 'infra');
-    btnWeb3.classList.toggle('active', domain === 'web3');
-    document.getElementById('input-target').textContent = (domain === 'infra')
-      ? 'scan --target https://barocco.by'
-      : 'scan --target 0x71C23310...';
-    resetUI();
-  }
-  
-  btnInfra.addEventListener('click', function(){ switchDomain('infra'); });
-  btnWeb3.addEventListener('click', function(){ switchDomain('web3'); });
-  
-  function makeRow(opts){
-    var row = document.createElement('div');
-    row.className = 'ledger-row';
-    row.innerHTML = '<div class="lr-id">' + opts.id + '</div>' +
-      '<div class="lr-type ' + (opts.typeClass||'') + '">' + opts.type + '</div>' +
-      '<div class="lr-status"><span class="' + opts.statusClass + '">' + opts.status + '</span></div>' +
-      '<div class="lr-verdict ' + (opts.verdictClass||'') + '">' + (opts.verdict||'—') + '</div>';
-    return row;
-  }
-  
-  function makeLogRow(text1, text2){
-    var row = document.createElement('div');
-    row.className = 'lr-log';
-    row.innerHTML = '<span class="lcmd">' + text1 + '</span><br/><span class="lexec">' + text2 + '</span>';
-    return row;
-  }
-  
-  function startSim(){
-    resetUI();
-    setStatus('running', 'RUNNING', 'status-running');
-    launchBtn.disabled = true;
-    document.getElementById('node-orchestrator').classList.add('active');
-    document.getElementById('badge-orchestrator').classList.add('active');
-    
-    simTimeouts.push(setTimeout(function(){
-      if (currentDomain === 'infra') runInfra();
-      else runWeb3();
-    }, 1000));
-  }
-  
-  function runInfra(){
-    var gamma = document.getElementById('node-gamma');
-    gamma.classList.add('active');
-    
-    var rows = document.getElementById('ledger-rows');
-    rows.innerHTML = '';
-    var r1 = makeRow({id:'#8f1a', type:'port/service', typeClass:'infra', status:'PENDING', statusClass:'lr-pending'});
-    var r2 = makeRow({id:'#4c9b', type:'secret/leak', typeClass:'infra', status:'PENDING', statusClass:'lr-pending'});
-    rows.appendChild(r1);
-    rows.appendChild(r2);
-    
-    var w1 = document.getElementById('w1-status');
-    var w2 = document.getElementById('w2-status');
-    var st1 = r1.querySelector('.lr-status span');
-    var st2 = r2.querySelector('.lr-status span');
-    
-    simTimeouts.push(setTimeout(function(){
-      document.getElementById('worker-int-1').classList.add('active');
-      document.getElementById('worker-int-2').classList.add('active');
-      w1.textContent = 'COMPUTING #8f1a';
-      w1.className = 'worker-status status-computing';
-      w2.textContent = 'COMPUTING #4c9b';
-      w2.className = 'worker-status status-computing';
-      st1.textContent = 'IN_PROGRESS';
-      st1.className = 'lr-progress';
-      st2.textContent = 'IN_PROGRESS';
-      st2.className = 'lr-progress';
-    }, 1200));
-    
-    simTimeouts.push(setTimeout(function(){
-      w1.textContent = 'IDLE';
-      w1.className = 'worker-status status-idle';
-      st1.textContent = 'DONE';
-      st1.className = 'lr-done';
-      r1.querySelector('.lr-verdict').textContent = 'FP (False Positive)';
-      r1.querySelector('.lr-verdict').className = 'lr-verdict fp';
-      w2.textContent = 'IDLE';
-      w2.className = 'worker-status status-idle';
-      st2.textContent = 'ESCALATED';
-      st2.className = 'lr-escalated';
-      r2.querySelector('.lr-verdict').textContent = 'AMBIGUOUS (Leaks found)';
-      r2.querySelector('.lr-verdict').className = 'lr-verdict amb';
-      document.getElementById('cov-gamma').textContent = 'COV: 50.0%';
-    }, 2800));
-    
-    simTimeouts.push(setTimeout(function(){
-      document.getElementById('worker-ver-1').classList.add('active');
-      var w3 = document.getElementById('w3-status');
-      w3.textContent = 'VERIFYING PII #4c9b';
-      w3.className = 'worker-status status-verifying';
-    }, 3500));
-    
-    simTimeouts.push(setTimeout(function(){
-      var w3 = document.getElementById('w3-status');
-      w3.textContent = 'IDLE';
-      w3.className = 'worker-status status-idle';
-      st2.textContent = 'DONE';
-      st2.className = 'lr-done';
-      r2.querySelector('.lr-verdict').textContent = 'VERIFIED (1,774 PII Leaks)';
-      r2.querySelector('.lr-verdict').className = 'lr-verdict verified';
-      document.getElementById('cov-gamma').textContent = 'COV: 100.0%';
-      
-      var fvb = document.getElementById('final-verdict-box');
-      fvb.className = 'final-verdict active-red';
-      document.getElementById('final-text').innerHTML = 
-        '<div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(239,68,68,0.3);padding-bottom:6px;margin-bottom:8px">' +
-          '<strong style="color:#ef4444">⚡ CRITICAL INFRA INCIDENT VERIFIED</strong>' +
-          '<span class="law-red">ЗАКОН РБ №99-З</span>' +
-        '</div>' +
-        '<strong>Target:</strong> barocco.by // Production debug-mode leak exposed personal database.<br/>' +
-        '<strong style="color:#ef4444">[ENFORCEMENT ACTION]:</strong> Автоматическая генерация пакета Responsible Disclosure для владельцев + шаблон заявления в регуляторные органы. Лог-дамп зашифрован.';
-      setStatus('completed', 'COMPLETED', 'status-completed');
-      document.getElementById('badge-orchestrator').classList.remove('active');
-      launchBtn.disabled = false;
-    }, 5500));
-  }
-  
-  function runWeb3(){
-    var alpha = document.getElementById('node-alpha');
-    alpha.classList.add('active');
-    
-    var rows = document.getElementById('ledger-rows');
-    rows.innerHTML = '';
-    var r1 = makeRow({id:'#tx-01', type:'finding/proxy', typeClass:'web3', status:'PENDING', statusClass:'lr-pending'});
-    var r2 = makeRow({id:'#tx-02', type:'chain/flashloan', typeClass:'flash', status:'PENDING', statusClass:'lr-pending'});
-    rows.appendChild(r1);
-    rows.appendChild(r2);
-    
-    var w1 = document.getElementById('w1-status');
-    var w2 = document.getElementById('w2-status');
-    var st1 = r1.querySelector('.lr-status span');
-    var st2 = r2.querySelector('.lr-status span');
-    
-    simTimeouts.push(setTimeout(function(){
-      document.getElementById('worker-int-1').classList.add('active');
-      document.getElementById('worker-int-2').classList.add('active');
-      w1.textContent = 'PARSING PROXIES #tx-01';
-      w1.className = 'worker-status status-computing';
-      w2.textContent = 'ANALYZING LOGIC #tx-02';
-      w2.className = 'worker-status status-computing';
-      st1.textContent = 'IN_PROGRESS';
-      st1.className = 'lr-progress';
-      st2.textContent = 'IN_PROGRESS';
-      st2.className = 'lr-progress';
-    }, 1200));
-    
-    simTimeouts.push(setTimeout(function(){
-      w1.textContent = 'IDLE';
-      w1.className = 'worker-status status-idle';
-      st1.textContent = 'DONE';
-      st1.className = 'lr-done';
-      r1.querySelector('.lr-verdict').textContent = 'FP (Storage Collision Safe)';
-      r1.querySelector('.lr-verdict').className = 'lr-verdict fp';
-      w2.textContent = 'IDLE';
-      w2.className = 'worker-status status-idle';
-      st2.textContent = 'ESCALATED';
-      st2.className = 'lr-escalated';
-      r2.querySelector('.lr-verdict').textContent = 'AMBIGUOUS (Price manipulation risk)';
-      r2.querySelector('.lr-verdict').className = 'lr-verdict amb';
-      document.getElementById('cov-alpha').textContent = 'COV: 50.0%';
-    }, 2800));
-    
-    simTimeouts.push(setTimeout(function(){
-      document.getElementById('worker-ver-1').classList.add('active');
-      var w3 = document.getElementById('w3-status');
-      w3.textContent = 'FOUNDRY FORK RUNTIME';
-      w3.className = 'worker-status status-verifying';
-      rows.appendChild(makeLogRow('$ anvil --fork-url RPC_NET --fork-block-number 20641029', '[EXECUTION]: Compiling validation PoC. Running forge test...'));
-    }, 3500));
-    
-    simTimeouts.push(setTimeout(function(){
-      var w3 = document.getElementById('w3-status');
-      w3.textContent = 'IDLE';
-      w3.className = 'worker-status status-idle';
-      st2.textContent = 'DONE';
-      st2.className = 'lr-done';
-      r2.querySelector('.lr-verdict').textContent = 'VERIFIED (Reentrancy vector confirmed)';
-      r2.querySelector('.lr-verdict').className = 'lr-verdict verified-fail';
-      document.getElementById('cov-alpha').textContent = 'COV: 100.0%';
-      
-      var fvb = document.getElementById('final-verdict-box');
-      fvb.className = 'final-verdict active-green';
-      document.getElementById('final-text').innerHTML = 
-        '<div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(16,185,129,0.3);padding-bottom:6px;margin-bottom:8px">' +
-          '<strong style="color:#10b981">⚠️ BLOCKCHAIN PROTOCOL EXPLOIT VERIFIED IN FORK</strong>' +
-          '<span class="law">EIP-1559 SAFE</span>' +
-        '</div>' +
-        '<strong>Target Contract:</strong> 0x71C23310... // Arbitrage / Oracle manipulation vector simulation.<br/>' +
-        '<strong style="color:#10b981">[VERIFIER METRIC]:</strong> Локальное исполнение в форке завершилось с кодом <span style="background:rgba(239,68,68,0.15);color:#ef4444;padding:1px 6px;border:1px solid rgba(239,68,68,0.3);border-radius:3px;font-weight:700">PASS (Attack Vector Valid)</span>. Сгенерирован патч remediation для синхронизации state variables.';
-      setStatus('completed', 'COMPLETED', 'status-completed');
-      document.getElementById('badge-orchestrator').classList.remove('active');
-      launchBtn.disabled = false;
-    }, 6000));
-  }
-  
-  launchBtn.addEventListener('click', startSim);
-  resetUI();
-})();
 </script>
 
 <section class="contact" id="contact">
@@ -1053,14 +796,6 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){
 <textarea class="form-input" name="message" placeholder="Опишите задачу или инфраструктуру для аудита" required maxlength="2000"></textarea>
 <div class="form-error" id="form-error"></div>
 <button type="submit" class="btn btn-primary" id="submit-btn">Отправить заявку</button>
-<div class="form-gmail-fallback" id="form-gmail-fallback" style="display:none; margin-top:12px; text-align:center;">
-<button type="button" class="btn btn-secondary" id="gmail-open" style="width:100%;">
-✉ Открыть в Gmail Web
-</button>
-<div style="font-size:11px; color:var(--text-muted); margin-top:8px;">
-Если почтовый клиент не открылся — нажмите кнопку выше
-</div>
-</div>
 <div class="form-success" id="form-success">
 ✓ Заявка успешно отправлена. Мы свяжемся с вами в ближайшее время.
 </div>
@@ -1072,16 +807,426 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){
 
 </main>
 <script>
+</script>
+<script>
+(function(){
+  var simTimeouts = [];
+  var currentDomain = 'infra';
+  var workerCounter = 0;
+  var taskCounter = 0;
+  var launchedWorkers = new Set();
+  
+  var launchBtn = document.getElementById('btn-launch');
+  var btnInfra = document.getElementById('btn-infra');
+  var btnWeb3 = document.getElementById('btn-web3');
+  if (!launchBtn) return;
+  
+  function makeRow(opts){
+    var row = document.createElement('div');
+    row.className = 'ledger-row';
+    row.id = opts.id;
+    row.innerHTML = '<div class="lr-id">' + opts.id + '</div>' +
+      '<div class="lr-type ' + (opts.typeClass||'') + '">' + opts.type + '</div>' +
+      '<div class="lr-status"><span class="' + opts.statusClass + '">' + opts.status + '</span></div>' +
+      '<div class="lr-verdict ' + (opts.verdictClass||'') + '">' + (opts.verdict||'—') + '</div>';
+    return row;
+  }
+  
+  function makeLogRow(text1, text2, accent){
+    var row = document.createElement('div');
+    row.className = 'lr-log';
+    row.innerHTML = '<span class="lcmd">' + text1 + '</span>' + (text2 ? '<br/><span class="lexec" style="color:' + (accent||'#fbbf24') + '">' + text2 + '</span>' : '');
+    return row;
+  }
+  
+  function setStatus(text, className){
+    var el = document.getElementById('scan-status');
+    el.textContent = text;
+    el.className = 'status-badge ' + className;
+  }
+  
+  function updateCoverage(percent, gate){
+    var id = gate === 'alpha' ? 'cov-alpha' : 'cov-gamma';
+    document.getElementById(id).textContent = 'COV: ' + percent.toFixed(1) + '%';
+  }
+  
+  function spawnWorker(label, type){
+    var slot = document.createElement('div');
+    slot.className = 'swarm-worker';
+    slot.id = 'w-slot-' + (++workerCounter);
+    
+    var isVerifier = type === 'verifier';
+    var isExploit = type === 'exploit';
+    var icon = isVerifier ? '🔥' : (isExploit ? '💣' : '⚡');
+    var statusId = 'w-stat-' + workerCounter;
+    
+    slot.innerHTML = '<span class="worker-label">' + icon + ' ' + label + '</span>' +
+      '<span id="' + statusId + '" class="worker-status status-idle">IDLE</span>';
+    document.getElementById('worker-pool').appendChild(slot);
+    
+    return { id: slot.id, statusId: statusId, label: label, type: type };
+  }
+  
+  function setWorkerStatus(w, status, text){
+    var el = document.getElementById(w.statusId);
+    if (!el) return;
+    el.textContent = text;
+    var cls = 'status-idle';
+    if (status === 'computing') cls = 'status-computing';
+    else if (status === 'verifying') cls = 'status-verifying';
+    else if (status === 'exploiting') cls = 'status-exploiting';
+    el.className = 'worker-status ' + cls;
+  }
+  
+  function clearAllTimeouts(){
+    simTimeouts.forEach(function(t){ clearTimeout(t); });
+    simTimeouts = [];
+  }
+  
+  function spawnTask(type, typeClass, parentId){
+    taskCounter++;
+    var id = '#' + Math.random().toString(36).substring(2, 6);
+    var row = makeRow({id:id, type:type, typeClass:typeClass, status:'PENDING', statusClass:'lr-pending'});
+    document.getElementById('ledger-rows').appendChild(row);
+    return { id: id, row: row, parentId: parentId, escalated: false };
+  }
+  
+  function updateTask(task, statusText, verdict, verdictClass, statusClassName){
+    var row = document.getElementById(task.id);
+    if (!row) return;
+    var statusSpan = row.querySelector('.lr-status span');
+    statusSpan.textContent = statusText;
+    statusSpan.className = statusClassName;
+    var verdictDiv = row.querySelector('.lr-verdict');
+    if (verdict) {
+      verdictDiv.textContent = verdict;
+      verdictDiv.className = 'lr-verdict ' + (verdictClass||'');
+    }
+  }
+  
+  function resetUI(){
+    clearAllTimeouts();
+    workerCounter = 0;
+    taskCounter = 0;
+    rowId = 0;
+    launchedWorkers.clear();
+    
+    setStatus('READY', 'status-ready');
+    document.getElementById('node-orchestrator').classList.remove('active');
+    document.getElementById('badge-orchestrator').classList.remove('active');
+    document.getElementById('node-alpha').classList.remove('active');
+    document.getElementById('node-gamma').classList.remove('active');
+    updateCoverage(0, 'alpha');
+    updateCoverage(0, 'gamma');
+    document.getElementById('worker-pool').innerHTML = '';
+    document.getElementById('ledger-rows').innerHTML = '<div class="ledger-empty">Target Ledger empty. Click LAUNCH_SWARM to test the architecture.</div>';
+    var fvb = document.getElementById('final-verdict-box');
+    fvb.className = 'final-verdict';
+    document.getElementById('final-text').textContent = 'Awaiting execution data...';
+    launchBtn.disabled = false;
+    
+    // Базовый пул воркеров (подгружается при старте)
+    var w1 = spawnWorker('INTERPRETER_01', 'interpreter');
+    var w2 = spawnWorker('INTERPRETER_02', 'interpreter');
+    var w3 = spawnWorker('VERIFIER_01', 'verifier');
+    window._baseWorkers = [w1, w2, w3];
+  }
+  
+  function switchDomain(domain){
+    if (document.getElementById('scan-status').textContent === 'RUNNING') return;
+    currentDomain = domain;
+    btnInfra.classList.toggle('active', domain === 'infra');
+    btnWeb3.classList.toggle('active', domain === 'web3');
+    document.getElementById('input-target').textContent = (domain === 'infra')
+      ? 'scan --target https://your-domain.com'
+      : 'scan --target 0xTARGET...';
+    resetUI();
+  }
+  
+  btnInfra.addEventListener('click', function(){ switchDomain('infra'); });
+  btnWeb3.addEventListener('click', function(){ switchDomain('web3'); });
+  
+  function runInfraPipeline(){
+    var gamma = document.getElementById('node-gamma');
+    gamma.classList.add('active');
+    document.getElementById('ledger-rows').innerHTML = '';
+    
+    var t1 = spawnTask('port/scan', 'infra');
+    var t2 = spawnTask('subdomain/enum', 'infra');
+    var t3 = spawnTask('header/check', 'infra');
+    
+    // Этап 1: Interpreter workers берут первичные таски
+    simTimeouts.push(setTimeout(function(){
+      setWorkerStatus(window._baseWorkers[0], 'computing', 'PING-SWEEP ' + t1.id);
+      setWorkerStatus(window._baseWorkers[1], 'computing', 'SUBDOMAIN ' + t2.id);
+      updateTask(t1, 'IN_PROGRESS', null, '', 'lr-progress');
+      updateTask(t2, 'IN_PROGRESS', null, '', 'lr-progress');
+    }, 800));
+    
+    // Этап 2: t1 (port scan) → FP
+    simTimeouts.push(setTimeout(function(){
+      setWorkerStatus(window._baseWorkers[0], 'idle', 'IDLE');
+      updateTask(t1, 'DONE', 'FP (standard)', 'fp', 'lr-done');
+    }, 2000));
+    
+    // Этап 3: t2 (subdomain) находит новые → СПАВН подтасков и новых воркеров
+    simTimeouts.push(setTimeout(function(){
+      setWorkerStatus(window._baseWorkers[1], 'idle', 'IDLE');
+      updateTask(t2, 'DONE', 'TP (3 subdomains)', 'verified', 'lr-done');
+      updateCoverage(33, 'gamma');
+      
+      // Динамический спавн: subdomain нашёл → новые таски
+      var t4 = spawnTask('subdomain/staging', 'infra', t2.id);
+      var t5 = spawnTask('subdomain/admin', 'infra', t2.id);
+      var t6 = spawnTask('subdomain/dev', 'infra', t2.id);
+      
+      // Новые воркеры подхватывают
+      var wNew1 = spawnWorker('INTERPRETER_03', 'interpreter');
+      var wNew2 = spawnWorker('INTERPRETER_04', 'interpreter');
+      
+      setTimeout(function(){
+        setWorkerStatus(wNew1, 'computing', 'CRAWL staging');
+        setWorkerStatus(wNew2, 'computing', 'CRAWL dev');
+        updateTask(t4, 'IN_PROGRESS', null, '', 'lr-progress');
+        updateTask(t6, 'IN_PROGRESS', null, '', 'lr-progress');
+      }, 200);
+    }, 2800));
+    
+    // Этап 4: t3 (header check) → AMBIGUOUS → СПАВН верификатора
+    simTimeouts.push(setTimeout(function(){
+      updateTask(t3, 'ESCALATED', 'AMBIGUOUS (debug?)', 'amb', 'lr-escalated');
+      updateCoverage(45, 'gamma');
+      
+      var v1 = spawnWorker('VERIFIER_02', 'verifier');
+      setTimeout(function(){
+        setWorkerStatus(v1, 'verifying', 'DEEP-SCAN headers');
+      }, 200);
+    }, 3400));
+    
+    // Этап 5: subdomain/staging находит утечку → AMBIGUOUS
+    simTimeouts.push(setTimeout(function(){
+      updateTask(t4, 'ESCALATED', 'AMBIGUOUS (.env)', 'amb', 'lr-escalated');
+      
+      // Спавним верификатора для утечки
+      var v2 = spawnWorker('VERIFIER_03', 'verifier');
+      setTimeout(function(){
+        setWorkerStatus(v2, 'verifying', 'EXTRACT secrets');
+      }, 200);
+    }, 4200));
+    
+    // Этап 6: subdomain/dev → FP (мертвый)
+    simTimeouts.push(setTimeout(function(){
+      updateTask(t6, 'DONE', 'FP (dead)', 'fp', 'lr-done');
+      updateCoverage(60, 'gamma');
+    }, 5000));
+    
+    // Этап 7: Финальная верификация - VERIFIED утечки
+    simTimeouts.push(setTimeout(function(){
+      // Закрываем все воркеры
+      document.querySelectorAll('.worker-status').forEach(function(el){
+        el.textContent = 'IDLE';
+        el.className = 'worker-status status-idle';
+      });
+      
+      // Лог форка
+      var logRow = makeLogRow(
+        'verifier_03: payload analyzer',
+        'PII EXPOSED: 1,774 records via debug endpoint',
+        '#ef4444'
+      );
+      document.getElementById('ledger-rows').appendChild(logRow);
+      
+      // Финальный таск
+      var tFinal = spawnTask('pii/exposed', 'infra');
+      updateTask(tFinal, 'DONE', 'VERIFIED (1,774 PII)', 'verified', 'lr-done');
+      updateCoverage(100, 'gamma');
+      
+      var fvb = document.getElementById('final-verdict-box');
+      fvb.className = 'final-verdict active-red';
+      document.getElementById('final-text').innerHTML = 
+        '<div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(239,68,68,0.3);padding-bottom:6px;margin-bottom:8px">' +
+          '<strong style="color:#ef4444">⚡ CRITICAL INFRA INCIDENT VERIFIED</strong>' +
+          '<span class="law-red">ЗАКОН РБ №99-З</span>' +
+        '</div>' +
+        '<strong>Target:</strong> your-domain.com // Surface mapped by ' + workerCounter + ' workers across ' + taskCounter + ' tasks.<br/>' +
+        '<strong style="color:#ef4444">[ENFORCEMENT ACTION]:</strong> Автоматическая генерация пакета Responsible Disclosure + шаблон заявления по законодательству РБ. Лог-дамп зашифрован.';
+      setStatus('COMPLETED', 'status-completed');
+      document.getElementById('badge-orchestrator').classList.remove('active');
+      launchBtn.disabled = false;
+    }, 6500));
+  }
+  
+  function runWeb3Pipeline(){
+    var alpha = document.getElementById('node-alpha');
+    alpha.classList.add('active');
+    document.getElementById('ledger-rows').innerHTML = '';
+    
+    var t1 = spawnTask('contract/proxy', 'web3');
+    
+    // Этап 1: Parser
+    simTimeouts.push(setTimeout(function(){
+      setWorkerStatus(window._baseWorkers[0], 'computing', 'PARSING ' + t1.id);
+      updateTask(t1, 'IN_PROGRESS', null, '', 'lr-progress');
+    }, 800));
+    
+    // Этап 2: Proxy находит имплементации → СПАВН 2 воркеров
+    simTimeouts.push(setTimeout(function(){
+      setWorkerStatus(window._baseWorkers[0], 'idle', 'IDLE');
+      updateTask(t1, 'DONE', 'TP (EIP-1967)', 'verified', 'lr-done');
+      updateCoverage(20, 'alpha');
+      
+      var t2 = spawnTask('impl/v1', 'web3', t1.id);
+      var t3 = spawnTask('impl/v2', 'web3', t1.id);
+      
+      var w2 = spawnWorker('INTERPRETER_03', 'interpreter');
+      var w3 = spawnWorker('INTERPRETER_04', 'interpreter');
+      
+      setTimeout(function(){
+        setWorkerStatus(w2, 'computing', 'DECOMPILE v1');
+        setWorkerStatus(w3, 'computing', 'DECOMPILE v2');
+        updateTask(t2, 'IN_PROGRESS', null, '', 'lr-progress');
+        updateTask(t3, 'IN_PROGRESS', null, '', 'lr-progress');
+      }, 200);
+    }, 2000));
+    
+    // Этап 3: impl v1 → FP
+    simTimeouts.push(setTimeout(function(){
+      updateTask(t2, 'DONE', 'FP (Storage Safe)', 'fp', 'lr-done');
+      updateCoverage(35, 'alpha');
+    }, 3200));
+    
+    // Этап 4: impl v2 → AMBIGUOUS → СПАВН верификаторов
+    simTimeouts.push(setTimeout(function(){
+      updateTask(t3, 'ESCALATED', 'AMBIGUOUS (reentrancy?)', 'amb', 'lr-escalated');
+      updateCoverage(50, 'alpha');
+      
+      var v1 = spawnWorker('VERIFIER_02', 'verifier');
+      var v2 = spawnWorker('VERIFIER_03', 'verifier');
+      var t4 = spawnTask('trace/calls', 'web3', t3.id);
+      var t5 = spawnTask('storage/slots', 'web3', t3.id);
+      
+      setTimeout(function(){
+        setWorkerStatus(v1, 'verifying', 'FORK-TEST reentrancy');
+        setWorkerStatus(v2, 'verifying', 'MAP dependencies');
+        updateTask(t4, 'IN_PROGRESS', null, '', 'lr-progress');
+        updateTask(t5, 'IN_PROGRESS', null, '', 'lr-progress');
+      }, 200);
+    }, 4000));
+    
+    // Этап 5: t4 (trace) → FP, t5 (storage) → AMBIGUOUS
+    simTimeouts.push(setTimeout(function(){
+      updateTask(t4, 'DONE', 'FP (calls safe)', 'fp', 'lr-done');
+      updateCoverage(65, 'alpha');
+    }, 5000));
+    
+    simTimeouts.push(setTimeout(function(){
+      updateTask(t5, 'ESCALATED', 'AMBIGUOUS (slot collision)', 'amb', 'lr-escalated');
+      updateCoverage(75, 'alpha');
+      
+      // Спавним нового эксплойт-агента
+      var x1 = spawnWorker('EXPLOIT_CART_01', 'exploit');
+      setTimeout(function(){
+        setWorkerStatus(x1, 'exploiting', 'ATTACK-POC build');
+      }, 200);
+    }, 5400));
+    
+    // Этап 6: Лог форка
+    simTimeouts.push(setTimeout(function(){
+      var logRow = makeLogRow(
+        '$ anvil --fork-url MAINNET_RPC --fork-block-number LATEST',
+        'Anvil fork ready. Compiling PoC exploit...',
+        '#fbbf24'
+      );
+      document.getElementById('ledger-rows').appendChild(logRow);
+    }, 6200));
+    
+    // Этап 7: Финальная верификация
+    simTimeouts.push(setTimeout(function(){
+      document.querySelectorAll('.worker-status').forEach(function(el){
+        el.textContent = 'IDLE';
+        el.className = 'worker-status status-idle';
+      });
+      
+      var tFinal = spawnTask('exploit/verified', 'flash', t3.id);
+      updateTask(tFinal, 'DONE', 'VERIFIED (Reentrancy)', 'verified-fail', 'lr-done');
+      updateCoverage(100, 'alpha');
+      
+      var logRow = makeLogRow(
+        'forge test --fork-url http://localhost:8545 --match-test reentrancy_vector',
+        'PASS: Attack vector confirmed in isolated fork.',
+        '#ef4444'
+      );
+      document.getElementById('ledger-rows').appendChild(logRow);
+      
+      var fvb = document.getElementById('final-verdict-box');
+      fvb.className = 'final-verdict active-green';
+      document.getElementById('final-text').innerHTML = 
+        '<div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(16,185,129,0.3);padding-bottom:6px;margin-bottom:8px">' +
+          '<strong style="color:#10b981">⚠️ BLOCKCHAIN PROTOCOL EXPLOIT VERIFIED IN FORK</strong>' +
+          '<span class="law">ON-PREMISES RUNTIME</span>' +
+        '</div>' +
+        '<strong>Target Contract:</strong> 0xTARGET... // ' + taskCounter + ' tasks processed by ' + workerCounter + ' workers.<br/>' +
+        '<strong style="color:#10b981">[VERIFIER METRIC]:</strong> Локальное исполнение в форке завершилось с кодом <span style="background:rgba(239,68,68,0.15);color:#ef4444;padding:1px 6px;border:1px solid rgba(239,68,68,0.3);border-radius:3px;font-weight:700">PASS (Attack Vector Valid)</span>. Сгенерирован патч remediation.';
+      setStatus('COMPLETED', 'status-completed');
+      document.getElementById('badge-orchestrator').classList.remove('active');
+      launchBtn.disabled = false;
+    }, 7500));
+  }
+  
+  function startSim(){
+    resetUI();
+    setStatus('RUNNING', 'status-running');
+    launchBtn.disabled = true;
+    document.getElementById('node-orchestrator').classList.add('active');
+    document.getElementById('badge-orchestrator').classList.add('active');
+    
+    simTimeouts.push(setTimeout(function(){
+      if (currentDomain === 'infra') runInfraPipeline();
+      else runWeb3Pipeline();
+    }, 1000));
+  }
+  
+  launchBtn.addEventListener('click', startSim);
+  resetUI();
+})();
+</script>
 
-// Gmail fallback handler
-document.getElementById('gmail-open')?.addEventListener('click', function(){
-  var subject = window._lastSubject || 'VECTOR-AI заявка';
-  var body = window._lastBody || 'Заявка с сайта VECTOR-AI';
-  var url = 'https://mail.google.com/mail/?view=cm&fs=1' +
-    '&to=andrey_prosto@bk.ru' +
-    '&su=' + encodeURIComponent(subject) +
-    '&body=' + encodeURIComponent(body);
-  window.open(url, '_blank', 'noopener');
+<!-- Lead Modal -->
+<div class="lead-modal" id="lead-modal">
+<div class="lead-modal-content">
+<button type="button" class="lead-modal-close" id="modal-close">×</button>
+<div class="lead-modal-icon">✉</div>
+<h3 class="lead-modal-title">Заявка сформирована</h3>
+<p class="lead-modal-text">Ваша заявка готова к отправке. Нажмите кнопку — откроется почтовый клиент с заполненными полями.</p>
+<a id="modal-mailto" href="mailto:andrey_prosto@bk.ru" class="btn btn-primary" style="width:100%;margin-bottom:12px;">
+📧 Открыть почтовый клиент
+</a>
+<a id="modal-gmail" href="https://mail.google.com/" target="_blank" rel="noopener" class="btn btn-secondary" style="width:100%;">
+🌐 Открыть в Gmail Web
+</a>
+<p class="lead-modal-note">Если почтовый клиент не установлен — нажмите вторую кнопку, заявка откроется в Gmail.</p>
+</div>
+</div>
+
+<style>
+.lead-modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px}
+.lead-modal.show{display:flex}
+.lead-modal-content{background:#0A0F1A;border:1px solid rgba(0,102,255,0.3);border-radius:20px;padding:36px 32px;max-width:440px;width:100%;position:relative;animation:modalSlide 0.3s ease}
+@keyframes modalSlide{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+.lead-modal-close{position:absolute;top:12px;right:16px;background:none;border:none;color:#8B949E;font-size:28px;cursor:pointer;line-height:1;padding:0;width:32px;height:32px}
+.lead-modal-close:hover{color:#E8EAED}
+.lead-modal-icon{font-size:48px;text-align:center;margin-bottom:16px}
+.lead-modal-title{font-size:22px;font-weight:700;text-align:center;margin-bottom:12px;color:#E8EAED}
+.lead-modal-text{color:#8B949E;text-align:center;margin-bottom:24px;font-size:14px;line-height:1.5}
+.lead-modal-note{font-size:11px;color:#6B7280;margin-top:14px;line-height:1.5;text-align:center}
+</style>
+
+<script>
+document.getElementById('modal-close')?.addEventListener('click', function(){
+  document.getElementById('lead-modal').classList.remove('show');
+});
+document.getElementById('lead-modal')?.addEventListener('click', function(e){
+  if (e.target === this) this.classList.remove('show');
 });
 </script>
 </body>
