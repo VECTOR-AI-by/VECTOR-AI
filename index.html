@@ -61,7 +61,6 @@ section{padding:80px 0}
 .capability-list li{padding:5px 0;display:flex;gap:8px}
 .capability-list li::before{content:'›';color:var(--primary);font-weight:700;flex-shrink:0}
 .architecture{background:linear-gradient(180deg,transparent 0%,rgba(0,102,255,0.03) 50%,transparent 100%)}
-.swarm-diagram{display:flex;flex-direction:column;gap:24px;max-width:1000px;margin:0 auto;padding:32px;background:var(--bg-card);border-radius:24px;border:1px solid rgba(255,255,255,0.05)}
 .swarm-tier{display:flex;flex-direction:column;gap:14px}
 .tier-label{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);text-align:center;margin-bottom:4px}
 .swarm-row{display:flex;justify-content:center;align-items:center;gap:18px;flex-wrap:wrap}
@@ -410,7 +409,12 @@ VECTOR-AI — Первое суверенное MAS-решение (Multi-Agent 
     margin:0 auto;
     padding:16px;
     border-radius:24px;
-    overflow:hidden;
+    /* На узких экранах сцена не сжимается ниже читаемого размера (см. .stage
+       min-width) — вместо этого появляется горизонтальный скролл, а не
+       нечитаемый мелкий текст внутри SVG. */
+    overflow-x:auto;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;
     background:
       radial-gradient(circle at 18% 8%, rgba(47,125,255,0.10), transparent 45%),
       radial-gradient(circle at 84% 92%, rgba(168,85,247,0.08), transparent 45%),
@@ -421,6 +425,7 @@ VECTOR-AI — Первое суверенное MAS-решение (Multi-Agent 
   .vai-swarm .stage{
     width:100%;
     max-width:1360px;
+    min-width:780px;
     margin:0 auto;
     background:linear-gradient(180deg, var(--bg) 0%, var(--bg-deep) 100%);
     border:1px solid var(--panel-line);
@@ -643,7 +648,7 @@ VECTOR-AI — Первое суверенное MAS-решение (Multi-Agent 
           <rect class="node-box" x="360" y="14" width="280" height="72" rx="7" stroke="var(--ink-faint)"/>
           <text x="500" y="34" text-anchor="middle" class="node-title" font-size="13">КОРНЕВАЯ ЦЕЛЬ</text>
           <text x="500" y="50" text-anchor="middle" class="node-sub" font-size="9.5">TARGET / REQUEST</text>
-          <text x="500" y="66" text-anchor="middle" class="node-sub" font-size="8.5" fill="var(--sub)" id="vai-op-name">ОПЕРАЦИЯ «GLASS TUNNEL» · 0x7F2C…9A3 / prod-cluster</text>
+          <text x="500" y="66" text-anchor="middle" class="node-sub" font-size="8.5" fill="var(--sub)" id="vai-op-name"> «GLASS TUNNEL» · 0x7F2C…9A3 / prod-cluster</text>
         </g>
 
         <g id="vai-node-commander" class="glow-line">
@@ -740,55 +745,29 @@ VECTOR-AI — Первое суверенное MAS-решение (Multi-Agent 
 
   // "ОПЕРАЦИЯ GLASS TUNNEL": АЛЬФА ведёт аудит смарт-контракта, ГАММА — периметр prod-инфры.
   // side: 'outer' — дверь открывается наружу (дальше от центра), 'inner' — внутрь (ближе к центру).
-  // "ОПЕРАЦИЯ GLASS TUNNEL": АЛЬФА ведёт аудит смарт-контракта, ГАММА — периметр prod-инфры.
-  // Каждый узел: ствол сам сканирует объект, часть находки забирает себе (selfKeep),
-  // основную массу (bulkCount/bulkLabel) отдаёт субагенту. На "matryoshka"-узлах субагент
-  // сам не справляется в одиночку и раскрывает 4 вложенных саб-субагента для триажа.
   const ALPHA_WPS = [
     {x:200, y:298, side:'outer', label:'PROXY',   file:'proxy-impl.md',
-      finding:'EIP-1967 upgradeable slot', sev:'MEDIUM', frac:0.081,
-      selfKeep:'адрес implementation-слота', bulkCount:3, bulkLabel:'admin-адреса'},
+      finding:'EIP-1967 upgradeable slot', sev:'MEDIUM', frac:0.081},
     {x:200, y:372, side:'inner', label:'OWNER',   file:'access-control.md',
-      finding:'onlyOwner: незащищ. функция', sev:'HIGH', frac:0.280,
-      selfKeep:'адрес владельца', bulkCount:1, bulkLabel:'уязвимую функцию'},
+      finding:'onlyOwner: незащищ. функция', sev:'HIGH', frac:0.280},
     {x:200, y:447, side:'outer', label:'FACTORY', file:'contract-factory.md',
-      finding:'обнаружена фабрика контрактов', sev:'CRITICAL', frac:0.481, matryoshka:true,
-      selfKeep:'admin-ключи + исходный код', bulkCount:50, bulkLabel:'контрактов',
-      categories:[
-        {tag:'EOA',          count:14, note:'пустые адреса',        color:'#7f8aad'},
-        {tag:'CONTRACT',     count:22, note:'верифиц. логика',      color:'#00d4aa'},
-        {tag:'IMPERSONATOR', count:9,  note:'фишинг-клон',          color:'#ef4444'},
-        {tag:'DELEGATE',     count:5,  note:'delegatecall target',  color:'#facc15'},
-      ]},
+      finding:'обнаружена фабрика контрактов', sev:'CRITICAL', frac:0.481},
     {x:200, y:521, side:'inner', label:'ORACLE',  file:'price-oracle.md',
-      finding:'один источник цены', sev:'HIGH', frac:0.680,
-      selfKeep:'адрес фида', bulkCount:2, bulkLabel:'связанных пула'},
+      finding:'один источник цены', sev:'HIGH', frac:0.680},
     {x:200, y:595, side:'outer', label:'LIQUIDITY', file:'liquidity-pool.md',
-      finding:'flash-loan реентерабельность', sev:'CRITICAL', frac:0.879,
-      selfKeep:'адрес пула', bulkCount:4, bulkLabel:'LP-токена'},
+      finding:'flash-loan реентерабельность', sev:'CRITICAL', frac:0.879},
   ];
   const GAMMA_WPS = [
     {x:800, y:298, side:'outer', label:'DNS',   file:'dns-zone.md',
-      finding:'wildcard раскрывает staging', sev:'MEDIUM', frac:0.081,
-      selfKeep:'zone-файл', bulkCount:6, bulkLabel:'поддоменов'},
+      finding:'wildcard раскрывает staging', sev:'MEDIUM', frac:0.081},
     {x:800, y:372, side:'inner', label:':443',  file:'tls-endpoint.md',
-      finding:'разрешён откат до TLS1.0', sev:'LOW', frac:0.280,
-      selfKeep:'сертификат', bulkCount:1, bulkLabel:'endpoint'},
+      finding:'разрешён откат до TLS1.0', sev:'LOW', frac:0.280},
     {x:800, y:447, side:'outer', label:'REPO',  file:'infra-repo.git',
-      finding:'репозиторий инфраструктуры вскрыт', sev:'CRITICAL', frac:0.481, matryoshka:true,
-      selfKeep:'утёкшие секреты + CI-конфиги', bulkCount:50, bulkLabel:'эндпоинтов',
-      categories:[
-        {tag:'OPEN',     count:18, note:'доступен без auth', color:'#ef4444'},
-        {tag:'AUTH',     count:20, note:'требует токен',     color:'#00d4aa'},
-        {tag:'DEAD',     count:8,  note:'недоступен',        color:'#7f8aad'},
-        {tag:'HONEYPOT', count:4,  note:'похоже на ловушку', color:'#facc15'},
-      ]},
+      finding:'репозиторий инфраструктуры вскрыт', sev:'CRITICAL', frac:0.481},
     {x:800, y:521, side:'inner', label:'IAM',   file:'iam-policy.md',
-      finding:'избыточная роль биндинга', sev:'HIGH', frac:0.680,
-      selfKeep:'policy JSON', bulkCount:12, bulkLabel:'ролей'},
+      finding:'избыточная роль биндинга', sev:'HIGH', frac:0.680},
     {x:800, y:595, side:'outer', label:'K8S',   file:'k8s-cluster.md',
-      finding:'kubelet API 10255 открыт', sev:'HIGH', frac:0.879,
-      selfKeep:'kubeconfig', bulkCount:5, bulkLabel:'подов'},
+      finding:'kubelet API 10255 открыт', sev:'HIGH', frac:0.879},
   ];
 
   const SEV_COLOR = { LOW:'#a3e635', MEDIUM:'#facc15', HIGH:'#fb923c', CRITICAL:'#ef4444' };
