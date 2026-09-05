@@ -13,6 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--primary:#0066FF;--primary-dark:#0052CC;--secondary:#00D4AA;--bg-dark:#0A0F1A;--bg-card:rgba(255,255,255,0.03);--text:#E8EAED;--text-muted:#8B949E;--gradient:linear-gradient(135deg,#0066FF 0%,#00D4AA 100%)}
@@ -69,7 +70,7 @@ section{padding:80px 0}
 .swarm-node.primary{background:var(--gradient);border:none;min-width:220px}
 .swarm-node.primary .swarm-label,.swarm-node.primary .swarm-sub{color:#fff}
 .swarm-node.worker{min-width:130px;padding:12px 18px}
-.swarm-node.alpha{background:rgba(0,102,255,0.15);border-color:rgba(0,102,255,0.4)}
+.swarm-node.alpha{background:rgba(168,85,247,0.15);border-color:rgba(168,85,247,0.4)}
 .swarm-node.gamma{background:rgba(0,212,170,0.12);border-color:rgba(0,212,170,0.4)}
 .swarm-label{font-size:15px;font-weight:700;margin-bottom:3px}
 .swarm-sub{font-size:11px;color:var(--text-muted)}
@@ -174,7 +175,7 @@ VECTOR-AI — Первое суверенное MAS-решение (Multi-Agent 
 <div class="stat"><span class="stat-num">12</span><span class="stat-label">языков кода</span></div>
 <div class="stat"><span class="stat-num">6</span><span class="stat-label">движков</span></div>
 <div class="stat"><span class="stat-num">9+</span><span class="stat-label">блокчейн-сетей</span></div>
-<div class="stat"><span class="stat-num">0</span><span class="stat-label">внешних API</span></div>
+<div class="stat"><span class="stat-num">0</span><span class="stat-label">внешних API ИИ-моделей</span></div>
 </div>
 </div>
 </section>
@@ -380,121 +381,682 @@ VECTOR-AI — Первое суверенное MAS-решение (Multi-Agent 
 <p class="section-description">Память системы полностью отделена от контекста моделей через распределённый Реестр Целей. Это гарантирует 100% покрытие аудита независимо от объёма кода. Активные проверки изолированы в контролируемых песочницах — никакого воздействия на продакшен заказчика.</p>
 </div>
 
-<div class="swarm-diagram">
+<style>
 
-<div class="swarm-tier">
-<div class="tier-label">1 · Вход и классификация</div>
-<div class="swarm-row">
-<div class="swarm-node">
-<div class="swarm-label">Запрос</div>
-<div class="swarm-sub">URL · IP · контракт · репо</div>
-</div>
-<div class="swarm-arrow">→</div>
-<div class="swarm-node">
-<div class="swarm-label">Archetype Gate</div>
-<div class="swarm-sub">DEX · Lending · OSINT · Infra</div>
-</div>
-</div>
-</div>
+  .vai-swarm{
+    --bg: #060913;
+    --bg-deep: #03050b;
+    --panel: #0b1120;
+    --panel-line: rgba(255,255,255,0.07);
+    --ink: #e6ecff;
+    --ink-dim: #7f8aad;
+    --ink-faint: #4d566f;
+    --commander: #2f7dff;
+    --commander-soft: rgba(47,125,255,0.16);
+    --alpha: #a855f7;
+    --alpha-soft: rgba(168,85,247,0.14);
+    --gamma: #00d4aa;
+    --gamma-soft: rgba(0,212,170,0.14);
+    --sub: #fb923c;
+    --sub-soft: rgba(251,146,60,0.14);
+    --good: #34e5b0;
+    --font-display: 'Space Grotesk', 'IBM Plex Mono', system-ui, sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
 
-<div class="swarm-tier">
-<div class="tier-label">2 · Оркестрация и ядро сканирования</div>
-<div class="swarm-row">
-<div class="swarm-node primary">
-<div class="swarm-label">ОРКЕСТРАТОР</div>
-<div class="swarm-sub">Flagship LLM · Manager</div>
-</div>
-</div>
-<div class="swarm-row">
-<div class="swarm-node alpha">
-<div class="swarm-label">ALPHA</div>
-<div class="swarm-sub">Web3 · Code · Contracts</div>
-</div>
-<div class="swarm-node gamma">
-<div class="swarm-label">GAMMA</div>
-<div class="swarm-sub">Infra · Net · OSINT</div>
-</div>
-</div>
-<div class="swarm-row">
-<div class="swarm-node worker" style="min-width:240px">
-<div class="swarm-label">web3-паттерный сканер</div>
-<div class="swarm-sub">12 языков · 6 движков · ИИ-интерпретация</div>
-</div>
-<div class="swarm-node worker" style="min-width:240px">
-<div class="swarm-label">Nmap + Инфра-арсенал</div>
-<div class="swarm-sub">20+ инструментов · CVE-детекция</div>
-</div>
-<div class="swarm-node worker" style="min-width:240px">
-<div class="swarm-label">OSINT-парсеры</div>
-<div class="swarm-sub">открытые API + утечки · PII-мониторинг</div>
-</div>
-</div>
-</div>
+    font-family:var(--font-mono);
+    color:var(--ink);
+    display:block;
+    max-width:1180px;
+    margin:0 auto;
+    padding:16px;
+    border-radius:24px;
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 18% 8%, rgba(47,125,255,0.10), transparent 45%),
+      radial-gradient(circle at 84% 92%, rgba(168,85,247,0.08), transparent 45%),
+      var(--bg-deep);
+  }
+  .vai-swarm *{box-sizing:border-box;}
 
-<div class="swarm-tier">
-<div class="tier-label">3 · Target Ledger — единый источник состояния</div>
-<div class="swarm-row">
-<div class="swarm-node" style="min-width:340px">
-<div class="swarm-label">Target Ledger (PostgreSQL / Redis)</div>
-<div class="swarm-sub">UUID · PARENT_ID · SKIP LOCKED</div>
-</div>
-</div>
-<div class="ledger-block">
-<span class="comment">// Схема реестра целей</span>
-{
-&nbsp;&nbsp;<span class="key">"uuid"</span>: <span class="val">"0x01"</span>,
-&nbsp;&nbsp;<span class="key">"parent_id"</span>: <span class="val">null</span>,
-&nbsp;&nbsp;<span class="key">"domain"</span>: <span class="val">"web3"</span>,
-&nbsp;&nbsp;<span class="key">"type"</span>: <span class="val">"finding"</span>,
-&nbsp;&nbsp;<span class="key">"status"</span>: <span class="val">"done"</span>,
-&nbsp;&nbsp;<span class="key">"priority"</span>: <span class="val">150</span>,
-&nbsp;&nbsp;<span class="key">"verdict"</span>: <span class="val">"AMBIGUOUS"</span>,
-&nbsp;&nbsp;<span class="key">"assigned"</span>: <span class="val">null</span>
-}
-</div>
-</div>
+  .vai-swarm .stage{
+    width:100%;
+    max-width:1360px;
+    margin:0 auto;
+    background:linear-gradient(180deg, var(--bg) 0%, var(--bg-deep) 100%);
+    border:1px solid var(--panel-line);
+    border-radius:6px;
+    overflow:hidden;
+    box-shadow: 0 40px 120px rgba(0,0,0,0.55);
+  }
 
-<div class="swarm-tier">
-<div class="tier-label">4 · Изолированный AI-Runtime (Docker)</div>
-<div class="swarm-row">
-<div class="swarm-node worker">
-<div class="swarm-label">Watchdog</div>
-<div class="swarm-sub">TTL · сброс зависших</div>
-</div>
-<div class="swarm-node worker">
-<div class="swarm-label">Spawner</div>
-<div class="swarm-sub">динамические воркеры</div>
-</div>
-</div>
-<div class="swarm-row">
-<div class="swarm-node" style="min-width:280px">
-<div class="swarm-label">🔹 Interpreter-воркеры</div>
-<div class="swarm-sub">Массовая фильтрация · отсев шума · TP/FP/AMBIGUOUS</div>
-</div>
-</div>
-<div class="swarm-row">
-<div class="swarm-node" style="min-width:280px">
-<div class="swarm-label">🔸 Verifier-воркеры</div>
-<div class="swarm-sub">Anvil+Foundry Fork / Nmap / OSINT · VERIFIED / REFUTED</div>
-</div>
-</div>
-</div>
+  /* ---------- header ---------- */
+  .vai-swarm header{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px 26px 16px;
+    border-bottom:1px solid var(--panel-line);
+  }
+  .vai-swarm .brand{display:flex; align-items:baseline; gap:14px;}
+  .vai-swarm .brand h1{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:20px;
+    letter-spacing:0.2px;
+    margin:0;
+    color:var(--ink);
+  }
+  .vai-swarm .brand h1 b{color:var(--commander); font-weight:700;}
+  .vai-swarm .brand span{
+    font-size:11px; color:var(--ink-dim);
+    letter-spacing:0.4px;
+  }
+  .vai-swarm .hud{display:flex; align-items:center; gap:18px;}
+  .vai-swarm .hud .pill{
+    display:flex; align-items:center; gap:7px;
+    font-size:11px; color:var(--ink-dim);
+    border:1px solid var(--panel-line);
+    padding:6px 11px; border-radius:20px;
+    background:rgba(255,255,255,0.02);
+  }
+  .vai-swarm .hud .dot{width:6px;height:6px;border-radius:50%;background:var(--good); box-shadow:0 0 8px var(--good);}
+  .vai-swarm .dot.blink{animation:vaiBlink 1.8s ease-in-out infinite;}
+  @keyframes vaiBlink{0%,100%{opacity:1;}50%{opacity:.25;}}
+  .vai-swarm #vai-cycle-counter{color:var(--ink); font-weight:600;}
+  .vai-swarm button#vai-pauseBtn{
+    font-family:var(--font-mono);
+    font-size:11px; letter-spacing:0.3px;
+    background:rgba(255,255,255,0.03);
+    color:var(--ink);
+    border:1px solid var(--panel-line);
+    padding:7px 14px; border-radius:20px;
+    cursor:pointer;
+    transition:border-color .15s, background .15s;
+  }
+  .vai-swarm button#vai-pauseBtn:hover{ border-color:rgba(255,255,255,0.25); background:rgba(255,255,255,0.06); }
 
-<div class="swarm-tier">
-<div class="tier-label">5 · Выходной контур</div>
-<div class="swarm-row">
-<div class="swarm-node">
-<div class="swarm-label">Tech Verdict</div>
-<div class="swarm-sub">JSON-граф + патчи</div>
-</div>
-<div class="swarm-node">
-<div class="swarm-label">Legal / Compliance</div>
-<div class="swarm-sub">Превентивная проверка законодательной базы</div>
-</div>
-</div>
-</div>
+  /* ---------- legend ---------- */
+  .vai-swarm .legend{
+    display:flex; gap:22px; flex-wrap:wrap;
+    padding:12px 26px; font-size:11px; color:var(--ink-dim);
+    border-bottom:1px solid var(--panel-line);
+  }
+  .vai-swarm .legend i{display:inline-block; width:9px; height:9px; border-radius:2px; margin-right:6px; vertical-align:-1px;}
+
+  /* ---------- body layout ---------- */
+  .vai-swarm .body{display:flex; align-items:stretch;}
+  .vai-swarm .graph-wrap{flex:1 1 auto; min-width:0; padding:6px 4px 0;}
+  .vai-swarm svg#vai-graph{display:block; width:100%; height:auto;}
+
+  .vai-swarm .telemetry{
+    width:272px; flex:0 0 272px;
+    border-left:1px solid var(--panel-line);
+    padding:18px 20px;
+    display:flex; flex-direction:column; gap:16px;
+  }
+  .vai-swarm .telemetry h2{
+    font-family:var(--font-display);
+    font-size:12px; letter-spacing:0.6px; text-transform:uppercase;
+    color:var(--ink-dim); margin:0 0 2px;
+    font-weight:600;
+  }
+  .vai-swarm .stat-row{
+    display:flex; align-items:center; justify-content:space-between;
+    font-size:12px; padding:8px 0;
+    border-bottom:1px dashed var(--panel-line);
+  }
+  .vai-swarm .stat-row .k{color:var(--ink-dim);}
+  .vai-swarm .stat-row .v{color:var(--ink); font-weight:600; text-align:right;}
+  .vai-swarm .stat-row .v.alpha{color:var(--alpha);}
+  .vai-swarm .stat-row .v.gamma{color:var(--gamma);}
+  .vai-swarm .stat-row .v.good{color:var(--good);}
+
+  .vai-swarm .mini-bars{display:flex; flex-direction:column; gap:8px; margin-top:2px;}
+  .vai-swarm .mini-bar{display:flex; align-items:center; gap:8px; font-size:11px; color:var(--ink-dim);}
+  .vai-swarm .mini-bar .track{flex:1; height:4px; border-radius:3px; background:rgba(255,255,255,0.06); overflow:hidden;}
+  .vai-swarm .mini-bar .fill{height:100%; width:0%; border-radius:3px; transition:width .5s ease;}
+  .vai-swarm .mini-bar.alpha .fill{background:var(--alpha); box-shadow:0 0 6px var(--alpha);}
+  .vai-swarm .mini-bar.gamma .fill{background:var(--gamma); box-shadow:0 0 6px var(--gamma);}
+
+  /* ---------- console ---------- */
+  .vai-swarm .console{
+    border-top:1px solid var(--panel-line);
+    background:rgba(0,0,0,0.28);
+  }
+  .vai-swarm .console-head{
+    display:flex; align-items:center; gap:8px;
+    padding:9px 26px; font-size:11px; color:var(--ink-dim);
+    border-bottom:1px solid var(--panel-line);
+    letter-spacing:0.3px;
+  }
+  .vai-swarm .console-head .dots{display:flex; gap:5px; margin-right:6px;}
+  .vai-swarm .console-head .dots span{width:7px; height:7px; border-radius:50%; background:var(--ink-faint);}
+  .vai-swarm #vai-console-body{
+    height:168px; overflow-y:auto;
+    padding:10px 26px 14px;
+    font-size:12px; line-height:1.65;
+  }
+  .vai-swarm #vai-console-body .line{white-space:pre-wrap; word-break:break-word; opacity:0; animation:vaiLineIn .25s ease forwards;}
+  @keyframes vaiLineIn{from{opacity:0; transform:translateY(2px);} to{opacity:1; transform:translateY(0);}}
+  .vai-swarm #vai-console-body .ts{color:var(--ink-faint); margin-right:8px;}
+  .vai-swarm #vai-console-body .tag{font-weight:600; margin-right:6px;}
+  .vai-swarm .tag.CMD{color:var(--commander);}
+  .vai-swarm .tag.ALPHA{color:var(--alpha);}
+  .vai-swarm .tag.GAMMA{color:var(--gamma);}
+  .vai-swarm .tag.SYS{color:var(--ink-dim);}
+  .vai-swarm #vai-console-body::-webkit-scrollbar{width:8px;}
+  .vai-swarm #vai-console-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08); border-radius:4px;}
+
+  /* ---------- SVG node styling ---------- */
+  .vai-swarm .node-box{fill:var(--panel); stroke-width:1.4;}
+  .vai-swarm .node-title{font-family:var(--font-display); font-weight:600; fill:var(--ink);}
+  .vai-swarm .node-sub{font-family:var(--font-mono); fill:var(--ink-dim);}
+  .vai-swarm .status-text{font-family:var(--font-mono); font-weight:600; letter-spacing:0.3px;}
+
+  .vai-swarm .glow-line{filter:url(#vai-softGlow);}
+  .vai-swarm .link-line{stroke:rgba(255,255,255,0.14); stroke-width:1.3; fill:none;}
+  .vai-swarm .return-line{fill:none; stroke-width:1.4; stroke-dasharray:3 6; opacity:0.22;}
+
+  .vai-swarm .token{filter:url(#vai-tokenGlow);}
+
+  .vai-swarm .flash{animation:vaiFlashPulse .7s ease;}
+  @keyframes vaiFlashPulse{
+    0%{filter:url(#vai-softGlow) brightness(1);}
+    35%{filter:url(#vai-softGlow) brightness(1.9);}
+    100%{filter:url(#vai-softGlow) brightness(1);}
+  }
+
+  .vai-swarm .is-running .trunk-line{ stroke-dashoffset:0; animation:vaiTrunkFlow 1.7s linear infinite; }
+  @keyframes vaiTrunkFlow{ from{stroke-dashoffset:24;} to{stroke-dashoffset:0;} }
+
+  .vai-swarm .spawn-in{animation:vaiSpawnIn .32s cubic-bezier(.2,.8,.3,1.3) forwards;}
+  .vai-swarm .spawn-out{animation:vaiSpawnOut .28s ease forwards;}
+  @keyframes vaiSpawnIn{from{opacity:0; transform:scale(0.15);} to{opacity:1; transform:scale(1);}}
+  @keyframes vaiSpawnOut{from{opacity:1; transform:scale(1);} to{opacity:0; transform:scale(0.15);}}
+
+  .vai-swarm .door-flash{animation:vaiDoorFlash .5s ease;}
+  @keyframes vaiDoorFlash{0%{opacity:0;}25%{opacity:0.9;}100%{opacity:0;}}
+
+  .vai-swarm .paused #vai-graph{ filter:saturate(0.55) brightness(0.72); transition:filter .3s; }
+  .vai-swarm .paused .is-running .trunk-line{ animation-play-state:paused; }
+  .vai-swarm .paused .flash{ animation-play-state:paused; }
+
+  @media (max-width: 980px){
+    .vai-swarm .body{flex-direction:column;}
+    .vai-swarm .telemetry{width:auto; flex:none; border-left:none; border-top:1px solid var(--panel-line); flex-direction:row; flex-wrap:wrap;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .vai-swarm .spawn-in,.vai-swarm .spawn-out,.vai-swarm .flash,.vai-swarm .door-flash{animation:none !important;}
+  }
+</style>
+<div class="vai-swarm">
+<div class="stage" id="vai-stage-root">
+
+  <header>
+    <div class="brand">
+      <h1><b>VECTOR</b>-AI</h1>
+      <span>SOVEREIGN MULTI-AGENT SYSTEM · STATEFUL VERTICAL GRAPH</span>
+    </div>
+    <div class="hud">
+      <div class="pill"><span class="dot blink"></span> ONLINE</div>
+      <div class="pill">ЦИКЛ <span id="vai-cycle-counter">0</span></div>
+      <button id="vai-pauseBtn">Пауза</button>
+    </div>
+  </header>
+
+  <div class="legend">
+    <span><i style="background:var(--commander)"></i>Командующий · global state</span>
+    <span><i style="background:var(--alpha)"></i>Альфа · Web3</span>
+    <span><i style="background:var(--gamma)"></i>Гамма · Infra</span>
+    <span><i style="background:var(--sub)"></i>Субагент · эфемерный</span>
+  </div>
+
+  <div class="body">
+    <div class="graph-wrap">
+      <svg id="vai-graph" viewBox="0 0 1000 800" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="vai-softGlow" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="3.2" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="vai-tokenGlow" x="-200%" y="-200%" width="500%" height="500%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="2.6" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+
+        <!-- ===== static guide / link lines (drawn first, low layer) ===== -->
+        <g id="vai-layer-links">
+          <path id="vai-p-root-cmd" class="link-line" d="M500,86 L500,104"/>
+          <path id="vai-p-cmd-final" class="link-line" d="M500,200 L500,700"/>
+          <path id="vai-p-deleg-alpha" class="link-line" d="M500,200 L200,268"/>
+          <path id="vai-p-deleg-gamma" class="link-line" d="M500,200 L800,268"/>
+          <path class="trunk-line" stroke="var(--alpha)" stroke-width="1.6" fill="none" stroke-dasharray="1 11" opacity="0.5" d="M200,268 L200,640"/>
+          <path class="trunk-line" stroke="var(--gamma)" stroke-width="1.6" fill="none" stroke-dasharray="1 11" opacity="0.5" d="M800,268 L800,640"/>
+          <path id="vai-p-alpha-main" d="M200,268 L200,640" fill="none" stroke="none"/>
+          <path id="vai-p-gamma-main" d="M800,268 L800,640" fill="none" stroke="none"/>
+          <path id="vai-p-alpha-return" class="return-line" stroke="var(--alpha)" d="M200,640 C90,520 260,320 500,200"/>
+          <path id="vai-p-gamma-return" class="return-line" stroke="var(--gamma)" d="M800,640 C910,520 740,320 500,200"/>
+        </g>
+
+        <!-- ===== nodes ===== -->
+        <g id="vai-node-root">
+          <rect class="node-box" x="360" y="14" width="280" height="72" rx="7" stroke="var(--ink-faint)"/>
+          <text x="500" y="34" text-anchor="middle" class="node-title" font-size="13">КОРНЕВАЯ ЦЕЛЬ</text>
+          <text x="500" y="50" text-anchor="middle" class="node-sub" font-size="9.5">TARGET / REQUEST</text>
+          <text x="500" y="66" text-anchor="middle" class="node-sub" font-size="8.5" fill="var(--sub)" id="vai-op-name">ОПЕРАЦИЯ «GLASS TUNNEL» · 0x7F2C…9A3 / prod-cluster</text>
+        </g>
+
+        <g id="vai-node-commander" class="glow-line">
+          <rect class="node-box" x="335" y="104" width="330" height="96" rx="9" stroke="var(--commander)"/>
+          <text x="500" y="132" text-anchor="middle" class="node-title" font-size="15" fill="var(--commander)">★ КОМАНДУЮЩИЙ</text>
+          <text x="500" y="151" text-anchor="middle" class="node-sub" font-size="9.5">первичный аналоговый / паттерн-разбор периметра</text>
+          <text x="500" y="164" text-anchor="middle" class="node-sub" font-size="9.5">держит глобальный стейт, пока домены активны</text>
+          <text id="vai-cmd-status" x="500" y="186" text-anchor="middle" class="status-text" font-size="11" fill="var(--good)">IDLE</text>
+        </g>
+
+        <g id="vai-node-alpha" class="glow-line">
+          <rect class="node-box" x="115" y="234" width="170" height="60" rx="8" stroke="var(--alpha)"/>
+          <text x="200" y="257" text-anchor="middle" class="node-title" font-size="13" fill="var(--alpha)">АЛЬФА</text>
+          <text x="200" y="271" text-anchor="middle" class="node-sub" font-size="9">WEB3 · СТВОЛ</text>
+          <text id="vai-alpha-status" x="200" y="286" text-anchor="middle" class="status-text" font-size="9.5" fill="var(--ink-dim)">IDLE</text>
+        </g>
+
+        <g id="vai-node-gamma" class="glow-line">
+          <rect class="node-box" x="715" y="234" width="170" height="60" rx="8" stroke="var(--gamma)"/>
+          <text x="800" y="257" text-anchor="middle" class="node-title" font-size="13" fill="var(--gamma)">ГАММА</text>
+          <text x="800" y="271" text-anchor="middle" class="node-sub" font-size="9">INFRA · СТВОЛ</text>
+          <text id="vai-gamma-status" x="800" y="286" text-anchor="middle" class="status-text" font-size="9.5" fill="var(--ink-dim)">IDLE</text>
+        </g>
+
+        <g id="vai-node-alpha-d">
+          <circle cx="200" cy="640" r="20" fill="var(--panel)" stroke="var(--alpha)" stroke-width="1.4"/>
+          <text x="200" y="644" text-anchor="middle" font-size="12" fill="var(--alpha)" class="node-title">Д</text>
+          <text x="200" y="672" text-anchor="middle" class="node-sub" font-size="8.5">ЦЕЛЬ АЛЬФА</text>
+        </g>
+        <g id="vai-node-gamma-d">
+          <circle cx="800" cy="640" r="20" fill="var(--panel)" stroke="var(--gamma)" stroke-width="1.4"/>
+          <text x="800" y="644" text-anchor="middle" font-size="12" fill="var(--gamma)" class="node-title">Д</text>
+          <text x="800" y="672" text-anchor="middle" class="node-sub" font-size="8.5">ЦЕЛЬ ГАММА</text>
+        </g>
+
+        <g id="vai-node-final" class="glow-line">
+          <rect class="node-box" x="380" y="700" width="240" height="64" rx="8" stroke="var(--commander)"/>
+          <text x="500" y="726" text-anchor="middle" class="node-title" font-size="13" fill="var(--commander)">ФИНАЛЬНЫЙ ВЕРДИКТ</text>
+          <text x="500" y="740" text-anchor="middle" class="node-sub" font-size="9">ПО КОРНЕВОЙ ЦЕЛИ</text>
+          <text id="vai-final-status" x="500" y="756" text-anchor="middle" class="status-text" font-size="9.5" fill="var(--ink-dim)">ОЖИДАНИЕ</text>
+        </g>
+
+        <!-- dynamic layers -->
+        <g id="vai-layer-spawns"></g>
+        <g id="vai-layer-tokens"></g>
+      </svg>
+    </div>
+
+    <div class="telemetry">
+      <h2>Global State</h2>
+      <div class="stat-row"><span class="k">Цель</span><span id="vai-tel-goal" class="v">IDLE</span></div>
+      <div class="stat-row"><span class="k">Альфа</span><span id="vai-tel-alpha" class="v alpha">IDLE</span></div>
+      <div class="stat-row"><span class="k">Гамма</span><span id="vai-tel-gamma" class="v gamma">IDLE</span></div>
+      <div class="stat-row"><span class="k">Активных веток</span><span id="vai-branches-count" class="v">0</span></div>
+      <div class="stat-row"><span class="k">Консистентность</span><span id="vai-state-consistency" class="v good">CONSISTENT</span></div>
+      <div class="stat-row" style="border-bottom:none; align-items:flex-start;"><span class="k">Последняя находка</span><span id="vai-last-finding" class="v" style="max-width:150px; font-weight:500;">—</span></div>
+
+      <div class="mini-bars">
+        <div class="mini-bar alpha"><span style="width:44px">A findings</span><div class="track"><div id="vai-bar-alpha" class="fill"></div></div><span id="vai-alpha-findings">0</span></div>
+        <div class="mini-bar gamma"><span style="width:44px">G findings</span><div class="track"><div id="vai-bar-gamma" class="fill"></div></div><span id="vai-gamma-findings">0</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="console">
+    <div class="console-head"><span class="dots"><span></span><span></span><span></span></span>EVENT TRACE</div>
+    <div id="vai-console-body"></div>
+  </div>
 
 </div>
+</div>
+<script>
+(function(){
+  const NS = "http://www.w3.org/2000/svg";
+  const svg = document.getElementById('vai-graph');
+  const layerTokens = document.getElementById('vai-layer-tokens');
+  const layerSpawns = document.getElementById('vai-layer-spawns');
+  const stage = document.getElementById('vai-stage-root');
+
+  const COLORS = {
+    commander:'#2f7dff', alpha:'#a855f7', gamma:'#00d4aa', sub:'#fb923c', neutral:'#e6ecff'
+  };
+
+  const P = {
+    rootCmd: document.getElementById('vai-p-root-cmd'),
+    cmdFinal: document.getElementById('vai-p-cmd-final'),
+    delegAlpha: document.getElementById('vai-p-deleg-alpha'),
+    delegGamma: document.getElementById('vai-p-deleg-gamma'),
+    alphaMain: document.getElementById('vai-p-alpha-main'),
+    gammaMain: document.getElementById('vai-p-gamma-main'),
+    alphaReturn: document.getElementById('vai-p-alpha-return'),
+    gammaReturn: document.getElementById('vai-p-gamma-return'),
+  };
+
+  // "ОПЕРАЦИЯ GLASS TUNNEL": АЛЬФА ведёт аудит смарт-контракта, ГАММА — периметр prod-инфры.
+  // side: 'outer' — дверь открывается наружу (дальше от центра), 'inner' — внутрь (ближе к центру).
+  // "ОПЕРАЦИЯ GLASS TUNNEL": АЛЬФА ведёт аудит смарт-контракта, ГАММА — периметр prod-инфры.
+  // Каждый узел: ствол сам сканирует объект, часть находки забирает себе (selfKeep),
+  // основную массу (bulkCount/bulkLabel) отдаёт субагенту. На "matryoshka"-узлах субагент
+  // сам не справляется в одиночку и раскрывает 4 вложенных саб-субагента для триажа.
+  const ALPHA_WPS = [
+    {x:200, y:298, side:'outer', label:'PROXY',   file:'proxy-impl.md',
+      finding:'EIP-1967 upgradeable slot', sev:'MEDIUM', frac:0.081,
+      selfKeep:'адрес implementation-слота', bulkCount:3, bulkLabel:'admin-адреса'},
+    {x:200, y:372, side:'inner', label:'OWNER',   file:'access-control.md',
+      finding:'onlyOwner: незащищ. функция', sev:'HIGH', frac:0.280,
+      selfKeep:'адрес владельца', bulkCount:1, bulkLabel:'уязвимую функцию'},
+    {x:200, y:447, side:'outer', label:'FACTORY', file:'contract-factory.md',
+      finding:'обнаружена фабрика контрактов', sev:'CRITICAL', frac:0.481, matryoshka:true,
+      selfKeep:'admin-ключи + исходный код', bulkCount:50, bulkLabel:'контрактов',
+      categories:[
+        {tag:'EOA',          count:14, note:'пустые адреса',        color:'#7f8aad'},
+        {tag:'CONTRACT',     count:22, note:'верифиц. логика',      color:'#00d4aa'},
+        {tag:'IMPERSONATOR', count:9,  note:'фишинг-клон',          color:'#ef4444'},
+        {tag:'DELEGATE',     count:5,  note:'delegatecall target',  color:'#facc15'},
+      ]},
+    {x:200, y:521, side:'inner', label:'ORACLE',  file:'price-oracle.md',
+      finding:'один источник цены', sev:'HIGH', frac:0.680,
+      selfKeep:'адрес фида', bulkCount:2, bulkLabel:'связанных пула'},
+    {x:200, y:595, side:'outer', label:'LIQUIDITY', file:'liquidity-pool.md',
+      finding:'flash-loan реентерабельность', sev:'CRITICAL', frac:0.879,
+      selfKeep:'адрес пула', bulkCount:4, bulkLabel:'LP-токена'},
+  ];
+  const GAMMA_WPS = [
+    {x:800, y:298, side:'outer', label:'DNS',   file:'dns-zone.md',
+      finding:'wildcard раскрывает staging', sev:'MEDIUM', frac:0.081,
+      selfKeep:'zone-файл', bulkCount:6, bulkLabel:'поддоменов'},
+    {x:800, y:372, side:'inner', label:':443',  file:'tls-endpoint.md',
+      finding:'разрешён откат до TLS1.0', sev:'LOW', frac:0.280,
+      selfKeep:'сертификат', bulkCount:1, bulkLabel:'endpoint'},
+    {x:800, y:447, side:'outer', label:'REPO',  file:'infra-repo.git',
+      finding:'репозиторий инфраструктуры вскрыт', sev:'CRITICAL', frac:0.481, matryoshka:true,
+      selfKeep:'утёкшие секреты + CI-конфиги', bulkCount:50, bulkLabel:'эндпоинтов',
+      categories:[
+        {tag:'OPEN',     count:18, note:'доступен без auth', color:'#ef4444'},
+        {tag:'AUTH',     count:20, note:'требует токен',     color:'#00d4aa'},
+        {tag:'DEAD',     count:8,  note:'недоступен',        color:'#7f8aad'},
+        {tag:'HONEYPOT', count:4,  note:'похоже на ловушку', color:'#facc15'},
+      ]},
+    {x:800, y:521, side:'inner', label:'IAM',   file:'iam-policy.md',
+      finding:'избыточная роль биндинга', sev:'HIGH', frac:0.680,
+      selfKeep:'policy JSON', bulkCount:12, bulkLabel:'ролей'},
+    {x:800, y:595, side:'outer', label:'K8S',   file:'k8s-cluster.md',
+      finding:'kubelet API 10255 открыт', sev:'HIGH', frac:0.879,
+      selfKeep:'kubeconfig', bulkCount:5, bulkLabel:'подов'},
+  ];
+
+  const SEV_COLOR = { LOW:'#a3e635', MEDIUM:'#facc15', HIGH:'#fb923c', CRITICAL:'#ef4444' };
+
+  let paused = false;
+  let cycle = 0;
+  let branchesActive = 0;
+  const findings = {alpha:0, gamma:0};
+
+  document.getElementById('vai-pauseBtn').addEventListener('click', ()=>{
+    paused = !paused;
+    stage.classList.toggle('paused', paused);
+    document.getElementById('vai-pauseBtn').textContent = paused ? 'Продолжить' : 'Пауза';
+  });
+
+  function sleep(ms){ return new Promise(r=>setTimeout(r, ms)); }
+  async function gate(){ while(paused){ await sleep(120); } }
+
+  function log(tag, msg){
+    const body = document.getElementById('vai-console-body');
+    const line = document.createElement('div');
+    line.className = 'line';
+    const now = new Date();
+    const ts = now.toTimeString().slice(0,8) + '.' + String(now.getMilliseconds()).padStart(3,'0');
+    line.innerHTML = `<span class="ts">${ts}</span><span class="tag ${tag}">[${tag}]</span>${msg}`;
+    body.appendChild(line);
+    while(body.children.length > 140){ body.removeChild(body.firstChild); }
+    body.scrollTop = body.scrollHeight;
+  }
+
+  function flashNode(id){
+    const el = document.getElementById('vai-node-'+id);
+    el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash');
+  }
+
+  function setDomainStatus(domain, text){
+    document.getElementById('vai-'+domain+'-status').textContent = text;
+    document.getElementById('vai-tel-'+domain).textContent = text;
+    const node = document.getElementById('vai-node-'+domain);
+    node.classList.toggle('is-running', text === 'RUNNING' || text === 'COMPILING');
+  }
+
+  function setFindings(domain, n){
+    document.getElementById('vai-'+domain+'-findings').textContent = n;
+    document.getElementById('vai-bar-'+domain).style.width = Math.min(100, n*14) + '%';
+  }
+
+  function makeToken(color, r){
+    const c = document.createElementNS(NS,'circle');
+    c.setAttribute('r', r);
+    c.setAttribute('fill', color);
+    c.setAttribute('class','token');
+    layerTokens.appendChild(c);
+    return c;
+  }
+
+  function flyAlong(path, {color='#e6ecff', duration=800, r=6} = {}){
+    return new Promise(resolve=>{
+      const tok = makeToken(color, r);
+      const total = path.getTotalLength();
+      const t0 = performance.now();
+      function frame(now){
+        const f = Math.min(1, (now - t0) / duration);
+        const p = path.getPointAtLength(f * total);
+        tok.setAttribute('cx', p.x);
+        tok.setAttribute('cy', p.y);
+        if (f < 1) requestAnimationFrame(frame);
+        else { tok.remove(); resolve(); }
+      }
+      requestAnimationFrame(frame);
+    });
+  }
+
+  function flyPointToPoint(x1,y1,x2,y2,{color='#e6ecff', duration=500, r=4} = {}){
+    return new Promise(resolve=>{
+      const tok = makeToken(color, r);
+      const t0 = performance.now();
+      function frame(now){
+        const f = Math.min(1, (now - t0) / duration);
+        tok.setAttribute('cx', x1 + (x2-x1)*f);
+        tok.setAttribute('cy', y1 + (y2-y1)*f);
+        if (f < 1) requestAnimationFrame(frame);
+        else { tok.remove(); resolve(); }
+      }
+      requestAnimationFrame(frame);
+    });
+  }
+
+  function createSubagentGroup(x,y,label,file,finding,sev){
+    const g = document.createElementNS(NS,'g');
+    g.setAttribute('class','spawn-in');
+    g.setAttribute('transform-origin', x+' '+y);
+
+    const rect = document.createElementNS(NS,'rect');
+    rect.setAttribute('x', x-80); rect.setAttribute('y', y-33);
+    rect.setAttribute('width', 160); rect.setAttribute('height', 66);
+    rect.setAttribute('rx', 7);
+    rect.setAttribute('fill', '#0b1120');
+    rect.setAttribute('stroke', COLORS.sub);
+    rect.setAttribute('stroke-width', 1.3);
+    g.appendChild(rect);
+
+    const sevColor = SEV_COLOR[sev] || COLORS.sub;
+    const chip = document.createElementNS(NS,'circle');
+    chip.setAttribute('cx', x+68); chip.setAttribute('cy', y-22); chip.setAttribute('r', 3.4);
+    chip.setAttribute('fill', sevColor);
+    g.appendChild(chip);
+
+    const t1 = document.createElementNS(NS,'text');
+    t1.setAttribute('x', x-68); t1.setAttribute('y', y-17);
+    t1.setAttribute('text-anchor','start');
+    t1.setAttribute('font-family',"'Space Grotesk',sans-serif");
+    t1.setAttribute('font-size','12');
+    t1.setAttribute('font-weight','600');
+    t1.setAttribute('fill', COLORS.sub);
+    t1.textContent = label;
+    g.appendChild(t1);
+
+    const t2 = document.createElementNS(NS,'text');
+    t2.setAttribute('x', x); t2.setAttribute('y', y-2);
+    t2.setAttribute('text-anchor','middle');
+    t2.setAttribute('font-family',"'IBM Plex Mono',monospace");
+    t2.setAttribute('font-size','8.5');
+    t2.setAttribute('fill', '#7f8aad');
+    t2.textContent = file;
+    g.appendChild(t2);
+
+    const t3 = document.createElementNS(NS,'text');
+    t3.setAttribute('x', x); t3.setAttribute('y', y+14);
+    t3.setAttribute('text-anchor','middle');
+    t3.setAttribute('font-family',"'IBM Plex Mono',monospace");
+    t3.setAttribute('font-size','8');
+    t3.setAttribute('fill', '#c7cee6');
+    t3.textContent = finding;
+    g.appendChild(t3);
+
+    const t4 = document.createElementNS(NS,'text');
+    t4.setAttribute('x', x); t4.setAttribute('y', y+27);
+    t4.setAttribute('text-anchor','middle');
+    t4.setAttribute('font-family',"'IBM Plex Mono',monospace");
+    t4.setAttribute('font-size','7.5');
+    t4.setAttribute('font-weight','600');
+    t4.setAttribute('letter-spacing','0.4px');
+    t4.setAttribute('fill', sevColor);
+    t4.textContent = sev;
+    g.appendChild(t4);
+
+    layerSpawns.appendChild(g);
+    return g;
+  }
+
+  function drawConnector(x1,y1,x2,y2,color){
+    const l = document.createElementNS(NS,'line');
+    l.setAttribute('x1',x1); l.setAttribute('y1',y1);
+    l.setAttribute('x2',x2); l.setAttribute('y2',y2);
+    l.setAttribute('stroke', color);
+    l.setAttribute('stroke-width', 1.4);
+    l.setAttribute('class','door-flash');
+    layerSpawns.appendChild(l);
+    return l;
+  }
+
+  async function spawnSubagent(domain, wp){
+    await gate();
+    // outer = дверь дальше от центра холста, inner = дверь ближе к центру (в обе стороны от ствола)
+    const away = domain === 'alpha' ? -115 : 115;   // наружу, к краю холста
+    const toward = domain === 'alpha' ? 150 : -150; // внутрь, к центру
+    const doorX = wp.x + (wp.side === 'outer' ? away : toward);
+    const color = COLORS[domain];
+
+    const connector = drawConnector(wp.x, wp.y, doorX, wp.y, color);
+    const node = createSubagentGroup(doorX, wp.y, wp.label, wp.file, wp.finding, wp.sev);
+    branchesActive++; document.getElementById('vai-branches-count').textContent = branchesActive;
+    log(domain.toUpperCase(), `Обнаружен объект <b>${wp.label}</b> (${wp.side==='outer'?'внешняя ветка':'внутренняя ветка'}) &rarr; спавн субагента &rarr; контекст <i>${wp.file}</i> инжектирован`);
+
+    await sleep(1500);
+
+    node.classList.remove('spawn-in');
+    node.classList.add('spawn-out');
+    log(domain.toUpperCase(), `${wp.label}: обнаружено — «${wp.finding}» &middot; severity <b style="color:${SEV_COLOR[wp.sev]}">${wp.sev}</b>`);
+    document.getElementById('vai-last-finding').textContent = `${wp.label}: ${wp.finding}`;
+    document.getElementById('vai-last-finding').style.color = SEV_COLOR[wp.sev];
+
+    await flyPointToPoint(doorX, wp.y, wp.x, wp.y, {color, duration:650, r:4});
+    node.remove();
+    connector.remove();
+
+    branchesActive--; document.getElementById('vai-branches-count').textContent = branchesActive;
+    const n = ++findings[domain];
+    setFindings(domain, n);
+    log(domain.toUpperCase(), `Пакет JSON получен ствол &larr; ${wp.label} &middot; лог воркера очищен, субагент схлопнут`);
+  }
+
+  async function runDomainTrunk(domain){
+    await gate();
+    setDomainStatus(domain, 'RUNNING');
+    const color = COLORS[domain];
+    const delegPath = domain === 'alpha' ? P.delegAlpha : P.delegGamma;
+    const mainPath  = domain === 'alpha' ? P.alphaMain  : P.gammaMain;
+    const returnPath= domain === 'alpha' ? P.alphaReturn: P.gammaReturn;
+    const wps = domain === 'alpha' ? ALPHA_WPS : GAMMA_WPS;
+
+    await flyAlong(delegPath, {color, duration:1050, r:7});
+    log('CMD', `Задача делегирована &rarr; <span class="tag ${domain.toUpperCase()}" style="display:inline">${domain.toUpperCase()}</span>, туннельное зрение на цель Д`);
+
+    const T = 42000;
+    const walker = flyAlong(mainPath, {color, duration:T, r:9});
+    const timers = wps.map(wp => setTimeout(()=> spawnSubagent(domain, wp), wp.frac * T));
+    await walker;
+
+    setDomainStatus(domain, 'COMPILING');
+    log(domain.toUpperCase(), `Ствол достиг Д &rarr; сбор JSON-пакетов веток &rarr; компиляция Domain Verdict`);
+    await sleep(2200);
+
+    await flyAlong(returnPath, {color, duration:2600, r:8});
+    setDomainStatus(domain, 'VERDICT');
+  }
+
+  function resetForNewCycle(){
+    findings.alpha = 0; findings.gamma = 0; branchesActive = 0;
+    setFindings('alpha', 0); setFindings('gamma', 0);
+    document.getElementById('vai-branches-count').textContent = 0;
+    document.getElementById('vai-state-consistency').textContent = 'CONSISTENT';
+    document.getElementById('vai-tel-goal').textContent = 'IDLE';
+    document.getElementById('vai-final-status').textContent = 'ОЖИДАНИЕ';
+    setDomainStatus('alpha','IDLE');
+    setDomainStatus('gamma','IDLE');
+  }
+
+  async function runCycle(){
+    resetForNewCycle();
+    await gate();
+    cycle++;
+    document.getElementById('vai-cycle-counter').textContent = cycle;
+    log('SYS', `Новая задача поступила в систему &middot; цикл ${cycle}`);
+    document.getElementById('vai-tel-goal').textContent = 'ACTIVE';
+    flashNode('root');
+
+    await flyAlong(P.rootCmd, {color: COLORS.neutral, duration:850, r:7});
+    flashNode('commander');
+    document.getElementById('vai-cmd-status').textContent = 'ПЕРВИЧНЫЙ РАЗБОР';
+    log('CMD', 'Первичный аналоговый / паттерн-разбор периметра, нарезка плана на 2 домена');
+    await sleep(2600);
+
+    document.getElementById('vai-cmd-status').textContent = 'MONITORING · GLOBAL STATE';
+    await gate();
+
+    await Promise.all([ runDomainTrunk('alpha'), runDomainTrunk('gamma') ]);
+
+    document.getElementById('vai-cmd-status').textContent = 'СИНТЕЗ ВЕРДИКТА';
+    log('CMD', `2 Domain Verdicts получены (логи воркеров не передаются) &middot; синтез финального вердикта`);
+    await sleep(2200);
+
+    await flyAlong(P.cmdFinal, {color: COLORS.commander, duration:1150, r:8});
+    flashNode('final');
+    document.getElementById('vai-final-status').textContent = 'ВЕРДИКТ ГОТОВ ✓';
+    document.getElementById('vai-cmd-status').textContent = 'IDLE';
+    log('SYS', `Финальный вердикт по корневой цели сформирован &middot; findings: ALPHA ${findings.alpha} / GAMMA ${findings.gamma}`);
+
+    await sleep(6000);
+    await gate();
+    runCycle();
+  }
+
+  log('SYS', 'Инициализация VECTOR-AI &middot; ядро LangGraph &middot; Stateful Vertical Graph online');
+  setTimeout(runCycle, 500);
+})();
+</script>
 
 <div class="satellites-block" id="satellites">
 <h3 class="satellites-title">Гибридная архитектура безопасного аудита (Satellites)</h3>
@@ -555,7 +1117,8 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){
 <p class="section-description">Интерактивная симуляция каскадного исполнения суверенного AI-роя. Переключайте между режимами и наблюдайте, как Командующий, Альфа/Гамма, Воркеры и Spawner/Watchdog реагируют на очередь в реальном времени.</p>
 </div>
 
-<div class="swarm-widget">
+<div class="swarm-widget" id="swarm-widget-el">
+<div id="story-layer"></div>
 <div class="swarm-header">
 <div class="swarm-dots">
 <span class="dot dot-red"></span>
@@ -568,6 +1131,7 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){
 <div class="swarm-domain-switch">
 <button type="button" id="btn-infra" class="domain-btn active">🌐 INFRA</button>
 <button type="button" id="btn-web3" class="domain-btn">⛓️ WEB3</button>
+<button type="button" id="btn-mixed" class="domain-btn">🧬 MIXED</button>
 </div>
 </div>
 
@@ -617,13 +1181,11 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){
 <div class="swarm-graph-wrap">
 <div class="scanline"></div>
 <div class="flex items-center justify-between mb-3">
-<div class="swarm-col-label">Swarm Graph</div>
+<div class="swarm-col-label">Закрытый контур // Swarm Zone</div>
 <div id="рой-count" class="text-[9px] text-zinc-400 bg-zinc-900 px-1.5 py-0.5 rounded border border-zinc-800">WORKERS: 0</div>
 </div>
 <div id="рой-graph" class="swarm-graph" style="height: 220px">
-            <div id="graph-links" class="graph-layer"></div>
-            <div id="graph-nodes" class="graph-layer"></div>
-<!-- LIVE EVENT STREAM moved -->
+<span class="zone-label">ИЗОЛИРОВАННЫЙ РАНТАЙМ</span>
 </div>
 </div>
 
@@ -674,7 +1236,21 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){
 
 <style>
 .swarm-section{padding:60px 0;background:linear-gradient(180deg,transparent 0%,rgba(0,212,170,0.03) 50%,transparent 100%);font-family:'JetBrains Mono',monospace}
-.swarm-widget{max-width:1100px;margin:0 auto;background:#0A0F14;border:1px solid rgba(255,255,255,0.08);border-radius:14px;overflow:hidden;font-size:12px;color:#cbd5e1;box-shadow:0 20px 60px rgba(0,0,0,0.5)}
+.swarm-widget{position:relative;max-width:1100px;margin:0 auto;background:#0A0F14;border:1px solid rgba(255,255,255,0.08);border-radius:14px;overflow:hidden;font-size:12px;color:#cbd5e1;box-shadow:0 20px 60px rgba(0,0,0,0.5)}
+#story-layer{position:absolute;inset:0;z-index:70;pointer-events:none}
+#route-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.story-chip{position:absolute;left:0;top:0;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;text-align:center;color:#e2e8f0;font-weight:700;overflow:hidden;line-height:1.15;box-sizing:border-box;opacity:0;transition:left .9s cubic-bezier(.4,0,.2,1),top .9s cubic-bezier(.4,0,.2,1),width .6s ease,height .6s ease,border-radius .6s ease,background .5s ease,border-color .5s ease,box-shadow .5s ease,opacity .5s ease}
+.story-chip.in{opacity:1}
+.story-chip.chip-task{background:rgba(59,130,246,0.14);border:1.5px dashed rgba(59,130,246,0.6);border-radius:10px;font-size:8px;padding:4px;box-shadow:0 0 14px rgba(59,130,246,0.2)}
+.story-chip.chip-task.captured{border-radius:50%;border-style:solid;font-size:17px;box-shadow:0 0 12px rgba(59,130,246,0.3)}
+.story-chip.chip-sub{background:rgba(59,130,246,0.16);border:1.5px solid rgba(59,130,246,0.5);border-radius:50%;font-size:10px;box-shadow:0 0 8px rgba(59,130,246,0.18)}
+.story-chip.chip-sub.st-done{background:rgba(16,185,129,0.22);border-color:rgba(16,185,129,0.75);box-shadow:0 0 10px rgba(16,185,129,0.3)}
+.story-chip.chip-sub.st-amb{background:rgba(251,146,60,0.22);border-color:rgba(251,146,60,0.75);box-shadow:0 0 10px rgba(251,146,60,0.3);animation:chipPulse .8s ease-in-out infinite}
+.story-chip.chip-sub.st-verify{background:rgba(239,68,68,0.16);border-color:rgba(239,68,68,0.6);box-shadow:0 0 10px rgba(239,68,68,0.25)}
+.story-chip.chip-verifier{background:rgba(239,68,68,0.12);border:1.5px dashed rgba(239,68,68,0.55);border-radius:50%;font-size:12px}
+.story-chip.chip-agg{background:rgba(16,185,129,0.24);border:2px solid rgba(16,185,129,0.85);border-radius:50%;box-shadow:0 0 18px rgba(16,185,129,0.4);font-size:9px;font-weight:800}
+@keyframes chipPulse{0%,100%{opacity:1}50%{opacity:.55}}
+.zone-label{position:absolute;top:8px;left:10px;font-size:8px;letter-spacing:1.5px;color:#4b5563;text-transform:uppercase;z-index:1}
 .swarm-header{background:#0a0e15;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .swarm-dots{display:flex;gap:6px;align-items:center}
 .swarm-dots .dot{width:10px;height:10px;border-radius:50%;opacity:0.7}
@@ -764,25 +1340,32 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){
 const VS = (function(){
   const targets = {
     infra: "проверить --цель https://target.local",
-    web3: "проверить --цель 0x71C23310... (forked EVM)"
+    web3: "проверить --цель 0x71C23310... (forked EVM)",
+    mixed: "проверить --цель acme-defi.io + 0x9fA1... (infra + контракты)"
   };
+  // SPEED замедляет всю симуляцию примерно в 3 раза относительно "естественного" темпа —
+  // раньше весь прогон занимал 5-10 секунд, что не похоже на реальную работу агентов.
+  const SPEED = 3.9;
   const state = {
-    domain:"infra", running:false, timers:[], workers:new Map(), ledger:new Map(),
-    coverage:{}, pending:0, claimed:0, timeouts:0, duplicates:0, lost:0, escalations:0
+    domain:"infra", running:false, timers:[], ledger:new Map(),
+    coverage:{}, pending:0, timeouts:0, duplicates:0, lost:0, escalations:0,
+    workers:new Map(), pool:new Map(), chipSeq:0
   };
-  const graphState = { usedSlots: new Set(), slotOf: new Map() };
-  const GRID = [
-    {l: 18, t: 18}, {l: 38, t: 12}, {l: 62, t: 12}, {l: 82, t: 18},
-    {l: 12, t: 45},                              {l: 88, t: 45},
-    {l: 18, t: 82}, {l: 38, t: 88}, {l: 62, t: 88}, {l: 82, t: 82},
-    {l: 35, t: 50},                              {l: 65, t: 50}
-  ];
   const $ = function(id){ return document.getElementById(id); };
-  const SPEED = 1.3;
+  // Координаты для перелётов чипов снимаются через getBoundingClientRect() в момент запуска.
+  // Если веб-шрифты (JetBrains Mono) ещё не подгрузились, карточки могут чуть сместиться/
+  // перетечь по высоте ПОСЛЕ того, как мы уже посчитали точку назначения — кружок улетает
+  // в "старую" точку и повисает не по центру карточки. fontsReady блокирует запуск до
+  // стабилизации шрифтов/раскладки, чтобы геометрия всегда была свежей.
+  var fontsReady = false;
   const later = function(ms, fn){ state.timers.push(setTimeout(fn, ms * SPEED)); };
   const esc = function(s){ return String(s).replace(/[&<>\\"\047]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","\047":"&#039;"}[c]; }); };
   const status = function(cls){ return "text-[10px] uppercase tracking-widest bg-zinc-900 px-2 py-0.5 rounded border border-zinc-800 " + cls; };
-  
+  const DOMAIN_META = {
+    alpha: { actor:"АЛЬФА", node:"node-alpha", cov:"cov-alpha", color:"168,85,247" },
+    gamma: { actor:"ГАММА", node:"node-gamma", cov:"cov-gamma", color:"16,212,170" }
+  };
+
   function log(actor, action, time){
     var box = $("event-log");
     if (box && box.querySelector(".italic")) box.innerHTML = "";
@@ -790,47 +1373,157 @@ const VS = (function(){
     var actorClass = actor === "ОРКЕСТРАТОР" ? "orch" : (actor === "АЛЬФА" ? "alpha" : (actor === "ГАММА" ? "gamma" : ""));
     var line = document.createElement("div");
     line.className = "log-line";
-    line.innerHTML = '<span class="log-time">[' + t + ']</span><span class="log-actor ' + actorClass + '">' + actor + ':</span><span class="log-action">' + action + '</span>';
+    line.innerHTML = '<span class="log-time">[' + t + ']</span><span class="log-actor ' + actorClass + '">' + esc(actor) + ':</span><span class="log-action">' + esc(action) + '</span>';
     if (box) { box.appendChild(line); box.scrollTop = box.scrollHeight; }
   }
-  
+
+  // ---------- Геометрия: переводим позиции реальных DOM-карточек в координаты
+  // относительно виджета, чтобы "задача" реально летала между Оркестратором,
+  // Альфой/Гаммой и закрытым контуром, а не абстрактно телепортировалась.
+  function widgetRect(){ return $("swarm-widget-el").getBoundingClientRect(); }
+  function centerOf(el){
+    var wr = widgetRect(), r = el.getBoundingClientRect();
+    return { x: r.left + r.width/2 - wr.left, y: r.top + r.height/2 - wr.top };
+  }
+  // Точка "отдыха" для чипа, который на секунду садится на карточку топологии
+  // (Оркестратор/Альфа/Гамма) — геометрический центр карточки визуально ощущается
+  // выше её реального центра (иконка+заголовок в верхней строке перетягивают внимание
+  // вверх), из-за чего кружок казался вылезающим за верхнюю рамку. Небольшой сдвиг вниз
+  // компенсирует это и держит кружок внутри карточки. Используется везде, где что-то
+  // приземляется на эти три карточки — включая концы маршрутных линий, чтобы линия и
+  // кружок не расходились.
+  function restOn(el){
+    var c = centerOf(el);
+    return { x: c.x, y: c.y + 11 };
+  }
+  // zoneSlot раскладывает N подзадач сеткой внутри закрытого контура. В MIXED-режиме
+  // зона делится на две половины (regionIdx/regionCount) — раньше ГАММА и АЛЬФА обе
+  // клали свои кружки в одни и те же координаты zoneSlot(i, 6), и они буквально
+  // лежали друг на друге парами. Теперь у каждого домена своя половина контура.
+  function zoneSlot(i, total, regionIdx, regionCount){
+    regionIdx = regionIdx || 0; regionCount = regionCount || 1;
+    var wr = widgetRect(), zr = $("рой-graph").getBoundingClientRect();
+    var regionW = zr.width / regionCount;
+    var cols = Math.max(1, Math.ceil(Math.sqrt(total)));
+    var rows = Math.max(1, Math.ceil(total / cols));
+    var col = i % cols, row = Math.floor(i / cols);
+    var padX = regionW * 0.2, padY = zr.height * 0.26;
+    var usableW = Math.max(1, regionW - padX * 2), usableH = Math.max(1, zr.height - padY * 2);
+    var regionLeft = zr.left - wr.left + regionIdx * regionW;
+    var x = regionLeft + padX + (cols > 1 ? (col / (cols - 1)) * usableW : usableW / 2);
+    var y = zr.top - wr.top + padY + (rows > 1 ? (row / (rows - 1)) * usableH : usableH / 2);
+    return { x: x, y: y };
+  }
+  function zoneDivider(show){
+    var existing = document.getElementById("zone-divider");
+    if (existing) existing.remove();
+    if (!show) return;
+    var wr = widgetRect(), zr = $("рой-graph").getBoundingClientRect();
+    var el = document.createElement("div");
+    el.id = "zone-divider";
+    el.style.cssText = "position:absolute;top:" + (zr.top - wr.top + 6) + "px;left:" + (zr.left - wr.left + zr.width/2) + "px;height:" + (zr.height - 12) + "px;width:1px;background:repeating-linear-gradient(to bottom,rgba(255,255,255,0.15) 0 4px,transparent 4px 8px);z-index:1;transform:translateX(-50%)";
+    $("story-layer").appendChild(el);
+  }
+  function zoneCenter(){
+    var wr = widgetRect(), zr = $("рой-graph").getBoundingClientRect();
+    return { x: zr.left - wr.left + zr.width/2, y: zr.top - wr.top + zr.height/2 };
+  }
+
+  // ---------- Chips: визуальные "кружки/карточки задач", летающие по виджету ----------
+  function makeChip(cls, label, pos, w, h){
+    var el = document.createElement("div");
+    el.className = "story-chip " + cls;
+    el.style.width = w + "px"; el.style.height = h + "px";
+    el.style.left = pos.x + "px"; el.style.top = pos.y + "px";
+    el.innerHTML = "<span>" + label + "</span>";
+    $("story-layer").appendChild(el);
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ el.classList.add("in"); }); });
+    return el;
+  }
+  function moveChip(el, pos){
+    el.style.left = pos.x + "px"; el.style.top = pos.y + "px";
+  }
+  function resizeChip(el, w, h){
+    el.style.width = w + "px"; el.style.height = h + "px";
+  }
+  function killChip(el, delay){
+    later(delay || 0, function(){
+      el.style.opacity = "0";
+      el.style.width = "0px"; el.style.height = "0px";
+      setTimeout(function(){ if (el.parentNode) el.parentNode.removeChild(el); }, 650);
+    });
+  }
+
+  function drawRoute(id, fromEl, toEl, color){
+    var svg = $("route-svg");
+    var a = restOn(fromEl), b = restOn(toEl);
+    var line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    line.setAttribute("id", "route-" + id);
+    line.setAttribute("x1", a.x); line.setAttribute("y1", a.y);
+    line.setAttribute("x2", b.x); line.setAttribute("y2", b.y);
+    line.setAttribute("stroke", "rgba(" + color + ",0.4)");
+    line.setAttribute("stroke-width", "1.5");
+    line.setAttribute("stroke-dasharray", "5 5");
+    line.classList.add("graph-line-anim");
+    svg.appendChild(line);
+    return line;
+  }
+  function removeRoute(id){
+    var el = document.getElementById("route-" + id);
+    if (el) el.remove();
+  }
+
+  // ---------- Пул воркеров (текстовая панель "Пул") ----------
+  function poolAdd(id, label, sub){
+    var c = $("worker-pool-container");
+    if (c.querySelector(".italic")) c.innerHTML = "";
+    var el = document.createElement("div");
+    el.id = "pool-" + id;
+    el.className = "swarm-worker";
+    el.style.cssText = "background:rgba(255,255,255,0.03);border:1px solid rgba(59,130,246,0.4);padding:8px 12px;border-radius:6px;display:flex;align-items:center;justify-content:space-between;font-size:11px;animation:swarmFadeIn 0.3s forwards";
+    el.innerHTML = '<div><span style="color:#cbd5e1;font-weight:600">' + esc(label) + '</span><span style="display:block;font-size:8px;color:#6B7280">' + esc(sub) + '</span></div>' +
+      '<span class="text-[9px] bg-zinc-950 px-1.5 py-0.5 rounded text-blue-400 border border-blue-900/40" style="animation:swarmPulse 0.8s ease-in-out infinite">RUNNING</span>';
+    c.appendChild(el);
+    state.pool.set(id, true);
+    $("рой-count").innerText = "WORKERS: " + state.pool.size;
+    renderMetrics();
+  }
+  function poolRemove(id){
+    var el = $("pool-" + id);
+    if (el) el.remove();
+    state.pool.delete(id);
+    $("рой-count").innerText = "WORKERS: " + state.pool.size;
+    if (!state.pool.size) $("worker-pool-container").innerHTML = '<div class="text-zinc-600 italic text-center py-8">Пул ожидает pending items...</div>';
+    renderMetrics();
+  }
+
   function switchDomain(domain){
-    if(state.running) return;
-    state.domain=domain;
-    $("input-target").innerText=targets[domain];
-    $("btn-infra").className=domain==="infra" ? "domain-btn active" : "domain-btn";
-    $("btn-web3").className=domain==="web3" ? "domain-btn active" : "domain-btn";
+    if (state.running) return;
+    state.domain = domain;
+    $("input-target").innerText = targets[domain];
+    $("btn-infra").className = domain === "infra" ? "domain-btn active" : "domain-btn";
+    $("btn-web3").className = domain === "web3" ? "domain-btn active" : "domain-btn";
+    $("btn-mixed").className = domain === "mixed" ? "domain-btn active" : "domain-btn";
     reset();
   }
 
-  // Пересобирает слой Swarm Graph: SVG для линий + центральный узел Оркестратора.
-  // Вызывается вместо innerHTML="" на graph-nodes/graph-links, чтобы у нас всегда
-  // был реальный <svg id="graph-lines-svg"> для рисования связей (раньше его не было
-  // вообще, поэтому drawLine() тихо ничего не делал и узлы просто "плавали" сами по себе).
-  function initGraph(){
-    var links = $("graph-links");
-    links.innerHTML = '<svg id="graph-lines-svg" width="100%" height="100%" style="position:absolute;inset:0;overflow:visible"></svg>';
-    var nodes = $("graph-nodes");
-    nodes.innerHTML = '';
-    var center = document.createElement("div");
-    center.id = "g-center";
-    center.className = "graph-node center-node";
-    center.style.left = "50%"; center.style.top = "50%";
-    center.innerText = "ОРКЕСТРАТОР";
-    nodes.appendChild(center);
-    graphState.usedSlots.clear();
-    graphState.slotOf.clear();
-  }
-  
   function reset(){
     state.timers.forEach(clearTimeout); state.timers = []; state.running = false;
-    state.workers.clear(); state.ledger.clear(); state.pending = 0; state.claimed = 0;
-    state.timeouts = 0; state.escalations = 0;
-    $("scan-status").innerText = "ГОТОВ";
-    $("scan-status").className = status("text-zinc-500");
-    $("btn-launch").disabled = false; $("btn-launch").style.opacity = "1";
+    state.ledger.clear(); state.pending = 0; state.timeouts = 0; state.escalations = 0;
+    state.workers.clear(); state.pool.clear(); state.chipSeq = 0;
+    gateResults = {}; gateGoal = {};
+    if (fontsReady) {
+      $("scan-status").innerText = "ГОТОВ";
+      $("scan-status").className = status("text-zinc-500");
+      $("btn-launch").disabled = false; $("btn-launch").style.opacity = "1";
+    } else {
+      $("scan-status").innerText = "ЗАГРУЗКА ШРИФТОВ";
+      $("scan-status").className = status("text-zinc-600");
+      $("btn-launch").disabled = true; $("btn-launch").style.opacity = ".55";
+    }
     $("orch-state").innerText = "IDLE";
     $("badge-commanding").className = "node-badge";
+    $("node-commanding").classList.remove("active");
     $("pipeline-stage").innerText = "ОЖИДАНИЕ";
     ["alpha","gamma"].forEach(function(x){
       $("node-" + x).style.opacity = ".4";
@@ -839,15 +1532,15 @@ const VS = (function(){
     });
     $("worker-pool-container").innerHTML = '<div class="text-zinc-600 italic text-center py-8">Пул неактивен. Ожидание цели...</div>';
     $("ledger-rows").innerHTML = '<div class="text-zinc-600 text-center py-16 italic">Реестр пуст. Запустите симуляцию.</div>';
-    initGraph();
     $("рой-count").innerText = "WORKERS: 0";
+    $("story-layer").innerHTML = '<svg id="route-svg"></svg>';
     $("final-verdict-box").className = "final-verdict";
     $("final-text").innerHTML = "Ожидание данных исполнения...";
     var logBox = $("event-log");
     if (logBox) logBox.innerHTML = '<div class="text-zinc-700 italic">Здесь будет видна передача задач между Командующим, Альфой/Гаммой и роем.</div>';
     renderMetrics();
   }
-  
+
   function addRow(id, type, st, stCls, ver, verCls, parent){
     var row = { id:id, type:type, status:st, verdict:ver, parent:parent };
     state.ledger.set(id, row); state.pending++;
@@ -864,7 +1557,6 @@ const VS = (function(){
     $("ledger-rows").scrollTop = $("ledger-rows").scrollHeight;
     renderMetrics();
   }
-  
   function updateRow(id, st, stCls, ver, verCls){
     var r = state.ledger.get(id); if (!r) return;
     if (r.status === "PENDING" && st !== "PENDING") state.pending = Math.max(0, state.pending - 1);
@@ -874,119 +1566,20 @@ const VS = (function(){
     if (v) { v.innerHTML = '<span class="' + (verCls || "lr-pending") + '">' + esc(ver) + '</span>'; }
     renderMetrics();
   }
-  
-  function addWorker(id, role, task){
-    state.workers.set(id, { id:id, role:role, task:task });
-    var c = $("worker-pool-container");
-    if (c.querySelector(".italic")) c.innerHTML = "";
-    var el = document.createElement("div");
-    el.id = "worker-" + id;
-    el.className = "swarm-worker";
-    el.style.cssText = "background:rgba(255,255,255,0.03);border:1px solid rgba(59,130,246,0.4);padding:8px 12px;border-radius:6px;display:flex;align-items:center;justify-content:space-between;font-size:11px;animation:swarmFadeIn 0.3s forwards";
-    el.innerHTML = '<div><span style="color:#cbd5e1;font-weight:600">' + esc(role) + '</span><span style="display:block;font-size:8px;color:#6B7280">' + esc(task) + '</span></div>' +
-      '<span id="wstat-' + id + '" class="text-[9px] bg-zinc-950 px-1.5 py-0.5 rounded text-blue-400 border border-blue-900/40" style="animation:swarmPulse 0.8s ease-in-out infinite">RUNNING</span>';
-    c.appendChild(el);
-    $("рой-count").innerText = "WORKERS: " + state.workers.size;
-    // Каждый воркер, появившийся в "Пуле", получает узел в Swarm Graph того же домена,
-    // который сейчас активен (АЛЬФА для web3, ГАММА для infra) — так граф всегда
-    // отражает ровно то, что происходит в логе событий и в списке воркеров.
-    var domain = state.domain === "web3" ? "alpha" : "gamma";
-    graphNode(id, role, domain);
-    renderMetrics();
-  }
-  
-  function removeWorker(id){
-    state.workers.delete(id);
-    var el = $("worker-" + id);
-    if (el) el.remove();
-    // Убираем и узел, и связывающую линию из Swarm Graph, освобождая слот в сетке —
-    // раньше узлы копились там бесконечно и график превращался в кашу, никак не
-    // отражая, что воркер уже закончил работу.
-    var gEl = $("g-" + id);
-    if (gEl) gEl.remove();
-    var lEl = document.getElementById("gl-" + id);
-    if (lEl) lEl.remove();
-    if (graphState.slotOf.has(id)) {
-      graphState.usedSlots.delete(graphState.slotOf.get(id));
-      graphState.slotOf.delete(id);
-    }
-    $("рой-count").innerText = "WORKERS: " + state.workers.size;
-    if (!state.workers.size) $("worker-pool-container").innerHTML = '<div class="text-zinc-600 italic text-center py-8">Пул ожидает pending items...</div>';
-    renderMetrics();
-  }
-  
-  function graphNode(id, label, domain){
-    const wrap = $("graph-nodes");
-    // Берём первый свободный слот сетки вместо хэша от id — так узлы не наслаиваются
-    // друг на друга и располагаются предсказуемо, по кругу вокруг Оркестратора.
-    let slot = -1;
-    for (let i = 0; i < GRID.length; i++){
-      if (!graphState.usedSlots.has(i)) { slot = i; break; }
-    }
-    if (slot === -1) slot = graphState.usedSlots.size % GRID.length;
-    graphState.usedSlots.add(slot);
-    graphState.slotOf.set(id, slot);
-    const pos = GRID[slot];
-    const el = document.createElement("div");
-    el.id = "g-" + id;
-    el.className = "graph-node spawn-in" + (domain === "alpha" ? " node-alpha-c" : domain === "gamma" ? " node-gamma-c" : "");
-    el.style.left = pos.l + "%";
-    el.style.top = pos.t + "%";
-    el.innerText = label.replace("⚡ ", "").replace("🔥 ", "");
-    wrap.appendChild(el);
-    drawLine(id, slot, domain);
-    packet(pos);
-  }
-  function drawLine(id, idx, domain){
-    const svg = document.getElementById("graph-lines-svg");
-    if (!svg) return;
-    const p = GRID[idx % GRID.length];
-    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line.setAttribute("id", "gl-" + id);
-    line.setAttribute("x1", "50%");
-    line.setAttribute("y1", "50%");
-    line.setAttribute("x2", p.l + "%");
-    line.setAttribute("y2", p.t + "%");
-    const color = domain === "alpha" ? "168,85,247" : domain === "gamma" ? "16,212,170" : "59,130,246";
-    line.setAttribute("stroke", "rgba(" + color + ",0.45)");
-    line.setAttribute("stroke-width", "1.5");
-    line.setAttribute("stroke-dasharray", "4 4");
-    line.classList.add("graph-line-anim");
-    svg.appendChild(line);
-  }
-  // Небольшой "пакет данных", который визуально пролетает от нового узла к
-  // Оркестратору в момент спавна — раньше packet() вообще не была объявлена
-  // и просто падала с ReferenceError при каждом новом воркере.
-  function packet(pos){
-    const wrap = $("graph-nodes");
-    if (!wrap) return;
-    const p = document.createElement("div");
-    p.className = "graph-packet";
-    p.style.left = pos.l + "%";
-    p.style.top = pos.t + "%";
-    p.style.transition = "left .6s ease, top .6s ease, opacity .6s ease";
-    wrap.appendChild(p);
-    requestAnimationFrame(function(){
-      requestAnimationFrame(function(){
-        p.style.left = "50%"; p.style.top = "50%"; p.style.opacity = "0";
-      });
-    });
-    setTimeout(function(){ p.remove(); }, 650);
-  }
-  
+
   function setCoverage(x, val){ $("cov-" + x).innerText = "COVERAGE: " + val + "%"; }
-  
+
   function renderMetrics(){
     $("queue-depth").innerText = "PENDING: " + state.pending;
-    $("runtime-metrics").innerHTML = 
+    $("runtime-metrics").innerHTML =
       '<div class="flex justify-between"><span class="text-zinc-600">SPAWNER target_workers</span><span class="text-blue-400">' + Math.max(1, Math.ceil(state.pending/5)) + '</span></div>' +
-      '<div class="flex justify-between"><span class="text-zinc-600">active_workers</span><span>' + state.workers.size + '</span></div>' +
+      '<div class="flex justify-between"><span class="text-zinc-600">active_workers</span><span>' + state.pool.size + '</span></div>' +
       '<div class="flex justify-between"><span class="text-zinc-600">queue pressure</span><span class="' + (state.pending>5?"text-yellow-400":"text-zinc-400") + '">' + (state.pending>5?"HIGH":"NORMAL") + '</span></div>' +
       '<div class="flex justify-between"><span class="text-zinc-600">watchdog timeouts</span><span class="' + (state.timeouts?"text-orange-400":"text-emerald-400") + '">' + state.timeouts + '</span></div>' +
       '<div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.05);color:#6B7280">event-driven runtime / external state</div>';
-    var total = 0, done = 0;
-    state.ledger.forEach(function(v){ total++; if (v.status === "DONE") done++; });
-    $("invariants").innerHTML = 
+    var total = 0;
+    state.ledger.forEach(function(){ total++; });
+    $("invariants").innerHTML =
       inv("NO LOST ITEMS", state.lost === 0, total + "/" + total) +
       inv("NO DUPLICATE CLAIMS", state.duplicates === 0, String(state.duplicates)) +
       inv("PENDING TRACKED", state.pending >= 0, String(state.pending)) +
@@ -998,20 +1591,18 @@ const VS = (function(){
   }
   function reportAllowed(){
     var vals = Object.values(state.coverage);
-    return vals.length > 0 && vals.every(function(v){ return v === 100; }) && state.pending === 0 && state.workers.size === 0;
+    return vals.length > 0 && vals.every(function(v){ return v === 100; }) && state.pending === 0 && state.pool.size === 0;
   }
-  
-  function activate(domain){
-    var node = $("node-" + domain);
+
+  function activateGate(domainKey){
+    var meta = DOMAIN_META[domainKey];
+    var node = $(meta.node);
     node.style.opacity = "1";
-    var color = domain === "infra" ? "168,85,247" : "16,185,129";
     node.className = "swarm-gate active";
-    node.style.cssText = "background:rgba(255,255,255,0.02);border:1px solid rgba(" + color + ",0.4);padding:12px;border-radius:10px;opacity:1;box-shadow:0 0 20px rgba(" + color + ",0.15)";
+    node.style.cssText = "background:rgba(255,255,255,0.02);border:1px solid rgba(" + meta.color + ",0.4);padding:12px;border-radius:10px;opacity:1;box-shadow:0 0 20px rgba(" + meta.color + ",0.15)";
   }
-  
+
   function finish(title, html, critical){
-    // WATCHDOG: аутпут рендерится ТОЛЬКО когда все items исполнены.
-    // Все PENDING / IN_PROGRESS / ESCALATED закрываются принудительно (сброс зависших — как в реальном рантайме).
     [...state.ledger.values()].forEach(function(r){
       if (r.status !== "DONE") {
         if (r.status === "PENDING") state.pending = Math.max(0, state.pending - 1);
@@ -1022,7 +1613,7 @@ const VS = (function(){
         if (v) { v.innerHTML = '<span class="' + (critical ? "text-red-400" : "text-emerald-400") + ' font-bold">' + esc(r.verdict) + '</span>'; }
       }
     });
-    [...state.workers.keys()].forEach(function(id){ removeWorker(id); });
+    Array.from(state.pool.keys()).forEach(function(id){ poolRemove(id); });
     $("final-verdict-box").className = "final-verdict " + (critical ? "active-red" : "active-green");
     $("final-text").innerHTML = '<div style="display:flex;align-items:center;justify-content:space-between;font-weight:700;border-bottom:1px solid ' + (critical?"rgba(239,68,68,0.3)":"rgba(16,185,129,0.3)") + ';padding-bottom:6px;margin-bottom:8px;color:' + (critical?"#ef4444":"#10b981") + '"><span>' + esc(title) + '</span><span class="' + (critical?"law-red":"law") + '">' + (reportAllowed() ? "REPORT UNLOCKED" : "REPORT BLOCKED") + '</span></div>' + html;
     $("scan-status").innerText = "ЗАВЕРШЕНО";
@@ -1032,146 +1623,257 @@ const VS = (function(){
     state.running = false; $("btn-launch").disabled = false; $("btn-launch").style.opacity = "1";
     renderMetrics();
   }
-  
+
+  // ---------- Основной сюжет: Задача → Оркестратор → Альфа/Гамма → рой → отчёт ----------
   function start(){
     if (state.running) return;
     reset(); state.running = true;
     $("btn-launch").disabled = true; $("btn-launch").style.opacity = ".55";
     $("scan-status").innerText = "СКАНИРОВАНИЕ";
     $("scan-status").className = status("text-yellow-400");
-    $("orch-state").innerText = "DECOMPOSING";
-    $("badge-commanding").className = "node-badge active";
-    $("pipeline-stage").innerText = "PHASE 1/3";
-    log("ОРКЕСТРАТОР", "декомпозиция задачи, классификация архетипа");
-    later(800, function(){
-      $("pipeline-stage").innerText = "PHASE 2/3";
-      if (state.domain === "infra") runInfra();
-      else runWeb3();
+    $("pipeline-stage").innerText = "PHASE 1/4";
+
+    var gateKeys = state.domain === "mixed" ? ["gamma","alpha"] : (state.domain === "infra" ? ["gamma"] : ["alpha"]);
+
+    // 1. Задача рисуется рядом с кнопкой запуска — НЕ поверх текста командной строки
+    //    (раньше чип рождался ровно на "0xFA1..." и оба слоя текста читались как каша).
+    var taskPos = centerOf($("btn-launch"));
+    var taskLabel = "🎯 " + (state.domain === "mixed" ? "MIXED" : (state.domain === "infra" ? "ИНФРА" : "WEB3"));
+    var taskChip = makeChip("chip-task", taskLabel, taskPos, 76, 34);
+    log("ОРКЕСТРАТОР", "новая задача принята в очередь: " + $("input-target").innerText);
+
+    // 2. Задача улетает к Оркестратору и "сжимается" на лету — он берёт её на себя.
+    //    Раньше сначала долетала (900мс), затем ЕЩЁ через 900мс сжималась и меняла форму —
+    //    из-за этого крупный прямоугольник какое-то время просто висел поверх карточки, а
+    //    текст лейбла обновлялся только ПОСЛЕ начала сжатия, поэтому длинная надпись
+    //    "SCAN CONTRACT" какое-то время не помещалась в уже маленький кружок и обрезалась.
+    //    Теперь текст меняется на короткую иконку РОВНО в момент начала сжатия.
+    later(1100, function(){
+      $("node-commanding").classList.add("active");
+      $("badge-commanding").className = "node-badge active";
+      $("orch-state").innerText = "CAPTURING";
+      moveChip(taskChip, restOn($("node-commanding")));
+      resizeChip(taskChip, 40, 40);
+      taskChip.classList.add("captured");
+      taskChip.querySelector("span").textContent = "👑";
     });
-      // HARD WATCHDOG: если пайплайн завис (например на Anvil-логе) — принудительное завершение
-    later(13000, function(){
+    later(1900, function(){
+      $("orch-state").innerText = "DECOMPOSING";
+      log("ОРКЕСТРАТОР", "задача принята, анализ архетипа и декомпозиция на домены");
+    });
+    later(2500, function(){
+      killChip(taskChip, 0); // короткая пауза после захвата — и прячем, а не держим поверх карточки
+    });
+
+    // 3. Оркестратор делегирует — задача уходит вниз, на Альфу и/или Гамму
+    later(3100, function(){
+      $("pipeline-stage").innerText = "PHASE 2/4";
+      if (gateKeys.length === 2) {
+        log("ОРКЕСТРАТОР", "проект смешанный (инфраструктура + web3) → делегирование на АЛЬФУ и ГАММУ одновременно");
+        zoneDivider(true);
+      } else {
+        log("ОРКЕСТРАТОР", "маршрутизация → " + DOMAIN_META[gateKeys[0]].actor);
+      }
+      gateKeys.forEach(function(gk, idx){
+        var meta = DOMAIN_META[gk];
+        activateGate(gk);
+        drawRoute(gk, $("node-commanding"), $(meta.node), meta.color);
+        var clone = makeChip("chip-task captured", "👑", restOn($("node-commanding")), 40, 40);
+        later(250 * idx, function(){ moveChip(clone, restOn($(meta.node))); });
+        later(700 + 250 * idx, function(){
+          log(meta.actor, "задача принята, начинаю декомпозицию на подзадачи");
+          killChip(clone, 0);
+          removeRoute(gk);
+          spawnSwarm(gk, idx, gateKeys.length);
+        });
+      });
+    });
+
+    // Жёсткий watchdog: если что-то зависло — принудительно закрываем прогон
+    later(34000, function(){
       if (state.running) {
         log("WATCHDOG", "обнаружено зависание пайплайна, принудительное закрытие всех items");
         finish("⏱ WATCHDOG: ЗАПУСК ЗАВЕРШЁН", "Зависшие items сброшены и закрыты принудительно. Очередь пуста, покрытие закрыто. Отчёт сформирован.", false);
       }
     });
-}
-  
-  function runInfra(){
-    activate("gamma");
-    state.coverage = { port:0, service:0, secret:0 };
-    log("ОРКЕСТРАТОР", "маршрутизация → ГАММА (infra/osint)");
-    addRow("inf-01", "port / scan", "PENDING", "lr-pending");
-    later(900, function(){
-      log("ГАММА", "spawn 1 worker (port scan)");
-      addWorker("w-01", "⚡ ИСПОЛНИТЕЛЬ · 01", "passive port analysis");
-      updateRow("inf-01", "IN_PROGRESS", "lr-progress", "—", "lr-pending");
-    });
-    later(2400, function(){
-      log("ИСПОЛНИТЕЛЬ · 01", "inf-01 → TP (ports exposed), spawn child tasks");
-      updateRow("inf-01", "DONE", "lr-done", "TP", "lr-verified");
-      removeWorker("w-01"); state.coverage.port = 100; setCoverage("gamma", 33);
-      addRow("inf-02", "service / fingerprint", "PENDING", "lr-pending");
-      addRow("inf-03", "secret / leak_check", "PENDING", "lr-pending");
-    });
-    later(3500, function(){
-      log("SPAWNER", "queue=2 → target_workers=⌈2/5⌉=1, escalate to 3");
-      addWorker("w-02", "⚡ ИСПОЛНИТЕЛЬ · 02", "service fingerprint");
-      addWorker("w-03", "⚡ ИСПОЛНИТЕЛЬ · 03", "repository metadata");
-    });
-    later(5600, function(){
-      log("ИСПОЛНИТЕЛЬ · 02", "inf-02 → FP (standard config)");
-      log("ИСПОЛНИТЕЛЬ · 03", "inf-03 → AMBIGUOUS, escalate to ВЕРИФИКАТОР");
-      updateRow("inf-02", "DONE", "lr-done", "FP", "lr-fp");
-      state.coverage.service = 100;
-      updateRow("inf-03", "ESCALATED", "lr-escalated", "AMBIGUOUS", "lr-escalated");
-      state.escalations++;
-      removeWorker("w-02"); removeWorker("w-03");
-      state.coverage.secret = 0; setCoverage("gamma", 67);
-    });
-    later(6800, function(){
-      log("ВЕРИФИКАТОР · 01", "spawn: active config validation (safe)");
-      addWorker("w-ver", "🔥 ВЕРИФИКАТОР · 01", "safe configuration validation");
-      updateRow("inf-03", "IN_PROGRESS", "lr-progress", "VERIFYING", "lr-escalated");
-    });
-    later(9000, function(){
-      log("ВЕРИФИКАТОР · 01", "inf-03 → VERIFIED (PII leak)");
-      updateRow("inf-03", "DONE", "lr-done", "VERIFIED", "lr-verified-fail");
-      state.coverage.secret = 100; setCoverage("gamma", 100);
-      removeWorker("w-ver");
-      log("ВЫХОДНОЙ КОНТУР", "генерация пакета Responsible Disclosure");
-      finish("⚡ ПОДТВЕРЖДЁН КРИТИЧЕСКИЙ ИНЦИДЕНТ", 
-        'Цель: <b>https://target.local</b><br/>Найденная конфигурация подтверждена безопасной проверкой. Все domain/type закрыты, очередь пуста. Автоматически сформирован технический пакет Responsible Disclosure.', false);
-    });
   }
-  
-  function runWeb3(){
-    activate("alpha");
-    state.coverage = { finding:0, contract:0, wallet:0 };
-    log("ОРКЕСТРАТОР", "маршрутизация → АЛЬФА (web3/code)");
-    addRow("w3-01", "finding / proxy_check", "PENDING", "lr-pending");
-    later(900, function(){
-      log("АЛЬФА", "spawn 1 worker (proxy analysis)");
-      addWorker("w-w3-01", "⚡ ИСПОЛНИТЕЛЬ · 01", "proxy storage analysis");
-      updateRow("w3-01", "IN_PROGRESS", "lr-progress", "—", "lr-pending");
+
+  var gateResults = {}; // gk -> {aggregated: bool}
+  var gateGoal = {};    // сколько доменов нужно дождаться для финала
+
+  function spawnSwarm(gk, regionIdx, regionCount){
+    var meta = DOMAIN_META[gk];
+    state.coverage[gk] = 0;
+    gateResults[gk] = false;
+    gateGoal[gk] = true;
+
+    var TASK_SETS = {
+      gamma: [
+        { t:"port / scan", verdict:"FP", cls:"lr-fp" },
+        { t:"subdomain / enum", verdict:"TP", cls:"lr-verified" },
+        { t:"header / security_check", verdict:"FP", cls:"lr-fp" },
+        { t:"tls / cert_check", verdict:"TP", cls:"lr-verified" },
+        { t:"secret / leak_check", verdict:"AMB", cls:"lr-verified-fail" },
+        { t:"cve / version_match", verdict:"AMB", cls:"lr-verified" }
+      ],
+      alpha: [
+        { t:"contract / proxy_check", verdict:"TP", cls:"lr-verified" },
+        { t:"contract / logic", verdict:"FP", cls:"lr-fp" },
+        { t:"contract / vault", verdict:"AMB", cls:"lr-verified-fail" },
+        { t:"wallet / graph_node", verdict:"TP", cls:"lr-verified" },
+        { t:"storage / slots", verdict:"AMB", cls:"lr-verified" },
+        { t:"oracle / price_feed", verdict:"FP", cls:"lr-fp" }
+      ]
+    };
+    var tasks = TASK_SETS[gk];
+    var chips = [];
+    // В MIXED-режиме у ГАММЫ и АЛЬФЫ одновременно есть подзадачи "1".."6" — без префикса
+    // на экране было бы два одинаковых кружка "1" (просто разного цвета), что на презентации
+    // читается как баг. Префикс добавляем только когда доменов реально два.
+    var numPrefix = regionCount === 2 ? (gk === "gamma" ? "Г" : "А") : "";
+    // Verifier-воркеры используют разные инструменты в зависимости от домена (см. секцию
+    // "Изолированный AI-Runtime" выше: Anvil+Foundry Fork — для web3, Nmap — для инфраструктуры).
+    // Раньше оба домена показывали одинаковую подпись "isolated fork / deep scan", что для
+    // инфраструктурных находок (порты, заголовки, CVE) технически не имеет смысла — форки
+    // бывают только у EVM-цепей.
+    var verifierTool = gk === "alpha" ? "изолированный EVM-форк · Foundry replay" : "Nmap deep-scan · ручная валидация";
+
+    log("SPAWNER", tasks.length + " подзадач от " + meta.actor + " → распределение по интерпретаторам");
+
+    // 4. Взрыв: задача разлетается на N маленьких кружков внутри закрытого контура
+    tasks.forEach(function(task, i){
+      var id = gk + "-" + (i+1);
+      addRow(id, task.t, "PENDING", "lr-pending");
+      var poolId = id;
+      var startPos = restOn($(meta.node));
+      var chip = makeChip("chip-sub", numPrefix + (i+1), startPos, 22, 22);
+      chips.push({ id:id, chip:chip, task:task, poolId:poolId });
+      later(400 + i * 220, function(){
+        moveChip(chip, zoneSlot(i, tasks.length, regionIdx, regionCount));
+        updateRow(id, "IN_PROGRESS", "lr-progress", "—", "lr-pending");
+        poolAdd(poolId, "⚡ " + meta.actor + " · ИСПОЛНИТЕЛЬ " + (i+1), task.t);
+      });
     });
-    later(2400, function(){
-      log("ИСПОЛНИТЕЛЬ · 01", "w3-01 → TP, 3 child contracts found");
-      updateRow("w3-01", "DONE", "lr-done", "TP", "lr-verified");
-      removeWorker("w-w3-01"); state.coverage.finding = 100; setCoverage("alpha", 25);
-      addRow("w3-02", "contract / logic", "PENDING", "lr-pending");
-      addRow("w3-03", "contract / vault", "PENDING", "lr-pending");
-      addRow("w3-04", "wallet / graph_node", "PENDING", "lr-pending");
+
+    // 5. Волна 1: интерпретаторы выносят вердикт — TP/FP зелёные улетают в отчёт,
+    //    AMBIGUOUS краснеют и подтягивают доп. верификатора
+    later(4200, function(){
+      log(meta.actor, "интерпретаторы завершили первичный проход по " + tasks.length + " задачам");
+      chips.forEach(function(c, i){
+        later(i * 260, function(){
+          if (c.task.verdict === "AMB") {
+            c.chip.classList.add("st-amb");
+            updateRow(c.id, "ESCALATED", "lr-escalated", "AMBIGUOUS", "lr-escalated");
+            state.escalations++;
+            log(meta.actor, "#" + c.id + " → AMBIGUOUS, требуется доп. верификация");
+            var basePos = zoneSlot(i, chips.length, regionIdx, regionCount);
+            var vpos = { x: basePos.x + 18, y: basePos.y - 16 };
+            var vchip = makeChip("chip-verifier", "🔥", vpos, 18, 18);
+            c.verifier = vchip;
+            c.verifierPoolId = c.id + "-ver";
+            poolAdd(c.verifierPoolId, "🔥 " + meta.actor + " · ВЕРИФИКАТОР " + (i+1), verifierTool);
+          } else {
+            c.chip.classList.add("st-done");
+            updateRow(c.id, "DONE", "lr-done", c.task.verdict, c.task.cls);
+            poolRemove(c.poolId);
+            log(meta.actor, "#" + c.id + " → " + c.task.verdict + ", результат зафиксирован");
+            later(500, function(){
+              moveChip(c.chip, restOn($(meta.node)));
+              killChip(c.chip, 700);
+            });
+          }
+        });
+      });
     });
-    later(3500, function(){
-      log("SPAWNER", "queue=3 → escalate to 3 workers");
-      addWorker("w-w3-02", "⚡ ИСПОЛНИТЕЛЬ · 02", "logic analysis");
-      addWorker("w-w3-03", "⚡ ИСПОЛНИТЕЛЬ · 03", "storage analysis");
-      addWorker("w-w3-04", "⚡ ИСПОЛНИТЕЛЬ · 04", "dependency graph");
-    });
-    later(5600, function(){
-      log("ИСПОЛНИТЕЛЬ · 02", "w3-02 → FP (safe calculation)");
-      log("ИСПОЛНИТЕЛЬ · 04", "w3-04 → TP (graph nodes found)");
-      log("ИСПОЛНИТЕЛЬ · 03", "w3-03 → AMBIGUOUS, escalate");
-      updateRow("w3-02", "DONE", "lr-done", "FP", "lr-fp");
-      updateRow("w3-04", "DONE", "lr-done", "TP", "lr-verified");
-      state.coverage.contract = 100; state.coverage.wallet = 100;
-      updateRow("w3-03", "ESCALATED", "lr-escalated", "AMBIGUOUS", "lr-escalated");
-      state.escalations++;
-      removeWorker("w-w3-02"); removeWorker("w-w3-03"); removeWorker("w-w3-04");
-      setCoverage("alpha", 75);
-    });
-    later(6800, function(){
-      log("ВЕРИФИКАТОР · 02", "spawn: isolated EVM fork validation");
-      addWorker("w-vweb3", "🔥 ВЕРИФИКАТОР · 02", "isolated EVM fork validation");
-      updateRow("w3-03", "IN_PROGRESS", "lr-progress", "FORK TEST", "lr-escalated");
-    });
+
+    // 6. Волна 2: эскалированные задачи возвращаются VERIFIED — верификатор
+    //    "сливается" с задачей, она зеленеет и тоже улетает в отчёт
     later(7600, function(){
-      log("ВЕРИФИКАТОР · 02", "forge test → spawned 2 graph child tasks");
-      addRow("w3-05", "graph_node / discovered wallet", "PENDING", "lr-pending", "—", "lr-pending", "w3-03");
-      addRow("w3-06", "graph_node / discovered wallet", "PENDING", "lr-pending", "—", "lr-pending", "w3-03");
-      state.coverage.wallet = 100;
-    });
-    later(8800, function(){
-      log("ВЕРИФИКАТОР · 02", "w3-05,06,03 → VERIFIED, exploit valid in fork");
-      updateRow("w3-05", "DONE", "lr-done", "VERIFIED", "lr-verified");
-      updateRow("w3-06", "DONE", "lr-done", "VERIFIED", "lr-verified");
-      updateRow("w3-03", "DONE", "lr-done", "VERIFIED", "lr-verified-fail");
-      removeWorker("w-vweb3");
-      state.coverage.contract = 100; setCoverage("alpha", 100);
-      log("ВЫХОДНОЙ КОНТУР", "remediation patch сгенерирован, реальная сеть не задета");
-      finish("⚠️ ПОДТВЕРЖДЁН ВЕКТОР В ИЗОЛИРОВАННОМ FORK", 
-        'Целевой контракт: <b>0x71C23310...</b><br/>Вектор воспроизведён в изолированном EVM-форке. <b>Реальная сеть не затрагивалась.</b><br/><span class="law-red">VERIFIED</span> — все дочерние items созданы через <span style="color:#cbd5e1">parent_id</span>, закрыты независимо, coverage=100%.', true);
+      var escalated = chips.filter(function(c){ return c.task.verdict === "AMB"; });
+      if (escalated.length) log(meta.actor, "верификаторы подтвердили " + escalated.length + " эскалированных находок");
+      escalated.forEach(function(c, i){
+        later(i * 320, function(){
+          c.chip.classList.remove("st-amb");
+          c.chip.classList.add("st-done");
+          if (c.verifier) killChip(c.verifier, 0);
+          if (c.verifierPoolId) poolRemove(c.verifierPoolId);
+          updateRow(c.id, "DONE", "lr-done", "VERIFIED", "lr-verified-fail");
+          poolRemove(c.poolId);
+          later(400, function(){
+            moveChip(c.chip, restOn($(meta.node)));
+            killChip(c.chip, 700);
+          });
+        });
+      });
+
+      // 7. Все подзадачи домена закрыты — агрегируем в один большой зелёный кружок
+      later(1600 + escalated.length * 320, function(){
+        state.coverage[gk] = 100; setCoverage(gk, 100);
+        log(meta.actor, "все подзадачи закрыты, coverage=100% — формирую агрегированный вердикт для Оркестратора");
+        var agg = makeChip("chip-agg", "✓", restOn($(meta.node)), 30, 30);
+        drawRoute(gk + "-agg", $(meta.node), $("node-commanding"), meta.color);
+        later(800, function(){
+          moveChip(agg, restOn($("node-commanding")));
+        });
+        later(1400, function(){
+          removeRoute(gk + "-agg");
+          killChip(agg, 0);
+          gateResults[gk] = true;
+          maybeAggregate();
+        });
+      });
     });
   }
-  
+
+  function maybeAggregate(){
+    var allDone = Object.keys(gateGoal).every(function(k){ return gateResults[k]; });
+    if (!allDone) return;
+    $("pipeline-stage").innerText = "PHASE 3/4";
+    $("orch-state").innerText = "AGGREGATING";
+    log("ОРКЕСТРАТОР", "агрегация вердиктов, проверка инвариантов Target Ledger");
+    var finalChip = makeChip("chip-agg", "✅", restOn($("node-commanding")), 38, 38);
+    later(900, function(){
+      $("pipeline-stage").innerText = "PHASE 4/4";
+      $("orch-state").innerText = "REPORT_READY";
+      moveChip(finalChip, centerOf($("final-verdict-box")));
+    });
+    later(1400, function(){
+      killChip(finalChip, 0);
+      var scope = Object.keys(gateGoal).map(function(gk){ return DOMAIN_META[gk].actor; }).join(" + ");
+      var targetText = esc($("input-target").innerText);
+      if (Object.keys(gateGoal).length === 2) {
+        log("ВЫХОДНОЙ КОНТУР", "сформирован сводный отчёт по инфраструктуре и контрактам");
+        finish("⚠️ СВОДНЫЙ ОТЧЁТ: ИНФРА + WEB3 ПОДТВЕРЖДЕНЫ",
+          'Цель: <b>' + targetText + '</b><br/>Домены-исполнители: <b>' + scope + '</b>. Обе ветки закрыты независимо через Target Ledger, coverage=100% по каждой.<br/><span class="law-red">VERIFIED</span> — критические находки подтверждены в изолированном контуре.', true);
+      } else if (Object.prototype.hasOwnProperty.call(gateGoal, "alpha")) {
+        log("ВЫХОДНОЙ КОНТУР", "remediation patch сгенерирован, реальная сеть не задета");
+        finish("⚠️ ПОДТВЕРЖДЁН ВЕКТОР В ИЗОЛИРОВАННОМ FORK",
+          'Цель: <b>' + targetText + '</b><br/>Вектор воспроизведён в изолированном EVM-форке. <b>Реальная сеть не затрагивалась.</b><br/><span class="law-red">VERIFIED</span> — все дочерние items закрыты независимо, coverage=100%.', true);
+      } else {
+        log("ВЫХОДНОЙ КОНТУР", "генерация пакета Responsible Disclosure");
+        finish("⚡ ПОДТВЕРЖДЁН КРИТИЧЕСКИЙ ИНЦИДЕНТ",
+          'Цель: <b>' + targetText + '</b><br/>Найденная уязвимость подтверждена безопасной активной проверкой (без риска для продакшена заказчика). Все domain/type закрыты, очередь пуста. Автоматически сформирован технический пакет Responsible Disclosure.', true);
+      }
+    });
+  }
+
   $("input-target").innerText = targets.infra; reset();
-  
-  // Обработчики кнопок (были потеряны — визуализатор стоял колом)
+
+  if (document.fonts && document.fonts.ready) {
+    // Если по какой-то причине симуляция уже идёт к моменту, когда шрифты долетели —
+    // не дёргаем reset() и не обнуляем текущий прогон. Просто отмечаем готовность;
+    // кнопка корректно включится сама при следующем reset() (конец текущего прогона
+    // или переключение домена).
+    document.fonts.ready.then(function(){ fontsReady = true; if (!state.running) reset(); }).catch(function(){ fontsReady = true; if (!state.running) reset(); });
+  } else {
+    fontsReady = true; reset();
+  }
+
   $("btn-launch").addEventListener("click", start);
   $("btn-infra").addEventListener("click", function(){ switchDomain("infra"); });
   $("btn-web3").addEventListener("click", function(){ switchDomain("web3"); });
-  
+  $("btn-mixed").addEventListener("click", function(){ switchDomain("mixed"); });
+
   return { start: start, switchDomain: switchDomain };
 })();
 </script>
